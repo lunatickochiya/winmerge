@@ -88,7 +88,7 @@ void CMergeFrameCommon::RemoveBarBorder()
  */
 void CMergeFrameCommon::SetLastCompareResult(int nResult)
 {
-	HICON hReplace = (nResult == 0) ? m_hIdentical : m_hDifferent;
+	HICON hReplace = (nResult == 0) ? m_hIdentical : ((nResult < 0) ? nullptr : m_hDifferent);
 
 	if (m_hCurrent != hReplace)
 	{
@@ -102,7 +102,7 @@ void CMergeFrameCommon::SetLastCompareResult(int nResult)
 	theApp.SetLastCompareResult(nResult);
 }
 
-void CMergeFrameCommon::ShowIdenticalMessage(const PathContext& paths, bool bIdenticalAll, std::function<int(LPCTSTR, unsigned, unsigned)> fnMessageBox)
+void CMergeFrameCommon::ShowIdenticalMessage(const PathContext& paths, bool bIdenticalAll, std::function<int(const tchar_t*, unsigned, unsigned)> fnMessageBox)
 {
 	String s;
 	if (theApp.m_bExitIfNoDiff != MergeCmdLineInfo::ExitQuiet)
@@ -370,10 +370,8 @@ void CMergeFrameCommon::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 	__super::OnGetMinMaxInfo(lpMMI);
 	// [Fix for MFC 8.0 MDI Maximizing Child Window bug on Vista]
 	// https://groups.google.com/forum/#!topic/microsoft.public.vc.mfc/iajCdW5DzTM
-#if _MFC_VER >= 0x0800
 	lpMMI->ptMaxTrackSize.x = max(lpMMI->ptMaxTrackSize.x, lpMMI->ptMaxSize.x);
 	lpMMI->ptMaxTrackSize.y = max(lpMMI->ptMaxTrackSize.y, lpMMI->ptMaxSize.y);
-#endif
 }
 
 void CMergeFrameCommon::OnDestroy()

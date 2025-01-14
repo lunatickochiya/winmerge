@@ -8,7 +8,6 @@
 #include "pch.h"
 #include "FileFilterMgr.h"
 #include <vector>
-#include <Poco/String.h>
 #include <Poco/Glob.h>
 #include <Poco/RegularExpression.h>
 #include "DirTravel.h"
@@ -20,7 +19,6 @@
 
 using std::vector;
 using Poco::Glob;
-using Poco::icompare;
 using Poco::RegularExpression;
 
 static void AddFilterPattern(vector<FileFilterElementPtr> *filterList, String & str, bool fileFilter);
@@ -170,6 +168,9 @@ FileFilter * FileFilterMgr::LoadFilterFile(const String& szFilepath, int & error
 	}
 
 	file.ReadBom(); // in case it is a Unicode file, let UniMemFile handle BOM
+	if (!file.IsUnicode() && !ucr::CheckForInvalidUtf8(
+		reinterpret_cast<const char*>(file.GetBase()), static_cast<size_t>(file.GetFileSize())))
+		file.SetUnicoding(ucr::UTF8);
 
 	String fileName;
 	paths::SplitFilename(szFilepath, nullptr, &fileName, nullptr);
@@ -426,6 +427,7 @@ void FileFilterMgr::CloneFrom(const FileFilterMgr* fileFilterMgr)
 	m_filters.clear();
 
 	size_t count = fileFilterMgr->m_filters.size();
+	m_filters.reserve(count);
 	for (size_t i = 0; i < count; i++)
 	{
 		auto ptr = std::make_shared<FileFilter>(FileFilter());

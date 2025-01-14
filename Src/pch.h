@@ -14,3 +14,6 @@
 #include <functional>
 #include <cassert>
 #include <ctime>
+#include <cctype>
+#include <array>
+#include <boost/flyweight.hpp>

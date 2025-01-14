@@ -129,7 +129,7 @@ bool CHexMergeView::IsLoadable()
 BOOL CHexMergeView::PreCreateWindow(CREATESTRUCT& cs)
 {
 	if (!IsLoadable())
-		LangMessageBox(IDS_FRHED_NOTINSTALLED, MB_OK);
+		AfxMessageBox(strutils::format_string1(_("%1 is not installed."), _T("Frhed")).c_str(), MB_OK);
 	cs.lpszClass = _T("heksedit");
 	cs.style |= WS_HSCROLL | WS_VSCROLL;
 	return TRUE;
@@ -250,7 +250,7 @@ size_t CHexMergeView::GetLength()
  * @param [in] path File to check
  * @return `true` if file is changed.
  */
-IMergeDoc::FileChange CHexMergeView::IsFileChangedOnDisk(LPCTSTR path)
+IMergeDoc::FileChange CHexMergeView::IsFileChangedOnDisk(const tchar_t* path)
 {
 	DiffFileInfo dfi;
 	if (!dfi.Update(path))
@@ -268,11 +268,11 @@ IMergeDoc::FileChange CHexMergeView::IsFileChangedOnDisk(LPCTSTR path)
 /**
  * @brief Load file
  */
-HRESULT CHexMergeView::LoadFile(LPCTSTR path)
+HRESULT CHexMergeView::LoadFile(const tchar_t* path)
 {
 	CHexMergeDoc *pDoc = static_cast<CHexMergeDoc *>(GetDocument());
 	String strTempFileName = path;
-	if (!pDoc->GetUnpacker()->Unpacking(&m_unpackerSubcodes, strTempFileName, path, { strTempFileName }))
+	if (!pDoc->GetUnpacker()->Unpacking(m_nThisPane, &m_unpackerSubcodes, strTempFileName, path, { strTempFileName }))
 		return E_FAIL;
 	HANDLE h = CreateFile(strTempFileName.c_str(), GENERIC_READ,
 		FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -296,6 +296,8 @@ HRESULT CHexMergeView::LoadFile(LPCTSTR path)
 				hr = SE(ReadFile(h, reinterpret_cast<BYTE *>(buffer) + pos, 
 					(length - pos) < 0x10000000 ?  static_cast<DWORD>(length - pos) : 0x10000000,
 					&cb, 0));
+				if (cb == 0)
+					break;
 				pos += cb;
 			}
 			if (hr != S_OK)
@@ -314,24 +316,8 @@ HRESULT CHexMergeView::LoadFile(LPCTSTR path)
 /**
  * @brief Save file
  */
-HRESULT CHexMergeView::SaveFile(LPCTSTR path, bool packing)
+HRESULT CHexMergeView::SaveFile(const tchar_t* path, bool packing)
 {
-	// Warn user in case file has been changed by someone else
-	if (IsFileChangedOnDisk(path) == IMergeDoc::FileChange::Changed)
-	{
-		String msg = strutils::format_string1(_("Another application has updated file\n%1\nsince WinMerge loaded it.\n\nOverwrite changed file?"), path);
-		if (AfxMessageBox(msg.c_str(), MB_ICONWARNING | MB_YESNO) == IDNO)
-			return E_FAIL;
-	}
-	// Ask user what to do about FILE_ATTRIBUTE_READONLY
-	String strPath = path;
-	bool bApplyToAll = false;
-	if (CMergeApp::HandleReadonlySave(strPath, false, bApplyToAll) == IDCANCEL)
-		return E_FAIL;
-	path = strPath.c_str();
-	// Take a chance to create a backup
-	if (!CMergeApp::CreateBackup(false, path))
-		return E_FAIL;
 	// Write data to an intermediate file
 	String tempPath = env::GetTemporaryPath();
 	String sIntermediateFilename = env::GetTemporaryFileName(tempPath, _T("MRG_"), 0);
@@ -364,7 +350,7 @@ HRESULT CHexMergeView::SaveFile(LPCTSTR path, bool packing)
 	CHexMergeDoc* pDoc = static_cast<CHexMergeDoc*>(GetDocument());
 	if (packing && !m_unpackerSubcodes.empty())
 	{
-		if (!pDoc->GetUnpacker()->Packing(sIntermediateFilename, path, m_unpackerSubcodes, { path }))
+		if (!pDoc->GetUnpacker()->Packing(m_nThisPane, sIntermediateFilename, path, m_unpackerSubcodes, { path }))
 		{
 			String str = CMergeApp::GetPackingErrorMessage(m_nThisPane, pDoc->m_nBuffers, path, *pDoc->GetUnpacker());
 			int answer = AfxMessageBox(str.c_str(), MB_OKCANCEL | MB_ICONWARNING);
@@ -552,15 +538,13 @@ void CHexMergeView::OnEditClear()
  */
 BOOL CHexMergeView::PreTranslateMessage(MSG* pMsg)
 {
-	if (GetTopLevelFrame()->PreTranslateMessage(pMsg))
-		return TRUE;
 	if (pMsg->message == WM_KEYDOWN)
 	{
 		// Close window in response to VK_ESCAPE if user has allowed it from options
 		if (pMsg->wParam == VK_ESCAPE && GetOptionsMgr()->GetInt(OPT_CLOSE_WITH_ESC) != 0)
 		{
 			GetParentFrame()->PostMessage(WM_CLOSE, 0, 0);
-			return TRUE;
+			return false;
 		}
 	}
 	return m_pif->translate_accelerator(pMsg);

@@ -324,9 +324,6 @@
     <ClCompile Include="TestMain.cpp">
       <Filter>MergeTest</Filter>
     </ClCompile>
-    <ClCompile Include="..\Externals\gtest\src\gtest-all.cc">
-      <Filter>MergeTest\gtest</Filter>
-    </ClCompile>
     <ClCompile Include="Merge7zFormatShellImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -708,11 +705,53 @@
     <ClCompile Include="PropCompareWebPage.cpp">
       <Filter>MFCGui\PropertyPages\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WebPageDiffBar.cpp">
-      <Filter>MFCGui\MDIChild\WebPageCompare\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DirWatcher.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\cio.cpp">
+      <Filter>Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MergeAppCOMClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PropEditorCompareMerge.cpp">
+      <Filter>MFCGui\PropertyPages\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MergeDocDiffCopy.cpp">
+      <Filter>MFCGui\MDIChild\TextTableCompare\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EditPluginDlg.cpp">
+      <Filter>MFCGui\Dialogs\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\RoundedRectWithShadow.cpp">
+      <Filter>MFCGui\Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicFlatStatusBar.cpp">
+      <Filter>MFCGui\Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuBar.cpp">
+      <Filter>MFCGui\Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyReBar.cpp">
+      <Filter>MFCGui\Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleBarHelper.cpp">
+      <Filter>MFCGui\Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MouseHook.cpp">
+      <Filter>MFCGui\Main\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\SysColorHook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PropSysColors.cpp">
+      <Filter>MFCGui\PropertyPages\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorSchemes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\AccentColor.cpp">
+      <Filter>MFCGui\Common\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -795,9 +834,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FileLocation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="files.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FileTextEncoding.h">
@@ -940,15 +976,6 @@
     </ClInclude>
     <ClInclude Include="Win_VersionHelper.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Externals\gtest\include\gtest\gtest.h">
-      <Filter>MergeTest\gtest</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Externals\gtest\include\gtest\gtest-printers.h">
-      <Filter>MergeTest\gtest</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Externals\gtest\include\gtest\internal\gtest-port.h">
-      <Filter>MergeTest\gtest</Filter>
     </ClInclude>
     <ClInclude Include="Merge7zFormatShellImpl.h">
       <Filter>Header Files</Filter>
@@ -1346,11 +1373,74 @@
     <ClInclude Include="PropCompareWebPage.h">
       <Filter>MFCGui\PropertyPages\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WebPageDiffBar.h">
-      <Filter>MFCGui\MDIChild\WebPageCompare\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DirWatcher.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\cio.h">
+      <Filter>Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileOpenFlags.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileLoadResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MergeAppCOMClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Externals\googletest\googletest\include\gtest\gtest-printers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Externals\googletest\googletest\include\gtest\gtest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Externals\googletest\googletest\include\gtest\internal\gtest-port.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IDirDoc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\DebugNew.h">
+      <Filter>Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PropEditorCompareMerge.h">
+      <Filter>MFCGui\PropertyPages\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InternalPlugins.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EditPluginDlg.h">
+      <Filter>MFCGui\Dialogs\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\RoundedRectWithShadow.h">
+      <Filter>MFCGui\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicFlatStatusBar.h">
+      <Filter>MFCGui\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuBar.h">
+      <Filter>MFCGui\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyReBar.h">
+      <Filter>MFCGui\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleBarHelper.h">
+      <Filter>MFCGui\Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseHook.h">
+      <Filter>MFCGui\Main\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PropSysColors.h">
+      <Filter>MFCGui\PropertyPages\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\SysColorHook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorSchemes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\AccentColor.h">
+      <Filter>MFCGui\Common\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1390,10 +1480,10 @@
     <None Include="res\left.bmp">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="res\left_to_browse.bmp">
+    <None Include="res\copy_left_to_browse.bmp">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="res\left_to_right.bmp">
+    <None Include="res\copy_left_to_right.bmp">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="res\lfile.ico">
@@ -1438,10 +1528,10 @@
     <None Include="res\right.bmp">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="res\right_to_browse.bmp">
+    <None Include="res\copy_right_to_browse.bmp">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="res\right_to_left.bmp">
+    <None Include="res\copy_right_to_left.bmp">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="res\sigma.ico">
@@ -1571,7 +1661,7 @@
     <Image Include="res\horizontally.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\left_to_middle.bmp">
+    <Image Include="res\copy_left_to_middle.bmp">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\LineFilter.ico">
@@ -1604,13 +1694,13 @@
     <Image Include="res\middle.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\middle_to_browse.bmp">
+    <Image Include="res\copy_middle_to_browse.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\middle_to_left.bmp">
+    <Image Include="res\copy_middle_to_left.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\middle_to_right.bmp">
+    <Image Include="res\copy_middle_to_right.bmp">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\mmissing.ico">
@@ -1697,7 +1787,7 @@
     <Image Include="res\report.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\right_to_middle.bmp">
+    <Image Include="res\copy_right_to_middle.bmp">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\rmissing.ico">
@@ -1775,6 +1865,24 @@
     <Image Include="res\zoom_out.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\move_left_to_middle.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\move_left_to_right.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\move_middle_to_left.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\move_middle_to_right.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\move_right_to_left.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\move_right_to_middle.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="res\WinMerge.exe.manifest">
@@ -1785,5 +1893,10 @@
     <Xml Include="res\WinMergeU.VisualElementsManifest.xml">
       <Filter>Resource Files</Filter>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="MergeAppLib.idl">
+      <Filter>Source Files</Filter>
+    </Midl>
   </ItemGroup>
 </Project>

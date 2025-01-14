@@ -18,6 +18,7 @@
 #include "FileOrFolderSelect.h"
 #include "Win_VersionHelper.h"
 #include "paths.h"
+#include "cecolor.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -33,6 +34,7 @@ BEGIN_MESSAGE_MAP(CFilepathEdit, CEdit)
 	ON_WM_SETCURSOR()
 	ON_WM_KILLFOCUS()
 	ON_WM_LBUTTONDOWN()
+	ON_WM_SYSCOLORCHANGE()
 	ON_COMMAND(ID_EDIT_COPY, OnEditCopy)
 	ON_COMMAND(ID_EDIT_PASTE, OnEditPaste)
 	ON_COMMAND(ID_EDIT_CUT, OnEditCut)
@@ -172,7 +174,7 @@ void CFilepathEdit::RefreshDisplayText()
 	// compact the path
 	CRect rect;
 	GetRect(rect);
-	std::vector<TCHAR> tmp((std::max)(MAX_PATH, line.length() + 1));
+	std::vector<tchar_t> tmp((std::max)(MAX_PATH, line.length() + 1));
 	std::copy(line.begin(), line.end(), tmp.begin());
 	PathCompactPath(lDC.GetSafeHdc(), &tmp[0],	rect.Width());
 	line = &tmp[0];
@@ -263,48 +265,26 @@ void CFilepathEdit::OnContextMenu(CWnd* pWnd, CPoint point)
 	}
 }
 
-static COLORREF GetDarkenColor(COLORREF a, double r)
-{
-	const int R = static_cast<int>(GetRValue(a) * r);
-	const int G = static_cast<int>(GetGValue(a) * r);
-	const int B = static_cast<int>(GetBValue(a) * r);
-	return RGB(R, G, B);
-}
-
-static COLORREF GetIntermediateColor(COLORREF a, COLORREF b)
-{
-  float ratio = 0.5;
-  const int R = static_cast<int>((GetRValue(a) - GetRValue(b)) * ratio) + GetRValue(b);
-  const int G = static_cast<int>((GetGValue(a) - GetGValue(b)) * ratio) + GetGValue(b);
-  const int B = static_cast<int>((GetBValue(a) - GetBValue(b)) * ratio) + GetBValue(b);
-  return RGB(R, G, B);
-}
-
 static COLORREF MakeBackColor(bool bActive, bool bInEditing)
 {
 	if (bActive)
-		return GetIntermediateColor(::GetSysColor(bInEditing ? COLOR_WINDOW : COLOR_ACTIVECAPTION), ::GetSysColor(COLOR_3DFACE));
+		return CEColor::GetIntermediateColor(::GetSysColor(bInEditing ? COLOR_WINDOW : COLOR_ACTIVECAPTION), ::GetSysColor(COLOR_3DFACE), 0.5f);
 	else
-		return GetIntermediateColor(::GetSysColor(bInEditing ? COLOR_WINDOW : COLOR_INACTIVECAPTION), ::GetSysColor(COLOR_3DFACE));
+		return CEColor::GetIntermediateColor(::GetSysColor(bInEditing ? COLOR_WINDOW : COLOR_INACTIVECAPTION), ::GetSysColor(COLOR_3DFACE), 0.5f);
 }
 
 void CFilepathEdit::OnNcPaint()
 {
-	COLORREF crBackGnd = m_bInEditing ? ::GetSysColor(COLOR_ACTIVEBORDER) : m_crBackGnd;
 	CWindowDC dc(this);
-	CRect rect;
-	const int lpx = dc.GetDeviceCaps(LOGPIXELSX);
-	auto pointToPixel = [lpx](int point) { return MulDiv(point, lpx, 72); };
-	const int margin = pointToPixel(3);
-
+	CRect rect, rcClient;
 	GetWindowRect(rect);
+	GetClientRect(rcClient);
 	rect.OffsetRect(-rect.TopLeft());
-	dc.FillSolidRect(CRect(rect.left, rect.top, rect.left + margin, rect.bottom), GetDarkenColor(crBackGnd, 0.98));
-	dc.FillSolidRect(CRect(rect.left, rect.top, rect.left + 1, rect.bottom), GetDarkenColor(crBackGnd, 0.96));
-	dc.FillSolidRect(CRect(rect.right - margin, rect.top, rect.right, rect.bottom), crBackGnd);
-	dc.FillSolidRect(CRect(rect.left + 1, rect.top, rect.right, rect.top + margin), GetDarkenColor(crBackGnd, 0.98));
-	dc.FillSolidRect(CRect(rect.left, rect.top, rect.right, rect.top + 1), GetDarkenColor(crBackGnd, 0.96));
-	dc.FillSolidRect(CRect(rect.left + margin, rect.bottom - margin, rect.right, rect.bottom), crBackGnd);
+	const int margin = (rect.Width() - rcClient.Width()) / 2;
+	dc.FillSolidRect(CRect(rect.left, rect.top, rect.left + margin, rect.bottom), m_crBackGnd);
+	dc.FillSolidRect(CRect(rect.right - margin, rect.top, rect.right, rect.bottom), m_crBackGnd);
+	dc.FillSolidRect(CRect(rect.left, rect.top, rect.right, rect.top + margin), m_crBackGnd);
+	dc.FillSolidRect(CRect(rect.left + margin, rect.bottom - margin, rect.right, rect.bottom), m_crBackGnd);
 }
 
 void CFilepathEdit::OnPaint()
@@ -314,13 +294,12 @@ void CFilepathEdit::OnPaint()
 	{
 		CClientDC dc(this);
 		CFont *pFontOld = dc.SelectObject(GetFont());	
+		int oldTextColor = dc.SetTextColor(m_crText);
 		int oldBkMode = dc.SetBkMode(TRANSPARENT);
 		CRect rc = GetMenuCharRect(&dc);
-		const int lpx = dc.GetDeviceCaps(LOGPIXELSX);
-		auto pointToPixel = [lpx](int point) { return MulDiv(point, lpx, 72); };
-		const int margin = pointToPixel(3);
-		dc.TextOutW(rc.left + margin, 0, IsWin7_OrGreater() ? _T("\u2261") : _T("="));
+		dc.TextOutW(rc.left, 0, IsWin7_OrGreater() ? _T("\u2261") : _T("="));
 		dc.SetBkMode(oldBkMode);
+		dc.SetTextColor(oldTextColor);
 		dc.SelectObject(pFontOld);
 	}
 }
@@ -345,9 +324,7 @@ CRect CFilepathEdit::GetMenuCharRect(CDC* pDC)
 	GetClientRect(rc);
 	int charWidth;
 	pDC->GetCharWidth('=', '=', &charWidth);
-	const int lpx = pDC->GetDeviceCaps(LOGPIXELSX);
-	auto pointToPixel = [lpx](int point) { return MulDiv(point, lpx, 72); };
-	rc.left = rc.right - charWidth - pointToPixel(3 * 2);
+	rc.left = rc.right - charWidth;
 	return rc;
 }
 
@@ -445,7 +422,7 @@ void CFilepathEdit::OnContextMenuSelected(UINT nID)
 		SetTextColor(::GetSysColor(COLOR_WINDOWTEXT));
 		SetBackColor(::GetSysColor(COLOR_WINDOW));
 		RedrawWindow(nullptr, nullptr, RDW_FRAME | RDW_INVALIDATE);
-		SetWindowText((m_sOriginalText.at(0) == '*' ? m_sOriginalText.substr(2) : m_sOriginalText).c_str());
+		SetWindowText(((!m_sOriginalText.empty() && m_sOriginalText.at(0) == '*') ? m_sOriginalText.substr(2) : m_sOriginalText).c_str());
 		SetSel(0, -1);
 		SetFocus();
 		return;
@@ -455,7 +432,7 @@ void CFilepathEdit::OnContextMenuSelected(UINT nID)
 		GetWindowText(text);
 		if (!text.IsEmpty() && text[0] == '*')
 			text = text.Right(text.GetLength() - 2);
-		String dir = paths::GetParentPath(static_cast<const TCHAR*>(text));
+		String dir = paths::GetParentPath(static_cast<const tchar_t*>(text));
 		bool selected = false;
 		if (m_bEnabledFileSelection)
 			selected = SelectFile(m_hWnd, m_sFilepath, true, dir.c_str());
@@ -488,12 +465,16 @@ BOOL CFilepathEdit::PreTranslateMessage(MSG *pMsg)
 			SetBackColor(MakeBackColor(true, false));
 			RedrawWindow(nullptr, nullptr, RDW_FRAME | RDW_INVALIDATE);
 			SetReadOnly();
-			CString sText;
-			GetWindowText(sText);
-			if (m_sOriginalText.at(2) == '*')
-				sText = _T("* ") + sText;
-			SetWindowText(sText);
-			GetParent()->PostMessage(WM_COMMAND, MAKEWPARAM(GetDlgCtrlID(), EN_USER_CAPTION_CHANGED), (LPARAM)m_hWnd);
+			CString text;
+			GetWindowText(text);
+			String orgtext = m_sOriginalText;
+			if (!orgtext.empty() && orgtext[0] == '*')
+				orgtext = orgtext.substr(2);
+			if (text == orgtext.c_str())
+				SetWindowText(m_sOriginalText.c_str());
+			else
+				GetParent()->PostMessage(WM_COMMAND, MAKEWPARAM(GetDlgCtrlID(), EN_USER_CAPTION_CHANGED), (LPARAM)m_hWnd);
+			::SetFocus(nullptr);
 			return TRUE;
 		}
 		if (pMsg->wParam == VK_ESCAPE)
@@ -504,6 +485,7 @@ BOOL CFilepathEdit::PreTranslateMessage(MSG *pMsg)
 			RedrawWindow(nullptr, nullptr, RDW_FRAME | RDW_INVALIDATE);
 			SetReadOnly();
 			SetWindowText(m_sOriginalText.c_str());
+			::SetFocus(nullptr);
 		}
 	}
 	return CEdit::PreTranslateMessage(pMsg);
@@ -592,4 +574,9 @@ void CFilepathEdit::SetTextColor(COLORREF rgb)
 
 	//redraw
 	Invalidate(TRUE);
+}
+
+void CFilepathEdit::OnSysColorChange()
+{
+	SetActive(GetActive());
 }
