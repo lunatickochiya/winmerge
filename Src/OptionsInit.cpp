@@ -6,7 +6,6 @@
 
 #include "pch.h"
 #include <vector>
-#include <typeinfo>
 #include "OptionsDef.h"
 #include "OptionsMgr.h"
 #include "RegOptionsMgr.h"
@@ -20,13 +19,12 @@
 #include "DiffWrapper.h" // CMP_CONTENT
 #include "paths.h"
 #include "Environment.h"
-#include "FileTransform.h"
 #include "Constants.h"
 
 // Functions to copy values set by installer from HKLM to HKCU.
-static bool OpenHKLM(HKEY *key, LPCTSTR relpath = nullptr);
-static bool OpenHKCU(HKEY *key, LPCTSTR relpath = nullptr);
-static void CopyFromLMtoCU(HKEY lmKey, HKEY cuKey, LPCTSTR valname);
+static bool OpenHKLM(HKEY *key, const tchar_t* relpath = nullptr);
+static bool OpenHKCU(HKEY *key, const tchar_t* relpath = nullptr);
+static void CopyFromLMtoCU(HKEY lmKey, HKEY cuKey, const tchar_t* valname);
 
 namespace Options
 {
@@ -63,14 +61,17 @@ void Init(COptionsMgr *pOptions)
 	pOptions->InitOption(OPT_SHOW_MISSING_MIDDLE_ONLY, true);
 	pOptions->InitOption(OPT_SHOW_MISSING_RIGHT_ONLY, true);
 
+	pOptions->InitOption(OPT_SHOW_MENUBAR, true);
 	pOptions->InitOption(OPT_SHOW_TOOLBAR, true);
 	pOptions->InitOption(OPT_SHOW_STATUSBAR, true);
 	pOptions->InitOption(OPT_SHOW_TABBAR, true);
+	pOptions->InitOption(OPT_REBAR_STATE, _T(""));
 	pOptions->InitOption(OPT_TOOLBAR_SIZE, 0, 0, 2);
 	pOptions->InitOption(OPT_RESIZE_PANES, false);
 
 	pOptions->InitOption(OPT_SYNTAX_HIGHLIGHT, true);
 	pOptions->InitOption(OPT_WORDWRAP, false);
+	pOptions->InitOption(OPT_WORDWRAP_TABLE, false);
 	pOptions->InitOption(OPT_VIEW_LINENUMBERS, false);
 	pOptions->InitOption(OPT_VIEW_WHITESPACE, false);
 	pOptions->InitOption(OPT_VIEW_EOL, false);
@@ -104,7 +105,7 @@ void Init(COptionsMgr *pOptions)
 	pOptions->InitOption(OPT_DIRVIEW_SORT_COLUMN3, (int)-1, -1, 128);
 	pOptions->InitOption(OPT_DIRVIEW_SORT_ASCENDING, true);
 	pOptions->InitOption(OPT_SHOW_SELECT_FILES_AT_STARTUP, false);
-	pOptions->InitOption(OPT_DIRVIEW_EXPAND_SUBDIRS, false);
+	pOptions->InitOption(OPT_DIRVIEW_EXPAND_SUBDIRS, 0, 0, 3);
 	pOptions->InitOption(OPT_DIRVIEW_COLUMN_ORDERS, _T(""));
 	pOptions->InitOption(OPT_DIRVIEW_COLUMN_WIDTHS, _T(""));
 	pOptions->InitOption(OPT_DIRVIEW3_COLUMN_ORDERS, _T(""));
@@ -118,7 +119,7 @@ void Init(COptionsMgr *pOptions)
 
 	pOptions->InitOption(OPT_AUTOMATIC_RESCAN, false);
 	pOptions->InitOption(OPT_ALLOW_MIXED_EOL, false);
-	pOptions->InitOption(OPT_COPY_FULL_LINE, false);
+	pOptions->InitOption(OPT_COPY_GRANULARITY, 3/*Character*/);
 	pOptions->InitOption(OPT_TAB_SIZE, (int)4, 0, 64);
 	pOptions->InitOption(OPT_TAB_TYPE, (int)0, 0, 1);	// 0 means tabs inserted
 
@@ -139,7 +140,7 @@ void Init(COptionsMgr *pOptions)
 
 	pOptions->InitOption(OPT_CMP_METHOD, (int)CMP_CONTENT, 0, CMP_SIZE);
 	pOptions->InitOption(OPT_CMP_MOVED_BLOCKS, false);
-	pOptions->InitOption(OPT_CMP_MATCH_SIMILAR_LINES, false);
+	pOptions->InitOption(OPT_CMP_ALIGN_SIMILAR_LINES, false);
 	pOptions->InitOption(OPT_CMP_STOP_AFTER_FIRST, false);
 	pOptions->InitOption(OPT_CMP_QUICK_LIMIT, 4 * 1024 * 1024); // 4 Megs
 	pOptions->InitOption(OPT_CMP_BINARY_LIMIT, 64 * 1024 * 1024); // 64 Megs
@@ -153,13 +154,14 @@ void Init(COptionsMgr *pOptions)
 	pOptions->InitOption(OPT_CMP_BIN_FILEPATTERNS, _T("*.bin;*.frx"));
 
 	pOptions->InitOption(OPT_CMP_CSV_FILEPATTERNS, _T("*.csv"));
+	pOptions->InitOption(OPT_CMP_CSV_DELIM_CHAR, _T(","));
 	pOptions->InitOption(OPT_CMP_TSV_FILEPATTERNS, _T("*.tsv"));
 	pOptions->InitOption(OPT_CMP_DSV_FILEPATTERNS, _T(""));
 	pOptions->InitOption(OPT_CMP_DSV_DELIM_CHAR, _T(";"));
 	pOptions->InitOption(OPT_CMP_TBL_ALLOW_NEWLINES_IN_QUOTES, true);
 	pOptions->InitOption(OPT_CMP_TBL_QUOTE_CHAR, _T("\""));
 
-	pOptions->InitOption(OPT_CMP_IMG_FILEPATTERNS, _T("*.bmp;*.cut;*.dds;*.exr;*.g3;*.gif;*.hdr;*.ico;*.iff;*.lbm;*.j2k;*.j2c;*.jng;*.jp2;*.jpg;*.jif;*.jpeg;*.jpe;*.jxr;*.wdp;*.hdp;*.koa;*.mng;*.pcd;*.pcx;*.pfm;*.pct;*.pict;*.pic;*.png;*.pbm;*.pgm;*.ppm;*.psd;*.ras;*.sgi;*.rgb;*.rgba;*.bw;*.tga;*.targa;*.tif;*.tiff;*.wap;*.wbmp;*.wbm;*.webp;*.xbm;*.xpm"));
+	pOptions->InitOption(OPT_CMP_IMG_FILEPATTERNS, _T("*.bmp;*.cut;*.dds;*.dng;*.exr;*.g3;*.gif;*.heic;*.hdr;*.ico;*.iff;*.lbm;*.j2k;*.j2c;*.jng;*.jp2;*.jpg;*.jif;*.jpeg;*.jpe;*.jxr;*.wdp;*.hdp;*.koa;*.mng;*.pcd;*.pcx;*.pfm;*.pct;*.pict;*.pic;*.png;*.pbm;*.pgm;*.ppm;*.psd;*.ras;*.sgi;*.rgb;*.rgba;*.bw;*.tga;*.targa;*.tif;*.tiff;*.wap;*.wbmp;*.wbm;*.webp;*.xbm;*.xpm"));
 	pOptions->InitOption(OPT_CMP_IMG_SHOWDIFFERENCES, true);
 	pOptions->InitOption(OPT_CMP_IMG_OVERLAYMODE, 0, 0, 3);
 	pOptions->InitOption(OPT_CMP_IMG_OVERLAYALPHA, 30, 0, 100);
@@ -169,9 +171,11 @@ void Init(COptionsMgr *pOptions)
 	pOptions->InitOption(OPT_CMP_IMG_BACKCOLOR, 0xFFFFFF);
 	pOptions->InitOption(OPT_CMP_IMG_DIFFBLOCKSIZE, 8, 0, 64);
 	pOptions->InitOption(OPT_CMP_IMG_DIFFCOLORALPHA, 70, 0, 100);
-	pOptions->InitOption(OPT_CMP_IMG_THRESHOLD, 0, 0, 442);
+	pOptions->InitOption(OPT_CMP_IMG_THRESHOLD, 0, 0, 442 * 1000);
 	pOptions->InitOption(OPT_CMP_IMG_INSERTIONDELETIONDETECTION_MODE, 0, 0, 2);
 	pOptions->InitOption(OPT_CMP_IMG_VECTOR_IMAGE_ZOOM_RATIO, 1000, 1, 8000);
+	pOptions->InitOption(OPT_CMP_IMG_BLINKINTERVAL, 800, 200, 8000);
+	pOptions->InitOption(OPT_CMP_IMG_OVERLAYANIMATIONINTERVAL, 1000, 200, 8000);
 	pOptions->InitOption(OPT_CMP_IMG_OCR_RESULT_TYPE, 0, 0, 2);
 
 	pOptions->InitOption(OPT_CMP_WEB_USERDATAFOLDER_TYPE, 0, 0, 1);
@@ -184,6 +188,8 @@ void Init(COptionsMgr *pOptions)
 	pOptions->InitOption(OPT_CMP_WEB_USER_AGENT, _T(""));
 	pOptions->InitOption(OPT_CMP_WEB_URL_PATTERN_TO_INCLUDE, _T(""));
 	pOptions->InitOption(OPT_CMP_WEB_URL_PATTERN_TO_EXCLUDE, _T(""));
+	pOptions->InitOption(OPT_CMP_WEB_SYNC_EVENTS, true);
+	pOptions->InitOption(OPT_CMP_WEB_SYNC_EVENT_FLAGS, 0xff);
 
 	pOptions->InitOption(OPT_PROJECTS_PATH, _T(""));
 	pOptions->InitOption(OPT_USE_SYSTEM_TEMP_PATH, true);
@@ -230,6 +236,7 @@ void Init(COptionsMgr *pOptions)
 	pOptions->InitOption(OPT_PATCHCREATOR_INCLUDE_CMD_LINE, false);
 	pOptions->InitOption(OPT_PATCHCREATOR_COPY_TO_CLIPBOARD, false);
 
+	pOptions->InitOption(OPT_TABBAR_ON_TITLEBAR, true);
 	pOptions->InitOption(OPT_TABBAR_AUTO_MAXWIDTH, true);
 	pOptions->InitOption(OPT_ACTIVE_FRAME_MAX, true);
 	pOptions->InitOption(OPT_ACTIVE_PANE, 0, 0, 2);
@@ -237,6 +244,11 @@ void Init(COptionsMgr *pOptions)
 	pOptions->InitOption(OPT_MRU_MAX, 9, 0, 128);
 
 	pOptions->InitOption(OPT_COLOR_SCHEME, _T("Default"));
+
+	pOptions->InitOption(OPT_SYSCOLOR_HOOK_ENABLED, false);
+	pOptions->InitOption(OPT_SYSCOLOR_HOOK_COLORS, _T(""));
+
+	pOptions->InitOption(OPT_MOUSE_HOOK_ENABLED, true);
 
 	Options::CustomColors::Init(pOptions);
 	Options::DiffOptions::Init(pOptions);
@@ -286,9 +298,9 @@ void CopyHKLMValues()
  * @param [in] relpath Relative registry path (to WinMerge reg path) to open, or nullptr.
  * @return true if opening succeeded.
  */
-static bool OpenHKLM(HKEY *key, LPCTSTR relpath)
+static bool OpenHKLM(HKEY *key, const tchar_t* relpath)
 {
-	TCHAR valuename[256];
+	tchar_t valuename[256];
 	if (relpath)
 		wsprintf(valuename, _T("%s\\%s"), RegDir, relpath);
 	else
@@ -309,9 +321,9 @@ static bool OpenHKLM(HKEY *key, LPCTSTR relpath)
  * @param [in] relpath Relative registry path (to WinMerge reg path) to open, or nullptr.
  * @return true if opening succeeded.
  */
-static bool OpenHKCU(HKEY *key, LPCTSTR relpath)
+static bool OpenHKCU(HKEY *key, const tchar_t* relpath)
 {
-	TCHAR valuename[256];
+	tchar_t valuename[256];
 	if (relpath)
 		wsprintf(valuename, _T("%s\\%s"), RegDir, relpath);
 	else
@@ -338,7 +350,7 @@ static bool OpenHKCU(HKEY *key, LPCTSTR relpath)
  * @param [in] cuKey HKCU key to where to copy.
  * @param [in] valname Name of the value to copy.
  */
-static void CopyFromLMtoCU(HKEY lmKey, HKEY cuKey, LPCTSTR valname)
+static void CopyFromLMtoCU(HKEY lmKey, HKEY cuKey, const tchar_t* valname)
 {
 	DWORD len = 0;
 	LONG retval = RegQueryValueEx(cuKey, valname, 0, nullptr, nullptr, &len);

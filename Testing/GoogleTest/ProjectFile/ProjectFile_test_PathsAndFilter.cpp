@@ -10,21 +10,21 @@
 #include "ProjectFile.h"
 
 /** @brief Projectfile to load. */
-static const TCHAR FileName[] = _T("..\\TestData\\PathsAndFilter.WinMerge");
+static const tchar_t FileName[] = _T("..\\TestData\\PathsAndFilter.WinMerge");
 /** @brief Left path we should get from file. */
-static const TCHAR LeftPath[] = _T("C:\\Temp\\Left");
+static const tchar_t LeftPath[] = _T("C:\\Temp\\Left");
 /** @brief Right path we should get from file. */
-static const TCHAR RightPath[] = _T("C:\\Temp\\Right");
+static const tchar_t RightPath[] = _T("C:\\Temp\\Right");
 /** @brief Filter we should get from file. */
-static const TCHAR Filter[] = _T("Filter Name");
+static const tchar_t Filter[] = _T("Filter Name");
 /** @brief Prediffer we should get from file. */
-static const TCHAR Prediffer[] = _T("IgnoreColumns.dll");
+static const tchar_t Prediffer[] = _T("IgnoreColumns.dll");
 /** @brief Unpacker we should get from file. */
-static const TCHAR Unpacker[] = _T("CompareMSExcelFiles.sct");
+static const tchar_t Unpacker[] = _T("CompareMSExcelFiles.sct");
 /** @brief Left desc we should get from file. */
-static const TCHAR LeftDesc[] = _T("left description");
+static const tchar_t LeftDesc[] = _T("left description");
 /** @brief Right desc we should get from file. */
-static const TCHAR RightDesc[] = _T("right description");
+static const tchar_t RightDesc[] = _T("right description");
 
 namespace
 {
@@ -207,13 +207,13 @@ TEST_F(PathAndFilterTest, GetTableProperties)
 	bool bHasTableDelimiter = m_pProjectFileItem->HasTableDelimiter();
 	ASSERT_TRUE(bHasTableDelimiter == true);
 
-	TCHAR tableDelimiter = m_pProjectFileItem->GetTableDelimiter();
+	tchar_t tableDelimiter = m_pProjectFileItem->GetTableDelimiter();
 	ASSERT_TRUE(tableDelimiter == '\t');
 
 	bool bHasTableQuote = m_pProjectFileItem->HasTableQuote();
 	ASSERT_TRUE(bHasTableQuote == true);
 
-	TCHAR tableQuote = m_pProjectFileItem->GetTableQuote();
+	tchar_t tableQuote = m_pProjectFileItem->GetTableQuote();
 	ASSERT_TRUE(tableQuote == '\"');
 
 	bool bHasTableAllowNewLinesInQuotes = m_pProjectFileItem->HasTableAllowNewLinesInQuotes();
@@ -223,4 +223,35 @@ TEST_F(PathAndFilterTest, GetTableProperties)
 	ASSERT_TRUE(tableAllowNewLinesInQuotes == true);
 }
 
+/**
+ * @brief Read diff options
+ */
+TEST_F(PathAndFilterTest, GetDiffOptions)
+{
+	ASSERT_EQ(true, m_pProjectFileItem->HasIgnoreMissingTrailingEol());
+	ASSERT_EQ(true, m_pProjectFileItem->HasFilterCommentsLines());
+	ASSERT_EQ(true, m_pProjectFileItem->HasIgnoreCodepage());
+	ASSERT_EQ(true, m_pProjectFileItem->HasIgnoreNumbers());
+	ASSERT_EQ(true, m_pProjectFileItem->HasIgnoreEol());
+	ASSERT_EQ(true, m_pProjectFileItem->HasIgnoreCase());
+	ASSERT_EQ(true, m_pProjectFileItem->HasIgnoreBlankLines());
+	ASSERT_EQ(true, m_pProjectFileItem->GetIgnoreMissingTrailingEol());
+	ASSERT_EQ(true, m_pProjectFileItem->GetFilterCommentsLines());
+	ASSERT_EQ(true, m_pProjectFileItem->GetIgnoreCodepage());
+	ASSERT_EQ(true, m_pProjectFileItem->GetIgnoreNumbers());
+	ASSERT_EQ(true, m_pProjectFileItem->GetIgnoreEol());
+	ASSERT_EQ(true, m_pProjectFileItem->GetIgnoreCase());
+	ASSERT_EQ(true, m_pProjectFileItem->GetIgnoreBlankLines());
+}
+
+/**
+ * @brief Read hidden items
+ */
+TEST_F(PathAndFilterTest, GetHiddenItems)
+{
+	ASSERT_EQ(true, m_pProjectFileItem->HasHiddenItems());
+	ASSERT_EQ(2, m_pProjectFileItem->GetHiddenItems().size());
+	ASSERT_EQ(_T("file1.txt"), m_pProjectFileItem->GetHiddenItems()[0]);
+	ASSERT_EQ(_T("file2.txt"), m_pProjectFileItem->GetHiddenItems()[1]);
+}
 }

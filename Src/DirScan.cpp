@@ -31,6 +31,7 @@
 #include "DirTravel.h"
 #include "paths.h"
 #include "Plugins.h"
+#include "MergeAppCOMClass.h"
 #include "MergeApp.h"
 #include "OptionsDef.h"
 #include "OptionsMgr.h"
@@ -87,7 +88,7 @@ public:
 		FolderCmp fc(m_pCtxt);
 		// keep the scripts alive during the Rescan
 		// when we exit the thread, we delete this and release the scripts
-		CAssureScriptsForThread scriptsForRescan;
+		CAssureScriptsForThread scriptsForRescan(new MergeAppCOMClass());
 
 		AutoPtr<Notification> pNf(m_queue.waitDequeueNotification());
 		while (pNf.get() != nullptr)
@@ -99,6 +100,13 @@ public:
 					CompareDiffItem(fc, pWorkNf->data());
 				pWorkNf->queueResult().enqueueNotification(new WorkCompletedNotification(pWorkNf->data()));
 			}
+			if (m_pCtxt->m_pCompareStats->IsIdleCompareThread(m_id))
+			{
+				m_pCtxt->m_pCompareStats->BeginCompare(nullptr, m_id);
+				while (!m_pCtxt->ShouldAbort() && m_pCtxt->m_pCompareStats->IsIdleCompareThread(m_id))
+					Poco::Thread::sleep(10);
+			}
+
 			pNf = m_queue.waitDequeueNotification();
 		}
 	}
@@ -139,7 +147,7 @@ int DirScan_GetItems(const PathContext &paths, const String subdir[],
 		bool casesensitive, int depth, DIFFITEM *parent,
 		bool bUniques)
 {
-	static const TCHAR backslash[] = _T("\\");
+	static const tchar_t backslash[] = _T("\\");
 	int nDirs = paths.GetSize();
 	CDiffContext *pCtxt = myStruct->context;
 	String sDir[3];
@@ -490,6 +498,7 @@ int DirScan_CompareItems(DiffFuncStruct *myStruct, DIFFITEM *parentdiffpos)
 	std::vector<DiffWorkerPtr> workers;
 	NotificationQueue queue;
 	myStruct->context->m_pCompareStats->SetCompareThreadCount(nworkers);
+	workers.reserve(nworkers);
 	for (int i = 0; i < nworkers; ++i)
 	{
 		workers.emplace_back(std::make_shared<DiffWorker>(queue, myStruct->context, i));
@@ -498,6 +507,7 @@ int DirScan_CompareItems(DiffFuncStruct *myStruct, DIFFITEM *parentdiffpos)
 
 	int res = CompareItems(queue, myStruct, parentdiffpos);
 
+	myStruct->context->m_pCompareStats->SetIdleCompareThreadCount(0);
 	Thread::sleep(100);
 	queue.wakeUpAll();
 	threadPool.joinAll();
@@ -683,6 +693,7 @@ static int CompareRequestedItems(DiffFuncStruct *myStruct, DIFFITEM *parentdiffp
 		{
 			if (di.diffcode.isScanNeeded())
 			{
+				pCtxt->m_pCompareStats->BeginCompare(&di, 0);
 				CompareDiffItem(fc, di);
 				if (di.diffcode.isResultError())
 				{ 
@@ -712,6 +723,7 @@ static int CompareRequestedItems(DiffFuncStruct *myStruct, DIFFITEM *parentdiffp
 
 int DirScan_CompareRequestedItems(DiffFuncStruct *myStruct, DIFFITEM *parentdiffpos)
 {
+	myStruct->context->m_pCompareStats->SetCompareThreadCount(1);
 	return CompareRequestedItems(myStruct, parentdiffpos);
 }
 

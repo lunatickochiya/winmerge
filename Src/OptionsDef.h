@@ -27,9 +27,11 @@ inline const String OPT_SHOW_MISSING_RIGHT_ONLY {_T("Settings/ShowMissingRightOn
 inline const String OPT_TREE_MODE {_T("Settings/TreeMode"s)};
 
 // Show/hide toolbar/statusbar/tabbar
+inline const String OPT_SHOW_MENUBAR {_T("Settings/ShowMenubar"s)};
 inline const String OPT_SHOW_TOOLBAR {_T("Settings/ShowToolbar"s)};
 inline const String OPT_SHOW_STATUSBAR {_T("Settings/ShowStatusbar"s)};
 inline const String OPT_SHOW_TABBAR {_T("Settings/ShowTabbar"s)};
+inline const String OPT_REBAR_STATE {_T("Settings/ReBarState"s)};
 inline const String OPT_TOOLBAR_SIZE {_T("Settings/ToolbarSize"s)};
 inline const String OPT_RESIZE_PANES {_T("Settings/AutoResizePanes"s)};
 
@@ -77,11 +79,11 @@ inline const String OPT_REPORTFILES_INCLUDEFILECMPREPORT {_T("ReportFiles/Includ
 // File compare
 inline const String OPT_AUTOMATIC_RESCAN {_T("Settings/AutomaticRescan"s)};
 inline const String OPT_ALLOW_MIXED_EOL {_T("Settings/AllowMixedEOL"s)};
-// restore old copy behaviour (always copy "full line" instead of "selected text only"), with a hidden option
-inline const String OPT_COPY_FULL_LINE {_T("Settings/CopyFullLine"s)};
+inline const String OPT_COPY_GRANULARITY {_T("Settings/CopyGranularity"s)};
 inline const String OPT_TAB_SIZE {_T("Settings/TabSize"s)};
 inline const String OPT_TAB_TYPE {_T("Settings/TabType"s)};
 inline const String OPT_WORDWRAP {_T("Settings/WordWrap"s)};
+inline const String OPT_WORDWRAP_TABLE {_T("Settings/WordWrapTable"s)};
 inline const String OPT_VIEW_LINENUMBERS {_T("Settings/ViewLineNumbers"s)};
 inline const String OPT_VIEW_FILEMARGIN {_T("Settings/ViewFileMargin"s)};
 inline const String OPT_VIEW_TOPMARGIN {_T("Settings/ViewTopMargin"s)};
@@ -117,6 +119,10 @@ inline const String OPT_FILE_SIZE_THRESHOLD {_T("Settings/OPT_FILE_SIZE_THRESHOL
 inline const String OPT_AUTO_RELOAD_MODIFIED_FILES {_T("Settings/AutoReloadModifiedFiles"s)};
 
 // Color options
+// SysColor hook
+inline const String OPT_SYSCOLOR_HOOK_ENABLED {_T("Settings/SysColorHookEnabled"s)};
+inline const String OPT_SYSCOLOR_HOOK_COLORS {_T("Settings/SysColorHookColors"s)};
+
 // The difference color
 inline const String OPT_CLR_DIFF {_T("Settings/DifferenceColor"s)};
 // The selected difference color
@@ -206,9 +212,10 @@ inline const String OPT_CMP_IGNORE_CASE {_T("Settings/IgnoreCase"s)};
 inline const String OPT_CMP_IGNORE_NUMBERS {_T("Settings/IgnoreNumbers"s)};
 inline const String OPT_CMP_IGNORE_EOL {_T("Settings/IgnoreEol"s)};
 inline const String OPT_CMP_IGNORE_CODEPAGE {_T("Settings/IgnoreCodepage"s)};
+inline const String OPT_CMP_IGNORE_MISSING_TRAILING_EOL {_T("Settings/IgnoreMissingTrailingEol"s)};
 inline const String OPT_CMP_METHOD {_T("Settings/CompMethod2"s)};
 inline const String OPT_CMP_MOVED_BLOCKS {_T("Settings/MovedBlocks"s)};
-inline const String OPT_CMP_MATCH_SIMILAR_LINES {_T("Settings/MatchSimilarLines"s)};
+inline const String OPT_CMP_ALIGN_SIMILAR_LINES {_T("Settings/MatchSimilarLines"s)};
 inline const String OPT_CMP_STOP_AFTER_FIRST {_T("Settings/StopAfterFirst"s)};
 inline const String OPT_CMP_QUICK_LIMIT {_T("Settings/QuickMethodLimit"s)};
 inline const String OPT_CMP_BINARY_LIMIT {_T("Settings/BinaryMethodLimit"s)};
@@ -234,6 +241,9 @@ inline const String OPT_CMP_IMG_DIFFCOLORALPHA {_T("Settings/ImageDiffColorAlpha
 inline const String OPT_CMP_IMG_THRESHOLD {_T("Settings/ImageColorDistanceThreshold"s)};
 inline const String OPT_CMP_IMG_INSERTIONDELETIONDETECTION_MODE {_T("Settings/ImageInsertionDeletionDetectionMode"s)};
 inline const String OPT_CMP_IMG_VECTOR_IMAGE_ZOOM_RATIO {_T("Settings/ImageVectorImageZoomRatio"s)};
+inline const String OPT_CMP_IMG_BLINKINTERVAL {_T("Settings/ImageBlinkInterval"s)};
+inline const String OPT_CMP_IMG_OVERLAYANIMATIONINTERVAL {_T("Settings/ImageOverlayAnimationInterval"s)};
+
 inline const String OPT_CMP_ENABLE_IMGCMP_IN_DIRCMP {_T("Settings/EnableImageCompareInFolderCompare"s)};
 inline const String OPT_CMP_IMG_OCR_RESULT_TYPE {_T("Settings/ImageOcrResultType"s)};
 
@@ -246,6 +256,8 @@ inline const String OPT_CMP_WEB_VIEW_WIDTH {_T("Settings/WebPageViewWidth"s)};
 inline const String OPT_CMP_WEB_VIEW_HEIGHT {_T("Settings/WebPageViewHeight"s)};
 inline const String OPT_CMP_WEB_ZOOM {_T("Settings/WebZoom"s)};
 inline const String OPT_CMP_WEB_USER_AGENT {_T("Settings/WebUserAgent"s)};
+inline const String OPT_CMP_WEB_SYNC_EVENTS {_T("Settings/WebSyncEvents"s)};
+inline const String OPT_CMP_WEB_SYNC_EVENT_FLAGS {_T("Settings/WebSyncEventFlags"s)};
 inline const String OPT_CMP_WEB_URL_PATTERN_TO_INCLUDE {_T("Settings/WebPageURLPatternToInclude"s)};
 inline const String OPT_CMP_WEB_URL_PATTERN_TO_EXCLUDE {_T("Settings/WebPageURLPatternToExclude"s)};
 
@@ -254,6 +266,7 @@ inline const String OPT_CMP_BIN_FILEPATTERNS {_T("Settings/BinaryFilePatterns"s)
 
 // Table options
 inline const String OPT_CMP_CSV_FILEPATTERNS {_T("Settings/CSVFilePatterns"s)};
+inline const String OPT_CMP_CSV_DELIM_CHAR   {_T("Settings/CSVDelimiterCharacter"s)};
 inline const String OPT_CMP_TSV_FILEPATTERNS {_T("Settings/TSVFilePatterns"s)};
 inline const String OPT_CMP_DSV_FILEPATTERNS {_T("Settings/DSVFilePatterns"s)};
 inline const String OPT_CMP_DSV_DELIM_CHAR   {_T("Settings/DSVDelimiterCharacter"s)};
@@ -294,10 +307,14 @@ inline const String OPT_PLUGINS_OPEN_IN_SAME_FRAME_TYPE {_T("Plugins/OpenInSameF
 inline const String OPT_SHOW_SELECT_FILES_AT_STARTUP {_T("Settings/ShowFileDialog"s)};
 
 // MDI Tab Bar
+inline const String OPT_TABBAR_ON_TITLEBAR {_T("Settings/TabBarOnTitleBar"s)};
 inline const String OPT_TABBAR_AUTO_MAXWIDTH {_T("Settings/TabBarAutoMaxWidth"s)};
 
 // MRU
 inline const String OPT_MRU_MAX {_T("Settings/MRUMax"s)};
+
+// Experimentals
+inline const String OPT_MOUSE_HOOK_ENABLED {_T("Settings/MouseHookEnabled"s)};
 
 // Font options
 inline const String OPT_FONT_FILECMP {_T("Font/"s)};

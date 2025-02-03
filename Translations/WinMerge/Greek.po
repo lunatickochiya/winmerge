@@ -60,6 +60,18 @@ msgstr ""
 msgid "Copy Selected Line(s) from Left"
 msgstr ""
 
+msgid "Copy Selected Diff (Left) to Clipboard\tCtrl+&1"
+msgstr ""
+
+msgid "Copy Selected Diff (Right) to Clipboard\tCtrl+&2"
+msgstr ""
+
+msgid "Copy Selected Diff (Middle) to Clipboard\tCtrl+&2"
+msgstr ""
+
+msgid "Copy Selected Diff (Right) to Clipboard\tCtrl+&3"
+msgstr ""
+
 #, c-format
 msgid "Select Line &Difference\tF4"
 msgstr "Επιλο&γή Διαφοράς Γραμμής\tF4"
@@ -242,6 +254,15 @@ msgstr ""
 msgid "&Vector Image Scaling"
 msgstr ""
 
+msgid "&Animation Settings"
+msgstr ""
+
+msgid "&Blink interval"
+msgstr ""
+
+msgid "&Overlay animation interval"
+msgstr ""
+
 msgid "Compare Extracted &Text From Images"
 msgstr ""
 
@@ -267,6 +288,24 @@ msgid "&Size"
 msgstr ""
 
 msgid "Fit to Window"
+msgstr ""
+
+msgid "&Event Sync"
+msgstr ""
+
+msgid "&Enabled"
+msgstr ""
+
+msgid "&Scroll"
+msgstr ""
+
+msgid "&Click"
+msgstr ""
+
+msgid "&Input"
+msgstr ""
+
+msgid "&GoBack/Forward"
 msgstr ""
 
 msgid "Clear &Browsing Data"
@@ -360,12 +399,25 @@ msgid "&View"
 msgstr "Πρ&οβολή"
 
 #, c-format
+msgid "Ta&b Bar"
+msgstr "Γραμμή Σε&λιδοδεικτών"
+
+msgid "&View Tab Bar"
+msgstr ""
+
+msgid "&On Title Bar"
+msgstr ""
+
+#, c-format
 msgid "&Toolbar"
 msgstr "Γραμμή Ε&ργαλείων"
 
 #, c-format
 msgid "&Small"
 msgstr "Μι&κρή"
+
+msgid "&Medium"
+msgstr ""
 
 #, c-format
 msgid "&Big"
@@ -375,13 +427,12 @@ msgstr "Με&γάλη"
 msgid "&Huge"
 msgstr ""
 
+msgid "Men&u Bar"
+msgstr ""
+
 #, c-format
 msgid "&Status Bar"
 msgstr "Γραμμή &Καταστάσεως"
-
-#, c-format
-msgid "Ta&b Bar"
-msgstr "Γραμμή Σε&λιδοδεικτών"
 
 #, c-format
 msgid "&Tools"
@@ -563,8 +614,16 @@ msgstr "Εμφάνιση Κρυ&φών Στοιχείων"
 msgid "Tree &Mode"
 msgstr ""
 
-#, c-format
-msgid "E&xpand All Subfolders"
+msgid "E&xpand Subfolders"
+msgstr ""
+
+msgid "&All Subfolders"
+msgstr ""
+
+msgid "&Different Subfolders"
+msgstr ""
+
+msgid "&Identical Subfolders"
 msgstr ""
 
 #, c-format
@@ -993,6 +1052,12 @@ msgstr ""
 msgid "&Transform with editor script..."
 msgstr ""
 
+msgid "Scripts for &copying"
+msgstr ""
+
+msgid "Select &editor script..."
+msgstr ""
+
 #, c-format
 msgid "Sp&lit"
 msgstr ""
@@ -1162,6 +1227,12 @@ msgstr ""
 msgid "Right Shell menu"
 msgstr ""
 
+msgid "Both Shell menu"
+msgstr ""
+
+msgid "All Shell menu"
+msgstr ""
+
 #, c-format
 msgid "Copy"
 msgstr ""
@@ -1248,8 +1319,11 @@ msgstr ""
 msgid "Ignore c&omment differences"
 msgstr ""
 
+msgid "Ignore &missing trailing EOL"
+msgstr ""
+
 #, c-format
-msgid "&Include Subfolders"
+msgid "&Include subfolders"
 msgstr "Οι Υποφάκελοι να &συμπεριληφθούν"
 
 #, c-format
@@ -1282,6 +1356,81 @@ msgstr "Μέγεθος"
 
 #, c-format
 msgid "&Load Project..."
+msgstr ""
+
+msgid "${*} - All arguments"
+msgstr ""
+
+msgid "${1} - The first argument"
+msgstr ""
+
+msgid "${2} - The second argument"
+msgstr ""
+
+msgid "${3} - The third argument"
+msgstr ""
+
+msgid "${4} - The fourth argument"
+msgstr ""
+
+msgid "${5} - The fifth argument"
+msgstr ""
+
+msgid "${6} - The sixth argument"
+msgstr ""
+
+msgid "${7} - The seventh argument"
+msgstr ""
+
+msgid "${8} - The eighth argument"
+msgstr ""
+
+msgid "${9} - The ninth argument"
+msgstr ""
+
+msgid "${SRC_FILE} - Source file"
+msgstr ""
+
+msgid "${SRC_FOLDER} - Source folder"
+msgstr ""
+
+msgid "${SRC_URL} - Source URL"
+msgstr ""
+
+msgid "${SRC_URL_PROTOCOL} - Source URL protocol"
+msgstr ""
+
+msgid "${SRC_URL_SUFFIX} - Source URL suffix"
+msgstr ""
+
+msgid "${DST_FILE} - Destination file"
+msgstr ""
+
+msgid "${DST_FOLDER} - Destination folder"
+msgstr ""
+
+msgid "${DST_URL} - Destination URL"
+msgstr ""
+
+msgid "${DST_URL_PROTOCOL} - Destination URL protocol"
+msgstr ""
+
+msgid "${DST_URL_SUFFIX} - Destination URL suffix"
+msgstr ""
+
+msgid "${WINMERGE_HOME} - WinMerge home directory"
+msgstr ""
+
+msgid "${SCRIPT_FILE} - Script file"
+msgstr ""
+
+msgid "Add &unpacker plugin..."
+msgstr ""
+
+msgid "Add &prediffer plugin..."
+msgstr ""
+
+msgid "&Duplicate plugin..."
 msgstr ""
 
 #, c-format
@@ -1408,10 +1557,10 @@ msgid "&Preserve file time in file compare"
 msgstr "Δια&τήρηση της ώρας τροποποιήσεως κατά τη σύγκριση αρχείων"
 
 #, c-format
-msgid "Show \"Select Files or Folders\" Dialog on Startup"
+msgid "Show \"Select Files or Folders\" dialog on startup"
 msgstr ""
 
-msgid "Close \"Select Files or Folders\" Dialog on clicking Compare button"
+msgid "Close \"Select Files or Folders\" dialog on clicking Compare button"
 msgstr ""
 
 #, c-format
@@ -1424,6 +1573,10 @@ msgstr ""
 #, c-format
 msgid "Language:"
 msgstr ""
+
+#, c-format
+msgid "Defaults"
+msgstr "&Αρχικές Ρυθμίσεις"
 
 #, c-format
 msgid "Find"
@@ -1609,6 +1762,86 @@ msgstr "Διαφορά Λέξεως:"
 msgid "Selected Word Diff:"
 msgstr "Επιλεγμένη Διαφορά Λέξεως:"
 
+#, c-format
+msgid "Dialog"
+msgstr "Διάλογος"
+
+#, c-format
+msgid "Keywords:"
+msgstr "Ειδικές Λέξεις:"
+
+#, c-format
+msgid "Function names:"
+msgstr "Ονόματα Διεργασιών:"
+
+#, c-format
+msgid "Comments:"
+msgstr "Σχόλια:"
+
+#, c-format
+msgid "Numbers:"
+msgstr "Αριθμοί:"
+
+#, c-format
+msgid "Operators:"
+msgstr "Τελεστές:"
+
+#, c-format
+msgid "Strings:"
+msgstr "Αυτούσιο Κείμενο:"
+
+#, c-format
+msgid "Preprocessor:"
+msgstr "Προεπεξεργαστής:"
+
+#, c-format
+msgid "User 1:"
+msgstr "από Χρήστη 1:"
+
+#, c-format
+msgid "User 2:"
+msgstr "από Χρήστη 2:"
+
+#, c-format
+msgid "Bold"
+msgstr "Έντονα"
+
+#, c-format
+msgid "&Use customized text colors"
+msgstr "Χρήση προ&τιμωμένων χρωματισμών κειμένου"
+
+#, c-format
+msgid "Whitespace:"
+msgstr "Χαρακτήρες Διαστήματος:"
+
+#, c-format
+msgid "Regular text:"
+msgstr "Απλό κείμενο:"
+
+#, c-format
+msgid "Selection:"
+msgstr "Επιλογή:"
+
+#, c-format
+msgid "Margin:"
+msgstr ""
+
+#, c-format
+msgid "Search Marker:"
+msgstr ""
+
+#, c-format
+msgid "User Defined Marker1:"
+msgstr ""
+
+#, c-format
+msgid "User Defined Marker2:"
+msgstr ""
+
+#, c-format
+msgid "User Defined Marker3:"
+msgstr ""
+
 msgid "&Use folder compare colors"
 msgstr ""
 
@@ -1624,8 +1857,7 @@ msgstr ""
 msgid "Items filtered:"
 msgstr ""
 
-#, c-format
-msgid "Margin:"
+msgid "&Use custom system colors (Some UI elements may not apply)"
 msgstr ""
 
 #, c-format
@@ -1713,10 +1945,6 @@ msgid "Open to e&xternal editor"
 msgstr "Άν&οιγμα με άλλη εφαρμογή επεξεργασίας"
 
 #, c-format
-msgid "Defaults"
-msgstr "&Αρχικές Ρυθμίσεις"
-
-#, c-format
 msgid "Display Columns"
 msgstr "Εμφάνιση Στηλών"
 
@@ -1734,19 +1962,13 @@ msgstr ""
 msgid "Additional Properties"
 msgstr ""
 
-msgid "&>"
-msgstr ""
-
-msgid "&<"
-msgstr ""
-
-msgid "<<"
-msgstr ""
-
 msgid "Select Plugin"
 msgstr ""
 
-msgid "Plugin &Name:"
+msgid "Plugin &name:"
+msgstr ""
+
+msgid "&Target files:"
 msgstr ""
 
 #, c-format
@@ -1766,10 +1988,10 @@ msgstr ""
 msgid "&Open files in the same window type after unpacking"
 msgstr ""
 
-msgid "&Plugin Pipeline:"
+msgid "&Plugin pipeline:"
 msgstr ""
 
-msgid "&Add pipe"
+msgid "&Alias..."
 msgstr ""
 
 #, c-format
@@ -1784,17 +2006,16 @@ msgstr ""
 msgid "Continue"
 msgstr ""
 
-#, c-format
-msgid "Comparing items..."
-msgstr "Σύγκριση αντικειμένων..."
-
-#, c-format
-msgid "Items compared:"
-msgstr "Συγκριθέντα αντικείμενα:"
+msgid "&Number of CPU cores to use:"
+msgstr ""
 
 #, c-format
 msgid "Items total:"
 msgstr "Σύνολο αντικειμένων:"
+
+#, c-format
+msgid "Items compared:"
+msgstr "Συγκριθέντα αντικείμενα:"
 
 msgid "Go to"
 msgstr "Μετάβαση"
@@ -1847,7 +2068,7 @@ msgstr "Ενεργοποίηση ανι&χνεύσεως μετακινηθέν�
 msgid "Align &similar lines"
 msgstr ""
 
-msgid "Diff &algorithm (Experimental):"
+msgid "Diff &algorithm:"
 msgstr ""
 
 msgid "Enable indent &heuristic"
@@ -1863,10 +2084,6 @@ msgstr "Επεξεργασία Κειμένου"
 #, c-format
 msgid "&Highlight syntax"
 msgstr "&Χρωματισμός Κώδικα"
-
-#, c-format
-msgid "&Automatic rescan"
-msgstr "Α&υτόματη Επανεξέταση"
 
 #, c-format
 msgid "&Preserve original EOL chars"
@@ -1888,6 +2105,16 @@ msgstr "Ε&ισαγωγή Στηλοθετών"
 msgid "Insert &Spaces"
 msgstr "Εισαγωγή Κενών &Διαστημάτων"
 
+msgid "&Rendering Mode:"
+msgstr ""
+
+#, c-format
+msgid "&Automatic rescan"
+msgstr "Α&υτόματη Επανεξέταση"
+
+msgid "Copy &granularity for selected differences:"
+msgstr ""
+
 #, c-format
 msgid "Line Difference Coloring"
 msgstr "Χρωματισμός Διαφορών Γραμμών"
@@ -1906,9 +2133,6 @@ msgstr "Επίπεδο &Λέξεων"
 
 #, c-format
 msgid "W&ord break characters:"
-msgstr ""
-
-msgid "&Rendering Mode:"
 msgstr ""
 
 msgid "WinMerge allows hiding some common message boxes. Press the Reset button to make all message boxes visible again."
@@ -2025,66 +2249,6 @@ msgstr "Εισαγωγή..."
 #, c-format
 msgid "Export..."
 msgstr "Εξαγωγή..."
-
-#, c-format
-msgid "Dialog"
-msgstr "Διάλογος"
-
-#, c-format
-msgid "Keywords:"
-msgstr "Ειδικές Λέξεις:"
-
-#, c-format
-msgid "Function names:"
-msgstr "Ονόματα Διεργασιών:"
-
-#, c-format
-msgid "Comments:"
-msgstr "Σχόλια:"
-
-#, c-format
-msgid "Numbers:"
-msgstr "Αριθμοί:"
-
-#, c-format
-msgid "Operators:"
-msgstr "Τελεστές:"
-
-#, c-format
-msgid "Strings:"
-msgstr "Αυτούσιο Κείμενο:"
-
-#, c-format
-msgid "Preprocessor:"
-msgstr "Προεπεξεργαστής:"
-
-#, c-format
-msgid "User 1:"
-msgstr "από Χρήστη 1:"
-
-#, c-format
-msgid "User 2:"
-msgstr "από Χρήστη 2:"
-
-#, c-format
-msgid "Bold"
-msgstr "Έντονα"
-
-#, c-format
-msgid "Search Marker:"
-msgstr ""
-
-#, c-format
-msgid "User Defined Marker1:"
-msgstr ""
-
-#, c-format
-msgid "User Defined Marker2:"
-msgstr ""
-
-#, c-format
-msgid "User Defined Marker3:"
-msgstr ""
 
 #, c-format
 msgid "Folder Compare Report"
@@ -2273,22 +2437,6 @@ msgid "&Quote character:"
 msgstr ""
 
 #, c-format
-msgid "&Use customized text colors"
-msgstr "Χρήση προ&τιμωμένων χρωματισμών κειμένου"
-
-#, c-format
-msgid "Whitespace:"
-msgstr "Χαρακτήρες Διαστήματος:"
-
-#, c-format
-msgid "Regular text:"
-msgstr "Απλό κείμενο:"
-
-#, c-format
-msgid "Selection:"
-msgstr "Επιλογή:"
-
-#, c-format
 msgid "Backup Files"
 msgstr "Εφεδρικά Αρχεία"
 
@@ -2363,6 +2511,9 @@ msgstr "Αρθρώματα"
 msgid "&Enable plugins"
 msgstr "Ενεργοποίηση Αρθρωμάτων"
 
+msgid "Plugin &type:"
+msgstr ""
+
 msgid "File filters:"
 msgstr ""
 
@@ -2411,6 +2562,12 @@ msgstr ""
 msgid "Unregister shell extension for W&indows 11 or later"
 msgstr ""
 
+msgid "Jump List"
+msgstr ""
+
+msgid "Clear all recent items"
+msgstr ""
+
 msgctxt "Options dialog|Categories"
 msgid "Folder"
 msgstr "Φάκελος"
@@ -2423,16 +2580,15 @@ msgstr "&Τερματισμός μετά την πρώτη διαφορά"
 msgid "Ign&ore time differences less than 3 seconds"
 msgstr "Διαφορές ώρας μικρότερες των &3 δευτερολέπτων να αγνοούνται"
 
+msgid "&Automatically expand subfolders after comparison:"
+msgstr ""
+
 #, c-format
 msgid "Include &unique subfolders contents"
 msgstr ""
 
 #, c-format
-msgid "&Automatically expand all subfolders"
-msgstr ""
-
-#, c-format
-msgid "Ignore &Reparse Points"
+msgid "Ignore &reparse points"
 msgstr ""
 
 msgid "Threshold for switching to &quick compare (MB):"
@@ -2441,19 +2597,10 @@ msgstr ""
 msgid "Threshold for switching to &binary compare (MB):"
 msgstr ""
 
-msgid "&Number of CPU cores to use:"
-msgstr ""
-
-msgid "&CSV File Patterns:"
-msgstr ""
-
-msgid "&TSV File Patterns:"
+msgid "File patterns:"
 msgstr ""
 
 msgid "Custom Delimiter-Separated Values"
-msgstr ""
-
-msgid "File Patterns:"
 msgstr ""
 
 msgctxt "Options dialog|Categories"
@@ -2461,7 +2608,7 @@ msgid "Binary"
 msgstr "Δυαδικό"
 
 #, c-format
-msgid "Binary File &Patterns:"
+msgid "Binary file &patterns:"
 msgstr ""
 
 #, c-format
@@ -2484,7 +2631,7 @@ msgid "Image"
 msgstr ""
 
 #, c-format
-msgid "Image File &Patterns:"
+msgid "Image file &patterns:"
 msgstr ""
 
 msgid "&Enable image compare in folder compare"
@@ -2510,6 +2657,36 @@ msgstr ""
 
 #, c-format
 msgid "&Hex View"
+msgstr ""
+
+msgid "Edit Plugin"
+msgstr ""
+
+msgid "&Category:"
+msgstr ""
+
+msgid "&Menu caption:"
+msgstr ""
+
+msgid "&Window type:"
+msgstr ""
+
+msgid "&Unpacked file extension:"
+msgstr ""
+
+msgid "&Require arguments"
+msgstr ""
+
+msgid "&Generate editor script"
+msgstr ""
+
+msgid "Command &line:"
+msgstr ""
+
+msgid "&Script file extension:"
+msgstr ""
+
+msgid "Script &body:"
 msgstr ""
 
 #, c-format
@@ -2661,6 +2838,9 @@ msgstr "Να μην εμφανισθεί ξανά αυτό το &Μήνυμα."
 msgid "To make this message box visible again, press the Reset button on the Message Boxes page of the Options dialog."
 msgstr ""
 
+msgid "Compare/Merge"
+msgstr ""
+
 #, c-format
 msgid "Syntax"
 msgstr ""
@@ -2764,6 +2944,18 @@ msgstr "Αρχεία HTML (*.htm,*.html)|*.htm;*.html|Όλα τα Αρχεία (
 #, c-format
 msgid "XML Files (*.xml)|*.xml|All Files (*.*)|*.*||"
 msgstr "Αρχεία XML (*.xml)|*.xml|All Files (*.*)|*.*||"
+
+msgid "Do not expand"
+msgstr ""
+
+msgid "Expand all subfolders"
+msgstr ""
+
+msgid "Expand different subfolders"
+msgstr ""
+
+msgid "Expand identical subfolders"
+msgstr ""
 
 msgid "File Type"
 msgstr ""
@@ -2965,6 +3157,14 @@ msgstr "Αντικείμενο %1 από %2"
 #, c-format
 msgid "Items: %1"
 msgstr "Αντικείμενα: %1"
+
+#, c-format
+msgid "Comparing items..."
+msgstr "Σύγκριση αντικειμένων..."
+
+#, c-format
+msgid "%.1f[items/sec]"
+msgstr ""
 
 msgid "Select two existing folders or files to compare."
 msgstr "Επιλέξατε δύο υπάρχοντες φακέλους ή αρχεία προς σύγκριση."
@@ -3254,6 +3454,9 @@ msgstr ""
 msgid "Differences to... (%1)"
 msgstr ""
 
+msgid "Some selected items are identical or skipped.\nDo you want to copy only the items with differences?"
+msgstr ""
+
 #, c-format
 msgid "Left (%1)"
 msgstr "Αριστερό (%1)"
@@ -3342,6 +3545,9 @@ msgstr "Επιβεβαιώσατε Μετακίνηση"
 
 #, c-format
 msgid "You are about to close the window that is comparing folders. Are you sure you want to close the window?"
+msgstr ""
+
+msgid "You are about to close the folder comparison window that took a significant amount of time. Are you sure you want to close the window?"
 msgstr ""
 
 msgid "The file or folder name is invalid."
@@ -3909,6 +4115,9 @@ msgstr ""
 "%1\n"
 "στην άλλη πλευρά και να ανοίξετε αυτούς τους φακέλους;"
 
+msgid "Are you sure you want to copy all differences to the other file?"
+msgstr ""
+
 #, c-format
 msgid "Do you want to move to the next file?"
 msgstr ""
@@ -4124,7 +4333,7 @@ msgid "Editor script"
 msgstr "Μακροεντολές Επεξεργαστή Κειμένου"
 
 #, c-format
-msgid "\nDifference in the Current Line"
+msgid "\nDifference in the Current Line (F4)"
 msgstr ""
 
 #, c-format
@@ -4292,7 +4501,10 @@ msgstr ""
 msgid "We&bpage"
 msgstr ""
 
-msgid "Frhed is not installed."
+msgid "W&rap Text"
+msgstr ""
+
+msgid "%1 is not installed."
 msgstr ""
 
 #, c-format
@@ -4497,6 +4709,181 @@ msgstr ""
 msgid "Al&l"
 msgstr ""
 
+msgid "&Others"
+msgstr ""
+
+#, c-format
+msgid "Missing plugin name in plugin pipeline: %1"
+msgstr ""
+
+#, c-format
+msgid "Missing quotation mark in plugin pipeline: %1"
+msgstr ""
+
+#, c-format
+msgid "The plugin name '%1' already exists."
+msgstr ""
+
+msgid "Specify plugin arguments"
+msgstr ""
+
+#, c-format
+msgid "Plugin not found or invalid: %1"
+msgstr ""
+
+#, c-format
+msgid "'%1' is not unpacker plugin"
+msgstr ""
+
+#, c-format
+msgid "'%1' is not prediffer plugin"
+msgstr ""
+
+#, c-format
+msgid "An error occurred while prediffing the file '%1' with the plugin '%2'. The prediffing is not applied any more."
+msgstr ""
+
+#, c-format
+msgid "Circular reference in plugin pipeline: %1"
+msgstr ""
+
+msgid "URL Handler"
+msgstr ""
+
+msgid "File Unpacker"
+msgstr ""
+
+msgid "File or Folder Unpacker"
+msgstr ""
+
+msgid "Alias for Unpacker"
+msgstr ""
+
+msgid "Alias for Prediffer"
+msgstr ""
+
+msgid "Alias for Editor script"
+msgstr ""
+
+#, c-format
+msgid "Alias for plugin pipeline '%1'"
+msgstr ""
+
+msgid "New plugin description"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "1st"
+msgstr ""
+
+msgid "2nd"
+msgstr ""
+
+msgid "3rd"
+msgstr ""
+
+msgid "1st and 2nd"
+msgstr ""
+
+msgid "1st and 3rd"
+msgstr ""
+
+msgid "2nd and 3rd"
+msgstr ""
+
+msgid "Filter applied"
+msgstr ""
+
+#, c-format
+msgid "Clipboard at %s"
+msgstr ""
+
+msgid "Clipboard history is disabled.\r\nTo enable clipboard history, press Windows logo key + V and then click the Turn on button."
+msgstr ""
+
+msgid "This system does not support clipboard history."
+msgstr ""
+
+msgid "The 32-bit version of WinMerge does not support Clipboard Compare"
+msgstr ""
+
+msgid "WebView2 runtime is not installed. Do you want to download it?"
+msgstr ""
+
+msgid "New Text Compare"
+msgstr ""
+
+msgid "New Table Compare"
+msgstr ""
+
+msgid "New Binary Compare"
+msgstr ""
+
+msgid "New Image Compare"
+msgstr ""
+
+msgid "New Webpage Compare"
+msgstr ""
+
+msgid "Clipboard Compare"
+msgstr ""
+
+msgid "&Print..."
+msgstr ""
+
+msgid "Pre&v Page"
+msgstr ""
+
+msgid "&Two Page"
+msgstr ""
+
+msgid "&One Page"
+msgstr ""
+
+msgid "Zoom &In"
+msgstr ""
+
+msgid "Zoom &Out"
+msgstr ""
+
+msgid "Comparing..."
+msgstr ""
+
+msgid "Zoom:"
+msgstr ""
+
+msgid "Diff hunk"
+msgstr ""
+
+msgid "Inline diff"
+msgstr ""
+
+msgid "Line"
+msgstr ""
+
+msgid "Character"
+msgstr ""
+
+msgid "\nPrevious Difference (Alt+Up)\n(Right Button+Wheel Up)\n(Alt+Wheel Up)"
+msgstr ""
+
+msgid "\nNext Difference (Alt+Down)\n(Right Button+Wheel Down)\n(Alt+Wheel Down)"
+msgstr ""
+
+msgid "\nCopy to Right (Alt+Right)\n(Right Button+Wheel Right)\n(Alt+Wheel Right)\n(Alt+Shift+Wheel Down)"
+msgstr ""
+
+msgid "\nCopy to Left (Alt+Left)\n(Right Button+Wheel Left)\n(Alt+Wheel Left)\n(Alt+Shift+Wheel Up)"
+msgstr ""
+
+msgid "\nCopy to Right and Advance (Ctrl+Alt+Right)\n(Ctrl+Alt+Wheel Right)\n(Ctrl+Alt+Shift+Wheel Down)"
+msgstr ""
+
+msgid "\nCopy to Left and Advance (Ctrl+Alt+Left)\n(Ctrl+Alt+Wheel Left)\n(Ctrl+Alt+Shift+Wheel Up)"
+msgstr ""
+
 msgid "Prettification"
 msgstr ""
 
@@ -4515,10 +4902,10 @@ msgstr ""
 msgid "Decompilation"
 msgstr ""
 
-msgid "&Others"
+msgid "URL Handling"
 msgstr ""
 
-msgid "URL Handling"
+msgid "Decoding / Encoding"
 msgstr ""
 
 msgid "Make Uppercase"
@@ -4584,6 +4971,9 @@ msgstr ""
 msgid "Ignore TSV Fields"
 msgstr ""
 
+msgid "Ignore Leading Line Numbers"
+msgstr ""
+
 msgid "Apply Prediff Substitution Filters"
 msgstr ""
 
@@ -4632,15 +5022,10 @@ msgstr ""
 msgid "Disassemble Native Code"
 msgstr ""
 
-#, c-format
-msgid "Missing plugin name in plugin pipeline: %1"
+msgid "Convert Text with AI..."
 msgstr ""
 
-#, c-format
-msgid "Missing quotation mark in plugin pipeline: %1"
-msgstr ""
-
-msgid "Specify plugin arguments"
+msgid "Unescape Java properties files"
 msgstr ""
 
 msgid "Make characters uppercase"
@@ -4667,7 +5052,7 @@ msgstr ""
 msgid "Reverse lines"
 msgstr ""
 
-msgid "Replace text with another text.\r\nUsage: Replace [-i] [-e] FIND REPLACE\r\n  FIND    - text to find\r\n  REPLACE - text to replace\r\n  -i - ignore case (only for -e)\r\n  -e - treat the specified text as a regular expression"
+msgid "Replace text with another text.\r\nUsage: Replace [-i] [-e] FIND REPLACE\r\n   or: Replace -s\r\n  FIND    - text to find\r\n  REPLACE - text to replace\r\n  -i - ignore case (only for -e)\r\n  -e - treat the specified text as a regular expression\r\n  -s - replace using Substitution Filters patterns"
 msgstr ""
 
 #, c-format
@@ -4734,7 +5119,7 @@ msgstr ""
 msgid "General content extractor with Apache Tika. \r\nArguments: Command line options passed to the tika-app.jar."
 msgstr ""
 
-msgid "Apply patch using GnuWin32 Patch for Windows"
+msgid "Apply patch using GNU patch"
 msgstr ""
 
 msgid "Display the text content of MS Excel files"
@@ -4758,10 +5143,13 @@ msgstr ""
 msgid "Ignore some fields - ignored fields list from the plugin name or the plugin argument"
 msgstr ""
 
+msgid "This plugin ignores the leading line numbers in text files (e.g. NC and BASIC files)."
+msgstr ""
+
 msgid "Prediff Line Filter"
 msgstr ""
 
-msgid "Basic text functions for the context menu"
+msgid "Date and time insertion function"
 msgstr ""
 
 msgid "HTTP URL Scheme Handler with curl. \r\nArguments: Command line options passed to the curl command."
@@ -4770,21 +5158,169 @@ msgstr ""
 msgid "Windows Registry URL Scheme Handler. \r\nArguments: Command line options passed to the reg.exe command."
 msgstr ""
 
-msgid "Filter applied"
+msgid "Basic text functions"
+msgstr ""
+
+msgid "AI-assisted text conversion functions"
+msgstr ""
+
+msgid "Text converter using OpenAI API.\r\nUsage: AIConvertText PROMPT"
+msgstr ""
+
+msgid "Unescape and display escaped Java properties files."
+msgstr ""
+
+msgid "CompareMSExcelFiles.sct WinMerge Plugin Options"
+msgstr ""
+
+msgid "Extract workbook data to multiple files"
+msgstr ""
+
+msgid "Update external references(links)"
+msgstr ""
+
+msgid "Compare document properties"
+msgstr ""
+
+msgid "Compare names"
+msgstr ""
+
+msgid "Compare cell values"
+msgstr ""
+
+msgid "Compare worksheets as image (very slow)"
+msgstr ""
+
+msgid " - Image split size: "
+msgstr ""
+
+msgid "Compare worksheets as HTML"
+msgstr ""
+
+msgid "Compare formulas"
+msgstr ""
+
+msgid "Compare texts in shapes"
+msgstr ""
+
+msgid "Compare headers and footers"
+msgstr ""
+
+msgid "Cannot get Macros.\r\n   To allow WinMerge to compare macros, use MS Office to alter the settings in the Macro Security for the current application.\r\n   The Trust access to Visual Basic Project feature should be turned on to use this feature in WinMerge.\r\n"
+msgstr ""
+
+msgid "Compare VBA macros"
+msgstr ""
+
+msgid "CompareMSWordFiles.sct WinMerge Plugin Options"
+msgstr ""
+
+msgid "Extract document data to multiple files"
+msgstr ""
+
+msgid "Compare bookmarks"
+msgstr ""
+
+msgid "Compare text contents of documents"
+msgstr ""
+
+msgid "Compare documents as HTML file (very slow)"
+msgstr ""
+
+msgid "CompareMSPowerPointFiles.sct WinMerge Plugin Options"
+msgstr ""
+
+msgid "Extract slide data to multiple files"
+msgstr ""
+
+msgid "Compare slides as image (very slow)"
+msgstr ""
+
+msgid "Compare texts in notes page"
+msgstr ""
+
+msgid "CompareMSVisioFiles.sct WinMerge Plugin Options"
+msgstr ""
+
+msgid "Extract page data to multiple files"
+msgstr ""
+
+msgid "Compare pages as image (very slow)"
+msgstr ""
+
+msgid "PrediffLineFilter.sct WinMerge Plugin Options"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid "Ignore Case"
+msgstr ""
+
+msgid "Use RegExp"
+msgstr ""
+
+msgid "Find what"
+msgstr ""
+
+msgid "Replace with"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Column Ranges To Ignore:\ne.g.)  3,10-20,32-33\n"
 msgstr ""
 
 #, c-format
-msgid "Clipboard at %s"
+msgid "Enter the name of the file to which the patch '%1' will be applied"
 msgstr ""
 
-msgid "Clipboard history is disabled.\r\nTo enable clipboard history, press Windows logo key + V and then click the Turn on button."
+#, c-format
+msgid "File '%1' does not exist"
 msgstr ""
 
-msgid "This system does not support clipboard history."
+msgid "Enter the command line arguments for patch command"
 msgstr ""
 
-msgid "The 32-bit version of WinMerge does not support Clipboard Compare"
+#, c-format
+msgid "Enter the name of the folder to which the patch '%1' will be applied"
 msgstr ""
 
-msgid "WebView2 runtime is not installed. Do you want to download it?"
+#, c-format
+msgid "Folder '%1' does not exist"
+msgstr ""
+
+msgid "Do not specify the '-p0' command line option for the patch file which includes absolute paths"
+msgstr ""
+
+msgid "AI.sct WinMerge Plugin Options"
+msgstr ""
+
+msgid "Enter prompt"
+msgstr ""
+
+#, c-format
+msgid "Enter your OpenAI API key.\r\n - Use of this plugin requires registration with OpenAI and incurs fees.\r\n - The API key is stored in the environment variable %1."
+msgstr ""
+
+msgid "Environment variable name for OpenAI API key"
+msgstr ""
+
+msgid "OpenAI API key"
+msgstr ""
+
+msgid "Temperature"
+msgstr ""
+
+msgid "Maximum length"
+msgstr ""
+
+msgid "Model"
+msgstr ""
+
+msgid "OpenAI API key has changed. Please restart WinMerge to apply the changes."
 msgstr ""

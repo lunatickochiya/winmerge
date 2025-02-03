@@ -8,12 +8,9 @@
 
 #include "pch.h"
 #include "DiffFileData.h"
-#include <io.h>
-#include <memory>
+#include "cio.h"
 #include "DiffItem.h"
-#include "FileLocation.h"
 #include "diff.h"
-#include "TFile.h"
 #include "FileTransform.h"
 #include "unicoder.h"
 #include "DebugNew.h"
@@ -67,7 +64,7 @@ bool DiffFileData::DoOpenFiles()
 		// Actual paths are m_FileLocation[i].filepath
 		// but these are often temporary files
 		// Displayable (original) paths are m_sDisplayFilepath[i]
-		m_inf[i].name = _strdup(ucr::toSystemCP(m_sDisplayFilepath[i]).c_str());
+		m_inf[i].name = strdup(ucr::toSystemCP(m_sDisplayFilepath[i]).c_str());
 		if (m_inf[i].name == nullptr)
 			return false;
 
@@ -76,14 +73,12 @@ bool DiffFileData::DoOpenFiles()
 		// Also, WinMerge-modified diffutils handles all three major eol styles
 		if (m_inf[i].desc == 0)
 		{
-			_tsopen_s(&m_inf[i].desc, TFile(m_FileLocation[i].filepath).wpath().c_str(),
-					O_RDONLY | O_BINARY, _SH_DENYNO, _S_IREAD);
-
+			cio::tsopen_s(&m_inf[i].desc, m_FileLocation[i].filepath, O_RDONLY | O_BINARY, _SH_DENYNO, _S_IREAD);
 			if (m_inf[i].desc < 0)
 				return false;
 
 			// Get file stats (diffutils uses these)
-			if (myfstat(m_inf[i].desc, &m_inf[i].stat) != 0)
+			if (cio::fstat(m_inf[i].desc, &m_inf[i].stat) != 0)
 				return false;
 		}
 		
@@ -120,7 +115,7 @@ void DiffFileData::Reset()
 
 		if (m_inf[i].desc > 0)
 		{
-			_close(m_inf[i].desc);
+			cio::close(m_inf[i].desc);
 		}
 		m_inf[i] = {};
 	}
@@ -131,8 +126,8 @@ void DiffFileData::Reset()
  * return false if anything fails
  * caller has to DeleteFile filepathTransformed, if it differs from filepath
  */
-bool DiffFileData::Filepath_Transform(bool bForceUTF8,
-	const FileTextEncoding & encoding, const String & filepath, String & filepathTransformed,
+bool DiffFileData::Filepath_Transform(int target, bool bForceUTF8,
+	const FileTextEncoding& encoding, const String& filepath, String& filepathTransformed,
 	const String& filteredFilenames, PrediffingInfo& infoPrediffer)
 {
 	// third step : prediff (plugins)
@@ -143,7 +138,7 @@ bool DiffFileData::Filepath_Transform(bool bForceUTF8,
 	// if a prediffer fails, we consider it is not the good one, that's all
 	// FileTransform_Prediffing returns `false` only if the prediffer works, 
 	// but the data can not be saved to disk (no more place ??)
-	if (!infoPrediffer.Prediffing(filepathTransformed, filteredFilenames, bMayOverwrite, { filepath }))
+	if (!infoPrediffer.Prediffing(target, filepathTransformed, filteredFilenames, bMayOverwrite, { filepath }))
 		return false;
 
 	if ((encoding.m_unicoding && encoding.m_unicoding != ucr::UTF8) || bForceUTF8)

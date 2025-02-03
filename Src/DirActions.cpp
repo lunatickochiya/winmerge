@@ -22,9 +22,9 @@
 #include "FileFilterHelper.h"
 #include "DebugNew.h"
 
-static void ThrowConfirmCopy(const CDiffContext& ctxt, int origin, int destination, int count,
+static void ThrowConfirmCopy(const CDiffContext& ctxt, int origin, int destination, size_t count,
 		const String& src, const String& dest, bool destIsSide);
-static void ThrowConfirmMove(const CDiffContext& ctxt, int origin, int destination, int count,
+static void ThrowConfirmMove(const CDiffContext& ctxt, int origin, int destination, size_t count,
 		const String& src, const String& dest, bool destIsSide);
 static void ThrowConfirmationNeededException(const CDiffContext& ctxt, const String &caption, const String &question,
 		int origin, int destination, size_t count,
@@ -203,7 +203,8 @@ void ConfirmActionList(const CDiffContext& ctxt, const FileActionScript & action
 		break;
 
 	case FileAction::ACT_MOVE:
-		bDestIsSide = false;
+		if (item.UIResult == FileActionItem::UI_DEL)
+			bDestIsSide = false;
 		if (actionList.GetActionItemCount() == 1)
 		{
 			ThrowConfirmMove(ctxt, item.UIOrigin, item.UIDestination,
@@ -251,15 +252,24 @@ UPDATEITEM_TYPE UpdateDiffAfterOperation(const FileActionItem & act, CDiffContex
 	// UI dependent.
 	switch (act.UIResult)
 	{
-	case FileActionItem::UI_SYNC:
+	case FileActionItem::UI_COPY:
+	case FileActionItem::UI_COPY_DIFFITEMS:
 		bUpdateSrc = true;
 		bUpdateDest = true;
-		CopyDiffSideAndProperties(di, act.UIOrigin, act.UIDestination);
+		CopyDiffSideAndProperties(ctxt, di, act.UIOrigin, act.UIDestination, act.UIResult);
 		if (ctxt.GetCompareDirs() > 2)
 			SetDiffCompare(di, DIFFCODE::NOCMP);
 		else
 			UpdateCompareFlagsAfterSync(di, ctxt.m_bRecursive);
 		SetDiffCounts(di, 0, 0);
+		break;
+
+	case FileActionItem::UI_MOVE:
+		bUpdateSrc = true;
+		bUpdateDest = true;
+		CopyDiffSideAndProperties(ctxt, di, act.UIOrigin, act.UIDestination, act.UIResult);
+		UnsetDiffSide(ctxt, di, act.UIOrigin);
+		SetDiffCompare(di, DIFFCODE::NOCMP);
 		break;
 
 	case FileActionItem::UI_DEL:
@@ -269,7 +279,7 @@ UPDATEITEM_TYPE UpdateDiffAfterOperation(const FileActionItem & act, CDiffContex
 		}
 		else
 		{
-			UnsetDiffSide(di, act.UIOrigin);
+			UnsetDiffSide(ctxt, di, act.UIOrigin);
 			SetDiffCompare(di, DIFFCODE::NOCMP);
 			bUpdateSrc = true;
 		}
@@ -278,7 +288,7 @@ UPDATEITEM_TYPE UpdateDiffAfterOperation(const FileActionItem & act, CDiffContex
 
 	if (bRemoveItem)
 		return UPDATEITEM_REMOVE;
-	if (bUpdateSrc | bUpdateDest)
+	if (bUpdateSrc || bUpdateDest)
 		return UPDATEITEM_UPDATE;
 	return UPDATEITEM_NONE;
 }
@@ -347,13 +357,28 @@ DIFFITEM *FindItemFromPaths(const CDiffContext& ctxt, const PathContext& paths)
 	return 0;
 }
 
-/// is it possible to copy item to left ?
-bool IsItemCopyable(const DIFFITEM &di, int index)
+bool IsItemCopyable(const DIFFITEM &di, int index, bool copyOnlyDiffItems)
+{
+	if (copyOnlyDiffItems)
+	{
+		// don't let them mess with error items
+		if (di.diffcode.isResultError()) return false;
+		// can't copy same items
+		if (di.diffcode.isResultSame()) return false;
+		// can't copy skipped items
+		if (di.diffcode.isResultFiltered()) return false;
+	}
+	// impossible if not existing
+	if (!di.diffcode.exists(index)) return false;
+	// everything else can be copied to other side
+	return true;
+}
+
+/// is it possible to move item to left ?
+bool IsItemMovable(const DIFFITEM &di, int index)
 {
 	// don't let them mess with error items
 	if (di.diffcode.isResultError()) return false;
-	// can't copy same items
-	if (di.diffcode.isResultSame()) return false;
 	// impossible if not existing
 	if (!di.diffcode.exists(index)) return false;
 	// everything else can be copied to other side
@@ -1048,9 +1073,9 @@ int GetColImage(const DIFFITEM &di)
  * @note This does not update UI - ReloadItemStatus() does
  * @sa CDirDoc::ReloadItemStatus()
  */
-void CopyDiffSideAndProperties(DIFFITEM& di, int src, int dst)
+void CopyDiffSideAndProperties(CDiffContext& ctxt, DIFFITEM& di, int src, int dst, int action)
 {
-	if (di.diffcode.exists(src))
+	if (IsItemCopyable(di, src, action == FileActionItem::UI_COPY_DIFFITEMS))
 	{
 		di.diffcode.diffcode |= (DIFFCODE::FIRST << dst);
 		// copy file properties other than ctime 
@@ -1064,7 +1089,7 @@ void CopyDiffSideAndProperties(DIFFITEM& di, int src, int dst)
 	if (di.HasChildren())
 	{
 		for (DIFFITEM* pdic = di.GetFirstChild(); pdic; pdic = pdic->GetFwdSiblingLink())
-			CopyDiffSideAndProperties(*pdic, src, dst);
+			CopyDiffSideAndProperties(ctxt, *pdic, src, dst, action);
 	}
 }
 
@@ -1073,16 +1098,25 @@ void CopyDiffSideAndProperties(DIFFITEM& di, int src, int dst)
  * @note This does not update UI - ReloadItemStatus() does
  * @sa CDirDoc::ReloadItemStatus()
  */
-void UnsetDiffSide(DIFFITEM& di, int index)
+void UnsetDiffSide(const CDiffContext& ctxt, DIFFITEM& di, int index)
 {
 	di.diffcode.diffcode &= ~(DIFFCODE::FIRST << index);
 	di.diffFileInfo[index].ClearPartial();
+	// https://github.com/WinMerge/winmerge/issues/2599
+	for (int i = 0; i < ctxt.GetCompareDirs(); ++i)
+	{
+		if (di.diffcode.exists(i))
+		{
+			di.diffFileInfo[index].filename = di.diffFileInfo[i].filename;
+			break;
+		}
+	}
 	di.nidiffs = CDiffContext::DIFFS_UNKNOWN_QUICKCOMPARE;
 	di.nsdiffs = CDiffContext::DIFFS_UNKNOWN_QUICKCOMPARE;
 	if (di.HasChildren())
 	{
 		for (DIFFITEM* pdic = di.GetFirstChild(); pdic; pdic = pdic->GetFwdSiblingLink())
-			UnsetDiffSide(*pdic, index);
+			UnsetDiffSide(ctxt, *pdic, index);
 	}
 }
 
@@ -1163,7 +1197,8 @@ int UpdateCompareFlagsAfterSync(DIFFITEM& di, bool bRecursive)
 			di.diffcode.diffcode |= flag;
 		}
 	}
-	else {
+	else
+	{
 		// Update compare flags for files and directories in tree mode.
 		// (Do not update directory compare flags when not in tree mode.)
 		if (!di.diffcode.isDirectory() || bRecursive)
@@ -1434,7 +1469,30 @@ void ExpandAllSubdirs(CDiffContext& ctxt)
 	while (diffpos != nullptr)
 	{
 		DIFFITEM &di = ctxt.GetNextDiffRefPosition(diffpos);
-		di.customFlags |= ViewCustomFlags::EXPANDED;
+		if (di.diffcode.isDirectory())
+			di.customFlags |= ViewCustomFlags::EXPANDED;
+	}
+}
+
+void ExpandDifferentSubdirs(CDiffContext& ctxt)
+{
+	DIFFITEM *diffpos = ctxt.GetFirstDiffPosition();
+	while (diffpos != nullptr)
+	{
+		DIFFITEM &di = ctxt.GetNextDiffRefPosition(diffpos);
+		if (di.diffcode.isDirectory() && (di.diffcode.isResultDiff() || !di.diffcode.existAll()))
+			di.customFlags |= ViewCustomFlags::EXPANDED;
+	}
+}
+
+void ExpandIdenticalSubdirs(CDiffContext& ctxt)
+{
+	DIFFITEM *diffpos = ctxt.GetFirstDiffPosition();
+	while (diffpos != nullptr)
+	{
+		DIFFITEM &di = ctxt.GetNextDiffRefPosition(diffpos);
+		if (di.diffcode.isDirectory() && di.diffcode.isResultSame())
+			di.customFlags |= ViewCustomFlags::EXPANDED;
 	}
 }
 

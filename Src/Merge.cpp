@@ -60,13 +60,20 @@
 #include "TestMain.h"
 #include "charsets.h" // For shutdown cleanup
 #include "OptionsProject.h"
+#include "MergeAppCOMClass.h"
+#include "RegKey.h"
+#include "Win_VersionHelper.h"
+#include "BCMenu.h"
+#include "MouseHook.h"
+#include "SysColorHook.h"
+#include <../src/mfc/afximpl.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
 /** @brief Backup file extension. */
-static const TCHAR BACKUP_FILE_EXT[] = _T("bak");
+static const tchar_t BACKUP_FILE_EXT[] = _T("bak");
 
 /////////////////////////////////////////////////////////////////////////////
 // CMergeApp
@@ -140,11 +147,11 @@ static COptionsMgr *CreateOptionManager(const MergeCmdLineInfo& cmdInfo)
 static HANDLE CreateMutexHandle()
 {
 	// Create exclusion mutex name
-	TCHAR szDesktopName[MAX_PATH] = _T("Win9xDesktop");
+	tchar_t szDesktopName[MAX_PATH] = _T("Win9xDesktop");
 	DWORD dwLengthNeeded;
 	GetUserObjectInformation(GetThreadDesktop(GetCurrentThreadId()), UOI_NAME,
 		szDesktopName, sizeof(szDesktopName), &dwLengthNeeded);
-	TCHAR szMutexName[MAX_PATH + 40];
+	tchar_t szMutexName[MAX_PATH + 40];
 	// Combine window class name and desktop name to form a unique mutex name.
 	// As the window class name is decorated to distinguish between ANSI and
 	// UNICODE build, so will be the mutex name.
@@ -152,7 +159,7 @@ static HANDLE CreateMutexHandle()
 	return CreateMutex(nullptr, FALSE, szMutexName);
 }
 
-static HWND ActivatePreviousInstanceAndSendCommandline(LPTSTR cmdLine)
+static HWND ActivatePreviousInstanceAndSendCommandline(tchar_t* cmdLine)
 {
 	HWND hWnd = FindWindow(CMainFrame::szClassName, nullptr);
 	if (hWnd == nullptr)
@@ -160,7 +167,7 @@ static HWND ActivatePreviousInstanceAndSendCommandline(LPTSTR cmdLine)
 	if (IsIconic(hWnd))
 		ShowWindow(hWnd, SW_RESTORE);
 	SetForegroundWindow(GetLastActivePopup(hWnd));
-	COPYDATASTRUCT data = { 0, (lstrlen(cmdLine) + 1) * sizeof(TCHAR), cmdLine };
+	COPYDATASTRUCT data = { 0, (lstrlen(cmdLine) + 1) * sizeof(tchar_t), cmdLine };
 	if (!SendMessage(hWnd, WM_COPYDATA, NULL, (LPARAM)&data))
 		return nullptr;
 	return hWnd;
@@ -184,9 +191,28 @@ static int ConvertLastCompareResultToExitCode(int nLastCompareResult)
 	return 2;
 }
 
+std::vector<JumpList::Item> CMergeApp::CreateUserTasks(MergeCmdLineInfo::usertasksflags_t flags)
+{
+	std::vector<JumpList::Item> items;
+	if (flags & MergeCmdLineInfo::NEW_TEXT_COMPARE)
+		items.emplace_back(_(""), _T("/new /t text"), _("New Text Compare"), _T(""), _T(""), 0);
+	if (flags & MergeCmdLineInfo::NEW_TABLE_COMPARE)
+		items.emplace_back(_(""), _T("/new /t table"), _("New Table Compare"), _T(""), _T(""), 0);
+	if (flags & MergeCmdLineInfo::NEW_BINARY_COMPARE)
+		items.emplace_back(_(""), _T("/new /t binary"), _("New Binary Compare"), _T(""), _T(""), 0);
+	if (flags & MergeCmdLineInfo::NEW_IMAGE_COMPARE)
+		items.emplace_back(_(""), _T("/new /t image"), _("New Image Compare"), _T(""), _T(""), 0);
+	if (flags & MergeCmdLineInfo::NEW_WEBPAGE_COMPARE)
+		items.emplace_back(_(""), _T("/new /t webpage"), _("New Webpage Compare"), _T(""), _T(""), 0);
+	if (flags & MergeCmdLineInfo::CLIPBOARD_COMPARE)
+		items.emplace_back(_(""), _T("/clipboard-compare"), _("Clipboard Compare"), _T(""), _T(""), 0);
+	if (flags & MergeCmdLineInfo::SHOW_OPTIONS_DIALOG)
+		items.emplace_back(_(""), _T("/show-dialog options"), _("Options"), _T(""), _T(""), 0);
+	return items;
+}
+
 CMergeApp::~CMergeApp()
 {
-	strdiff::Close();
 }
 /////////////////////////////////////////////////////////////////////////////
 // The one and only CMergeApp object
@@ -324,6 +350,7 @@ BOOL CMergeApp::InitInstance()
 	// Initialize i18n (multiple language) support
 	m_pLangDlg->InitializeLanguage((WORD)GetOptionsMgr()->GetInt(OPT_SELECTED_LANGUAGE));
 
+	SysColorHook::Init();
 	charsets_init();
 	UpdateCodepageModule();
 
@@ -352,15 +379,6 @@ BOOL CMergeApp::InitInstance()
 	if (m_pLineFilters != nullptr)
 		m_pLineFilters->Initialize(GetOptionsMgr());
 
-	// If there are no filters loaded, and there is filter string in previous
-	// option string, import old filters to new place.
-	if (m_pLineFilters->GetCount() == 0)
-	{
-		String oldFilter = theApp.GetProfileString(_T("Settings"), _T("RegExps"));
-		if (!oldFilter.empty())
-			m_pLineFilters->Import(oldFilter);
-	}
-
 	if (m_pSubstitutionFiltersList != nullptr)
 		m_pSubstitutionFiltersList->Initialize(GetOptionsMgr());
 
@@ -387,12 +405,17 @@ BOOL CMergeApp::InitInstance()
 		}
 	}
 
+	ReloadCustomSysColors();
+
 	strdiff::Init(); // String diff init
 	strdiff::SetBreakChars(GetOptionsMgr()->GetString(OPT_BREAK_SEPARATORS).c_str());
 
+	if (IsWin11_OrGreater())
+		BCMenu::DisableOwnerDraw();
+
 	m_bMergingMode = GetOptionsMgr()->GetBool(OPT_MERGE_MODE);
 
-	m_mainThreadScripts = new CAssureScriptsForThread;
+	m_mainThreadScripts = new CAssureScriptsForThread(new MergeAppCOMClass());
 
 	if (cmdInfo.m_nDialogType != MergeCmdLineInfo::NO_DIALOG)
 	{
@@ -401,44 +424,13 @@ BOOL CMergeApp::InitInstance()
 	}
 	if (cmdInfo.m_bShowCompareAsMenu)
 	{
+		cmdInfo.m_bShowCompareAsMenu = false;
 		if (!ShowCompareAsMenu(cmdInfo))
 			return FALSE;
 	}
 
-	// Register the application's document templates.  Document templates
-	//  serve as the connection between documents, frame windows and views.
-
-	// Open view
-	m_pOpenTemplate = new CMultiDocTemplate(
-		IDR_MAINFRAME,
-		RUNTIME_CLASS(COpenDoc),
-		RUNTIME_CLASS(COpenFrame), // custom MDI child frame
-		RUNTIME_CLASS(COpenView));
-	AddDocTemplate(m_pOpenTemplate);
-
-	// Merge Edit view
-	m_pDiffTemplate = new CMultiDocTemplate(
-		IDR_MERGEDOCTYPE,
-		RUNTIME_CLASS(CMergeDoc),
-		RUNTIME_CLASS(CMergeEditFrame), // custom MDI child frame
-		RUNTIME_CLASS(CMergeEditSplitterView));
-	AddDocTemplate(m_pDiffTemplate);
-
-	// Merge Edit view
-	m_pHexMergeTemplate = new CMultiDocTemplate(
-		IDR_MERGEDOCTYPE,
-		RUNTIME_CLASS(CHexMergeDoc),
-		RUNTIME_CLASS(CHexMergeFrame), // custom MDI child frame
-		RUNTIME_CLASS(CHexMergeView));
-	AddDocTemplate(m_pHexMergeTemplate);
-
-	// Directory view
-	m_pDirTemplate = new CMultiDocTemplate(
-		IDR_DIRDOCTYPE,
-		RUNTIME_CLASS(CDirDoc),
-		RUNTIME_CLASS(CDirFrame), // custom MDI child frame
-		RUNTIME_CLASS(CDirView));
-	AddDocTemplate(m_pDirTemplate);
+	if (GetOptionsMgr()->GetBool(OPT_MOUSE_HOOK_ENABLED))
+		CMouseHook::SetMouseHook();
 
 	// create main MDI Frame window
 	CMainFrame* pMainFrame = new CMainFrame;
@@ -486,6 +478,66 @@ BOOL CMergeApp::InitInstance()
 	return bContinue;
 }
 
+CMultiDocTemplate* CMergeApp::GetOpenTemplate()
+{
+	// Open view
+	if (!m_pOpenTemplate)
+	{
+		m_pOpenTemplate = new CMultiDocTemplate(
+			IDR_MAINFRAME,
+			RUNTIME_CLASS(COpenDoc),
+			RUNTIME_CLASS(COpenFrame), // custom MDI child frame
+			RUNTIME_CLASS(COpenView));
+		AddDocTemplate(m_pOpenTemplate);
+	}
+	return m_pOpenTemplate;
+}
+
+CMultiDocTemplate* CMergeApp::GetDiffTemplate()
+{
+	// Merge Edit view
+	if (!m_pDiffTemplate)
+	{
+		m_pDiffTemplate = new CMultiDocTemplate(
+			IDR_MERGEDOCTYPE,
+			RUNTIME_CLASS(CMergeDoc),
+			RUNTIME_CLASS(CMergeEditFrame), // custom MDI child frame
+			RUNTIME_CLASS(CMergeEditSplitterView));
+		AddDocTemplate(m_pDiffTemplate);
+	}
+	return m_pDiffTemplate;
+}
+
+CMultiDocTemplate* CMergeApp::GetHexMergeTemplate()
+{
+	if (!m_pHexMergeTemplate)
+	{
+		// Hex Merge view
+		m_pHexMergeTemplate = new CMultiDocTemplate(
+			IDR_MERGEDOCTYPE,
+			RUNTIME_CLASS(CHexMergeDoc),
+			RUNTIME_CLASS(CHexMergeFrame), // custom MDI child frame
+			RUNTIME_CLASS(CHexMergeView));
+		AddDocTemplate(m_pHexMergeTemplate);
+	}
+	return m_pHexMergeTemplate;
+}
+
+CMultiDocTemplate* CMergeApp::GetDirTemplate()
+{
+	if (!m_pDirTemplate)
+	{
+		// Directory view
+		m_pDirTemplate = new CMultiDocTemplate(
+			IDR_DIRDOCTYPE,
+			RUNTIME_CLASS(CDirDoc),
+			RUNTIME_CLASS(CDirFrame), // custom MDI child frame
+			RUNTIME_CLASS(CDirView));
+		AddDocTemplate(m_pDirTemplate);
+	}
+	return m_pDirTemplate;
+}
+
 static void OpenContributersFile(int&)
 {
 	CMergeApp::OpenFileToExternalEditor(paths::ConcatPath(env::GetProgPath(), ContributorsPath));
@@ -518,6 +570,8 @@ void CMergeApp::OnAppAbout()
  */
 int CMergeApp::ExitInstance()
 {
+	CMouseHook::UnhookMouseHook();
+
 	charsets_cleanup();
 
 	//  Save registry keys if existing WinMerge.reg
@@ -532,25 +586,17 @@ int CMergeApp::ExitInstance()
 	// WinMerge did not delete temp files this makes sure they are removed.
 	CleanupWMtemp();
 
+	strdiff::Close();
 	delete m_mainThreadScripts;
 	CWinApp::ExitInstance();
 	
-#ifndef _DEBUG
-	// There is a problem that OleUninitialize() in mfc/oleinit.cpp, which is called just before the process exits,
-	// hangs in rare cases.
-	// To deal with this problem, force the process to exit
-	// if the process does not exit within 2 seconds after the call to CMergeApp::ExitInstance().
-	_beginthreadex(0, 0,
-		[](void*) -> unsigned int {
-			Sleep(2000);
-			ExitProcess(0);
-		}, nullptr, 0, nullptr);
-#endif
-
-	return m_bEnableExitCode ? ConvertLastCompareResultToExitCode(m_nLastCompareResult) : 0;
+	const int exitstatus = m_bEnableExitCode ? ConvertLastCompareResultToExitCode(m_nLastCompareResult) : 0;
+	if (!WaitZombieThreads())
+		TerminateProcess(GetCurrentProcess(), exitstatus);
+	return exitstatus;
 }
 
-int CMergeApp::DoMessageBox(LPCTSTR lpszPrompt, UINT nType, UINT nIDPrompt)
+int CMergeApp::DoMessageBox(const tchar_t* lpszPrompt, UINT nType, UINT nIDPrompt)
 {
 	// This is a convenient point for breakpointing !!!
 
@@ -595,6 +641,8 @@ int CMergeApp::DoMessageBox(LPCTSTR lpszPrompt, UINT nType, UINT nIDPrompt)
 
 bool CMergeApp::IsReallyIdle() const
 {
+	if (!m_pDirTemplate)
+		return true;
 	bool idle = true;
 	POSITION pos = m_pDirTemplate->GetFirstDocPosition();
 	while (pos != nullptr)
@@ -627,6 +675,17 @@ BOOL CMergeApp::OnIdle(LONG lCount)
 	if (typeid(*GetOptionsMgr()) == typeid(CRegOptionsMgr))
 	{
 		static_cast<CRegOptionsMgr*>(GetOptionsMgr())->CloseKeys();
+	}
+
+	static int count = 0;
+	if (++count > 1)
+	{
+		count = 0;
+		while (!m_idleFuncs.empty())
+		{
+			m_idleFuncs.front()();
+			m_idleFuncs.pop_front();
+		}
 	}
 
 	return FALSE;
@@ -777,6 +836,27 @@ bool CMergeApp::ParseArgsAndDoOpen(MergeCmdLineInfo& cmdInfo, CMainFrame* pMainF
 	if (!cmdInfo.m_sPreDiffer.empty())
 		infoPrediffer.reset(new PrediffingInfo(cmdInfo.m_sPreDiffer));
 
+	if (cmdInfo.m_nDialogType != MergeCmdLineInfo::NO_DIALOG)
+	{
+		ShowDialog(cmdInfo.m_nDialogType);
+		return false;
+	}
+
+	if (cmdInfo.m_bShowCompareAsMenu)
+	{
+		cmdInfo.m_bShowCompareAsMenu = false;
+		if (!ShowCompareAsMenu(cmdInfo))
+			return false;
+	}
+
+	if (cmdInfo.m_dwUserTasksFlags.has_value())
+	{
+		JumpList::AddUserTasks(CreateUserTasks(*cmdInfo.m_dwUserTasksFlags));
+		CRegKeyEx reg;
+		if (ERROR_SUCCESS == reg.Open(HKEY_CURRENT_USER, RegDir))
+			reg.WriteDword(_T("UserTasksFlags"), *cmdInfo.m_dwUserTasksFlags);
+	}
+
 	// Set the global file filter.
 	if (!cmdInfo.m_sFileFilter.empty())
 	{
@@ -806,8 +886,6 @@ bool CMergeApp::ParseArgsAndDoOpen(MergeCmdLineInfo& cmdInfo, CMainFrame* pMainF
 		m_bExitIfNoDiff = cmdInfo.m_bExitIfNoDiff;
 		m_bEscShutdown = cmdInfo.m_bEscShutdown;
 
-		m_strSaveAsPath = cmdInfo.m_sOutputpath;
-
 		strDesc[0] = cmdInfo.m_sLeftDesc;
 		if (cmdInfo.m_Files.GetSize() < 3)
 		{
@@ -831,6 +909,8 @@ bool CMergeApp::ParseArgsAndDoOpen(MergeCmdLineInfo& cmdInfo, CMainFrame* pMainF
 			pOpenTextFileParams->m_line = cmdInfo.m_nLineIndex;
 			pOpenTextFileParams->m_char = cmdInfo.m_nCharIndex;
 			pOpenTextFileParams->m_fileExt = cmdInfo.m_sFileExt;
+			pOpenTextFileParams->m_strSaveAsPath = cmdInfo.m_sOutputpath;
+
 		}
 		if (auto* pOpenTableFileParams = dynamic_cast<CMainFrame::OpenTableFileParams*>(pOpenParams.get()))
 		{
@@ -838,19 +918,27 @@ bool CMergeApp::ParseArgsAndDoOpen(MergeCmdLineInfo& cmdInfo, CMainFrame* pMainF
 			pOpenTableFileParams->m_tableQuote = cmdInfo.m_cTableQuote;
 			pOpenTableFileParams->m_tableAllowNewlinesInQuotes = cmdInfo.m_bTableAllowNewlinesInQuotes;
 		}
+		if (auto* pOpenBinaryFileParams = dynamic_cast<CMainFrame::OpenBinaryFileParams*>(pOpenParams.get()))
+		{
+			pOpenBinaryFileParams->m_strSaveAsPath = cmdInfo.m_sOutputpath;
+		}
+		if (auto* pOpenImageFileParams = dynamic_cast<CMainFrame::OpenImageFileParams*>(pOpenParams.get()))
+		{
+			pOpenImageFileParams->m_strSaveAsPath = cmdInfo.m_sOutputpath;
+		}
 		if (cmdInfo.m_Files.GetSize() > 2)
 		{
 			cmdInfo.m_dwLeftFlags |= FFILEOPEN_CMDLINE;
 			cmdInfo.m_dwMiddleFlags |= FFILEOPEN_CMDLINE;
 			cmdInfo.m_dwRightFlags |= FFILEOPEN_CMDLINE;
-			DWORD dwFlags[3] = {cmdInfo.m_dwLeftFlags, cmdInfo.m_dwMiddleFlags, cmdInfo.m_dwRightFlags};
+			fileopenflags_t dwFlags[3] = {cmdInfo.m_dwLeftFlags, cmdInfo.m_dwMiddleFlags, cmdInfo.m_dwRightFlags};
 			bCompared = pMainFrame->DoFileOrFolderOpen(&cmdInfo.m_Files,
 				dwFlags, strDesc, cmdInfo.m_sReportFile, cmdInfo.m_bRecurse, nullptr,
 				infoUnpacker.get(), infoPrediffer.get(), nID, pOpenParams.get());
 		}
 		else if (cmdInfo.m_Files.GetSize() > 1)
 		{
-			DWORD dwFlags[3] = {cmdInfo.m_dwLeftFlags, cmdInfo.m_dwRightFlags, FFILEOPEN_NONE};
+			fileopenflags_t dwFlags[3] = {cmdInfo.m_dwLeftFlags, cmdInfo.m_dwRightFlags, FFILEOPEN_NONE};
 			bCompared = pMainFrame->DoFileOrFolderOpen(&cmdInfo.m_Files,
 				dwFlags, strDesc, cmdInfo.m_sReportFile, cmdInfo.m_bRecurse, nullptr,
 				infoUnpacker.get(), infoPrediffer.get(), nID, pOpenParams.get());
@@ -879,7 +967,7 @@ bool CMergeApp::ParseArgsAndDoOpen(MergeCmdLineInfo& cmdInfo, CMainFrame* pMainF
 			}
 			else
 			{
-				DWORD dwFlags[3] = {cmdInfo.m_dwLeftFlags, cmdInfo.m_dwRightFlags, FFILEOPEN_NONE};
+				fileopenflags_t dwFlags[3] = {cmdInfo.m_dwLeftFlags, cmdInfo.m_dwRightFlags, FFILEOPEN_NONE};
 				bCompared = pMainFrame->DoFileOrFolderOpen(&cmdInfo.m_Files,
 					dwFlags, strDesc, cmdInfo.m_sReportFile, cmdInfo.m_bRecurse, nullptr,
 					infoUnpacker.get(), infoPrediffer.get(), nID, pOpenParams.get());
@@ -889,11 +977,12 @@ bool CMergeApp::ParseArgsAndDoOpen(MergeCmdLineInfo& cmdInfo, CMainFrame* pMainF
 		{
 			if (cmdInfo.m_bNewCompare)
 			{
-				bCompared = pMainFrame->DoFileNew(nID, 2, strDesc, infoPrediffer.get(), pOpenParams.get());
+				fileopenflags_t dwFlags[3] = {cmdInfo.m_dwLeftFlags, cmdInfo.m_dwRightFlags, FFILEOPEN_NONE};
+				bCompared = pMainFrame->DoFileNew(nID, 2, dwFlags, strDesc, infoPrediffer.get(), pOpenParams.get());
 			}
 			else if (cmdInfo.m_bClipboardCompare)
 			{
-				DWORD dwFlags[3] = {cmdInfo.m_dwLeftFlags, cmdInfo.m_dwRightFlags, FFILEOPEN_NONE};
+				fileopenflags_t dwFlags[3] = {cmdInfo.m_dwLeftFlags, cmdInfo.m_dwRightFlags, FFILEOPEN_NONE};
 				bCompared = pMainFrame->DoOpenClipboard(nID, 2, dwFlags, strDesc, infoUnpacker.get(), infoPrediffer.get(), pOpenParams.get());
 			}
 			else
@@ -917,10 +1006,10 @@ void CMergeApp::UpdateDefaultCodepage(int cpDefaultMode, int cpCustomCodepage)
 			ucr::setDefaultCodepage(GetACP());
 			break;
 		case 1:
-			TCHAR buff[32];
+			tchar_t buff[32];
 			wLangId = GetLangId();
 			if (GetLocaleInfo(wLangId, LOCALE_IDEFAULTANSICODEPAGE, buff, sizeof(buff)/sizeof(buff[0])))
-				ucr::setDefaultCodepage(_ttol(buff));
+				ucr::setDefaultCodepage(tc::ttol(buff));
 			else
 				ucr::setDefaultCodepage(GetACP());
 			break;
@@ -989,7 +1078,7 @@ void CMergeApp::OpenFileToExternalEditor(const String& file, int nLineNumber/* =
 	STARTUPINFO stInfo = { sizeof STARTUPINFO };
 	PROCESS_INFORMATION processInfo;
 
-	retVal = !!CreateProcess(nullptr, (LPTSTR)sCmd.c_str(),
+	retVal = !!CreateProcess(nullptr, (tchar_t*)sCmd.c_str(),
 		nullptr, nullptr, FALSE, CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr,
 		&stInfo, &processInfo);
 
@@ -1033,7 +1122,7 @@ FileFilterHelper* CMergeApp::GetGlobalFileFilter()
  * @brief Show Help - this is for opening help from outside mainframe.
  * @param [in] helpLocation Location inside help, if `nullptr` main help is opened.
  */
-void CMergeApp::ShowHelp(LPCTSTR helpLocation /*= nullptr*/)
+void CMergeApp::ShowHelp(const tchar_t* helpLocation /*= nullptr*/)
 {
 	String sPath = paths::ConcatPath(env::GetProgPath(), strutils::format(DocsPath, GetLangName()));
 	if (paths::DoesPathExist(sPath) != paths::IS_EXISTING_FILE)
@@ -1139,9 +1228,7 @@ bool CMergeApp::CreateBackup(bool bFolder, const String& pszPath)
 			< MAX_PATH_FULL)
 		{
 			success = true;
-			bakPath = paths::ConcatPath(bakPath, filename);
-			bakPath += _T(".");
-			bakPath += ext;
+			bakPath = paths::ConcatPath(bakPath, filename + _T(".") + ext);
 		}
 
 		if (success)
@@ -1355,6 +1442,7 @@ bool CMergeApp::LoadAndOpenProjectFile(const String& sProject, const String& sRe
 		projItem.GetPaths(tFiles, bDummy);
 		for (int i = 0; i < tFiles.GetSize(); ++i)
 		{
+			tFiles[i] = env::ExpandEnvironmentVariables(tFiles[i]);
 			if (!paths::IsPathAbsolute(tFiles[i]) && !paths::IsURL(tFiles[i]))
 			{
 				String sProjectDir = paths::GetParentPath(sProject);
@@ -1399,10 +1487,10 @@ bool CMergeApp::LoadAndOpenProjectFile(const String& sProject, const String& sRe
 		}
 
 		String strDesc[3];
-		DWORD dwFlags[3] = {
-			static_cast<DWORD>(tFiles.GetPath(0).empty() ? FFILEOPEN_NONE : FFILEOPEN_PROJECT),
-			static_cast<DWORD>(tFiles.GetPath(1).empty() ? FFILEOPEN_NONE : FFILEOPEN_PROJECT),
-			static_cast<DWORD>(tFiles.GetPath(2).empty() ? FFILEOPEN_NONE : FFILEOPEN_PROJECT)
+		fileopenflags_t dwFlags[3] = {
+			static_cast<fileopenflags_t>(tFiles.GetPath(0).empty() ? FFILEOPEN_NONE : FFILEOPEN_PROJECT),
+			static_cast<fileopenflags_t>(tFiles.GetPath(1).empty() ? FFILEOPEN_NONE : FFILEOPEN_PROJECT),
+			static_cast<fileopenflags_t>(tFiles.GetPath(2).empty() ? FFILEOPEN_NONE : FFILEOPEN_PROJECT)
 		};
 		if (bLeftReadOnly)
 			dwFlags[0] |= FFILEOPEN_READONLY;
@@ -1523,10 +1611,15 @@ bool CMergeApp::TranslateString(const std::string& str, String& translated_str) 
 	return m_pLangDlg->TranslateString(str, translated_str);
 }
 
+bool CMergeApp::TranslateString(const std::wstring& str, String& translated_str) const
+{
+	return m_pLangDlg->TranslateString(str, translated_str);
+}
+
 /**
  * @brief Load dialog caption and translate to current WinMerge GUI language
  */
-std::wstring CMergeApp::LoadDialogCaption(LPCTSTR lpDialogTemplateID) const
+std::wstring CMergeApp::LoadDialogCaption(const tchar_t* lpDialogTemplateID) const
 {
 	return m_pLangDlg->LoadDialogCaption(lpDialogTemplateID);
 }
@@ -1535,7 +1628,7 @@ std::wstring CMergeApp::LoadDialogCaption(LPCTSTR lpDialogTemplateID) const
  * @brief Adds specified file to the recent projects list.
  * @param [in] sPathName Path to project file
  */
-void CMergeApp::AddToRecentProjectsMRU(LPCTSTR sPathName)
+void CMergeApp::AddToRecentProjectsMRU(const tchar_t* sPathName)
 {
 	// sPathName will be added to the top of the MRU list.
 	// If sPathName already exists in the MRU list, it will be moved to the top
@@ -1560,7 +1653,7 @@ void CMergeApp::SetupTempPath()
  */
 BOOL CMergeApp::OnOpenRecentFile(UINT nID)
 {
-	return LoadAndOpenProjectFile(static_cast<const TCHAR *>(m_pRecentFileList->m_arrNames[nID-ID_FILE_PROJECT_MRU_FIRST]));
+	return LoadAndOpenProjectFile(static_cast<const tchar_t *>(m_pRecentFileList->m_arrNames[nID-ID_FILE_PROJECT_MRU_FIRST]));
 }
 
 /**
@@ -1612,7 +1705,7 @@ void CMergeApp::OnUpdateMergingStatus(CCmdUI *pCmdUI)
 	pCmdUI->Enable(GetMergingMode());
 }
 
-UINT CMergeApp::GetProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nDefault)
+UINT CMergeApp::GetProfileInt(const tchar_t* lpszSection, const tchar_t* lpszEntry, int nDefault)
 {
 	COptionsMgr *pOptions = GetOptionsMgr();
 	String name = strutils::format(_T("%s/%s"), lpszSection, lpszEntry);
@@ -1621,7 +1714,7 @@ UINT CMergeApp::GetProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nDefau
 	return pOptions->GetInt(name);
 }
 
-BOOL CMergeApp::WriteProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nValue)
+BOOL CMergeApp::WriteProfileInt(const tchar_t* lpszSection, const tchar_t* lpszEntry, int nValue)
 {
 	COptionsMgr *pOptions = GetOptionsMgr();
 	String name = strutils::format(_T("%s/%s"), lpszSection, lpszEntry);
@@ -1630,7 +1723,7 @@ BOOL CMergeApp::WriteProfileInt(LPCTSTR lpszSection, LPCTSTR lpszEntry, int nVal
 	return pOptions->SaveOption(name, nValue) == COption::OPT_OK;
 }
 
-CString CMergeApp::GetProfileString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR lpszDefault)
+CString CMergeApp::GetProfileString(const tchar_t* lpszSection, const tchar_t* lpszEntry, const tchar_t* lpszDefault)
 {
 	COptionsMgr *pOptions = GetOptionsMgr();
 	String name = strutils::format(_T("%s/%s"), lpszSection, lpszEntry);
@@ -1639,7 +1732,7 @@ CString CMergeApp::GetProfileString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCT
 	return pOptions->GetString(name).c_str();
 }
 
-BOOL CMergeApp::WriteProfileString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTSTR lpszValue)
+BOOL CMergeApp::WriteProfileString(const tchar_t* lpszSection, const tchar_t* lpszEntry, const tchar_t* lpszValue)
 {
 	COptionsMgr *pOptions = GetOptionsMgr();
 	if (lpszEntry != nullptr)
@@ -1656,3 +1749,31 @@ BOOL CMergeApp::WriteProfileString(LPCTSTR lpszSection, LPCTSTR lpszEntry, LPCTS
 	}
 	return TRUE;
 }
+
+void CMergeApp::AddZombieThread(CWinThread* pThread)
+{ 
+	m_threads.push_back(pThread);
+}
+
+bool CMergeApp::WaitZombieThreads()
+{ 
+	bool terminated = true;
+	for (auto* pThread : m_threads)
+	{
+		DWORD dwResult = WaitForSingleObject(pThread->m_hThread, 1000);
+		if (dwResult != WAIT_OBJECT_0)
+			terminated = false;
+		delete pThread;
+	}
+	return terminated;
+}
+
+void CMergeApp::ReloadCustomSysColors()
+{
+	SysColorHook::Unhook(AfxGetInstanceHandle());
+	SysColorHook::Deserialize(GetOptionsMgr()->GetString(OPT_SYSCOLOR_HOOK_COLORS));
+	if (GetOptionsMgr()->GetBool(OPT_SYSCOLOR_HOOK_ENABLED))
+		SysColorHook::Hook(AfxGetInstanceHandle());
+	afxData.UpdateSysColors();
+}
+

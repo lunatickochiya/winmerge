@@ -14,14 +14,19 @@
 #include <vector>
 #include <memory>
 #include <optional>
+#include "MyReBar.h"
+#include "MenuBar.h"
 #include "MDITabBar.h"
+#include "BasicFlatStatusBar.h"
 #include "PathContext.h"
 #include "OptionsDef.h"
 #include "OptionsMgr.h"
+#include "FileOpenFlags.h"
 
 class BCMenu;
 class CDirView;
 class COpenDoc;
+struct IDirDoc;
 class CDirDoc;
 class CMergeDoc;
 class CHexMergeDoc;
@@ -83,13 +88,14 @@ public:
 		int m_line = -1;
 		int m_char = -1;
 		String m_fileExt;
+		String m_strSaveAsPath; /**< "3rd path" where output saved if given */
 	};
 
 	struct OpenTableFileParams : public OpenTextFileParams
 	{
 		virtual ~OpenTableFileParams() {}
-		std::optional<TCHAR> m_tableDelimiter;
-		std::optional<TCHAR> m_tableQuote;
+		std::optional<tchar_t> m_tableDelimiter;
+		std::optional<tchar_t> m_tableQuote;
 		std::optional<bool> m_tableAllowNewlinesInQuotes;
 	};
 
@@ -97,6 +103,7 @@ public:
 	{
 		virtual ~OpenBinaryFileParams() {}
 		int m_address = -1;
+		String m_strSaveAsPath; /**< "3rd path" where output saved if given */
 	};
 
 	struct OpenImageFileParams : public OpenFileParams
@@ -104,6 +111,7 @@ public:
 		virtual ~OpenImageFileParams() {}
 		int m_x = -1;
 		int m_y = -1;
+		String m_strSaveAsPath; /**< "3rd path" where output saved if given */
 	};
 
 	struct OpenWebPageParams : public OpenFileParams
@@ -129,7 +137,7 @@ public:
 	bool m_bShowErrors; /**< Show folder compare error items? */
 	LOGFONT m_lfDiff; /**< MergeView user-selected font */
 	LOGFONT m_lfDir; /**< DirView user-selected font */
-	static const TCHAR szClassName[];
+	static const tchar_t szClassName[];
 
 // Operations
 public:
@@ -140,56 +148,65 @@ public:
 	HMENU NewWebPageDiffViewMenu();
 	HMENU NewOpenViewMenu();
 	HMENU NewDefaultMenu(int ID = 0);
-	HMENU GetPrediffersSubmenu(HMENU mainMenu);
-	void UpdatePrediffersMenu();
+	void UpdatePrediffersMenu(CMenu* pPredifferMenu);
 
 	bool DoFileOrFolderOpen(const PathContext *pFiles = nullptr,
-		const DWORD dwFlags[] = nullptr, const String strDesc[] = nullptr,
-		const String& sReportFile = _T(""), bool bRecurse = false, CDirDoc *pDirDoc = nullptr,
+		const fileopenflags_t dwFlags[] = nullptr, const String strDesc[] = nullptr,
+		const String& sReportFile = _T(""), std::optional<bool> bRecurse = false, IDirDoc *pDirDoc = nullptr,
 		const PackingInfo * infoUnpacker = nullptr, const PrediffingInfo * infoPrediffer = nullptr,
 		UINT nID = 0, const OpenFileParams *pOpenParams = nullptr);
 	bool DoFileOpen(UINT nID, const PathContext* pFiles,
-		const DWORD dwFlags[] = nullptr, const String strDesc[] = nullptr,
+		const fileopenflags_t dwFlags[] = nullptr, const String strDesc[] = nullptr,
 		const String& sReportFile = _T(""),
 		const PackingInfo* infoUnpacker = nullptr, const PrediffingInfo * infoPrediffer = nullptr,
 		const OpenFileParams *pOpenParams = nullptr);
-	bool DoFileNew(UINT nID, int nPanes, const String strDesc[] = nullptr,
+	bool DoFileNew(UINT nID, int nPanes,
+		const fileopenflags_t dwFlags[] = nullptr, const String strDesc[] = nullptr,
 		const PrediffingInfo * infoPrediffer = nullptr,
 		const OpenFileParams *pOpenParams = nullptr);
 	bool DoOpenConflict(const String& conflictFile, const String strDesc[] = nullptr, bool checked = false);
-	bool DoOpenClipboard(UINT nID = 0, int nBuffers = 2, const DWORD dwFlags[] = nullptr, const String strDesc[] = nullptr,
+	bool DoOpenClipboard(UINT nID = 0, int nBuffers = 2, const fileopenflags_t dwFlags[] = nullptr, const String strDesc[] = nullptr,
 		const PackingInfo* infoUnpacker = nullptr, const PrediffingInfo * infoPrediffer = nullptr,
 		const OpenFileParams* pOpenParams = nullptr);
 	bool DoSelfCompare(UINT nID, const String& file, const String strDesc[] = nullptr,
 		const PackingInfo* infoUnpacker = nullptr, const PrediffingInfo * infoPrediffer = nullptr,
 		const OpenFileParams* pOpenParams = nullptr);
-	bool ShowAutoMergeDoc(UINT nID, CDirDoc * pDirDoc, int nFiles, const FileLocation fileloc[],
-		const DWORD dwFlags[], const String strDesc[], const String& sReportFile = _T(""),
-		const PackingInfo * infoUnpacker = nullptr, const OpenFileParams *pOpenParams = nullptr);
-	bool ShowMergeDoc(UINT nID, CDirDoc * pDirDoc, int nFiles, const FileLocation fileloc[],
-		const DWORD dwFlags[], const String strDesc[], const String& sReportFile = _T(""),
-		const PackingInfo * infoUnpacker = nullptr, const OpenFileParams *pOpenParams = nullptr);
-	bool ShowTextOrTableMergeDoc(std::optional<bool> table, CDirDoc * pDirDoc, int nFiles, const FileLocation fileloc[],
-		const DWORD dwFlags[], const String strDesc[], const String& sReportFile = _T(""),
-		const PackingInfo * infoUnpacker = nullptr, const OpenTextFileParams *pOpenParams = nullptr);
-	bool ShowTextMergeDoc(CDirDoc * pDirDoc, int nFiles, const FileLocation fileloc[],
-		const DWORD dwFlags[], const String strDesc[], const String& sReportFile = _T(""),
-		const PackingInfo * infoUnpacker = nullptr, const OpenTextFileParams *pOpenParams = nullptr);
-	bool ShowTextMergeDoc(CDirDoc* pDirDoc, int nBuffers, const String text[],
+	bool ShowAutoMergeDoc(UINT nID, IDirDoc * pDirDoc, int nFiles, const FileLocation fileloc[],
+		const fileopenflags_t dwFlags[], const String strDesc[], const String& sReportFile = _T(""),
+		const PackingInfo * infoUnpacker = nullptr, const PrediffingInfo * infoPrediffer = nullptr,
+		const OpenFileParams *pOpenParams = nullptr);
+	bool ShowMergeDoc(UINT nID, IDirDoc * pDirDoc, int nFiles, const FileLocation fileloc[],
+		const fileopenflags_t dwFlags[], const String strDesc[], const String& sReportFile = _T(""),
+		const PackingInfo * infoUnpacker = nullptr, const PrediffingInfo * infoPrediffer = nullptr,
+		const OpenFileParams *pOpenParams = nullptr);
+	bool ShowTextOrTableMergeDoc(std::optional<bool> table, IDirDoc * pDirDoc, int nFiles, const FileLocation fileloc[],
+		const fileopenflags_t dwFlags[], const String strDesc[], const String& sReportFile = _T(""),
+		const PackingInfo * infoUnpacker = nullptr, const PrediffingInfo * infoPrediffer = nullptr,
+		const OpenTextFileParams *pOpenParams = nullptr);
+	bool ShowTextMergeDoc(IDirDoc * pDirDoc, int nFiles, const FileLocation fileloc[],
+		const fileopenflags_t dwFlags[], const String strDesc[], const String& sReportFile = _T(""),
+		const PackingInfo * infoUnpacker = nullptr, const PrediffingInfo * infoPrediffer = nullptr,
+		const OpenTextFileParams *pOpenParams = nullptr);
+	bool ShowTextMergeDoc(IDirDoc* pDirDoc, int nBuffers, const String text[],
 		const String strDesc[], const String& strFileExt, const OpenTextFileParams *pOpenParams = nullptr);
-	bool ShowTableMergeDoc(CDirDoc * pDirDoc, int nFiles, const FileLocation fileloc[],
-		const DWORD dwFlags[], const String strDesc[], const String& sReportFile = _T(""),
-		const PackingInfo * infoUnpacker = nullptr, const OpenTextFileParams *pOpenParams = nullptr);
-	bool ShowHexMergeDoc(CDirDoc * pDirDoc, int nFiles, const FileLocation fileloc[],
-		const DWORD dwFlags[], const String strDesc[], const String& sReportFile = _T(""),
-		const PackingInfo * infoUnpacker = nullptr, const OpenBinaryFileParams *pOpenParams = nullptr);
-	bool ShowImgMergeDoc(CDirDoc * pDirDoc, int nFiles, const FileLocation fileloc[],
-		const DWORD dwFlags[], const String strDesc[], const String& sReportFile = _T(""),
-		const PackingInfo * infoUnpacker = nullptr, const OpenImageFileParams *pOpenParams = nullptr);
-	bool ShowWebDiffDoc(CDirDoc * pDirDoc, int nFiles, const FileLocation fileloc[],
-		const DWORD dwFlags[], const String strDesc[], const String& sReportFile = _T(""),
-		const PackingInfo * infoUnpacker = nullptr, const OpenWebPageParams *pOpenParams = nullptr);
+	bool ShowTableMergeDoc(IDirDoc * pDirDoc, int nFiles, const FileLocation fileloc[],
+		const fileopenflags_t dwFlags[], const String strDesc[], const String& sReportFile = _T(""),
+		const PackingInfo * infoUnpacker = nullptr, const PrediffingInfo * infoPrediffer = nullptr,
+		const OpenTextFileParams *pOpenParams = nullptr);
+	bool ShowHexMergeDoc(IDirDoc * pDirDoc, int nFiles, const FileLocation fileloc[],
+		const fileopenflags_t dwFlags[], const String strDesc[], const String& sReportFile = _T(""),
+		const PackingInfo * infoUnpacker = nullptr, const PrediffingInfo * infoPrediffer = nullptr,
+		const OpenBinaryFileParams *pOpenParams = nullptr);
+	bool ShowImgMergeDoc(IDirDoc * pDirDoc, int nFiles, const FileLocation fileloc[],
+		const fileopenflags_t dwFlags[], const String strDesc[], const String& sReportFile = _T(""),
+		const PackingInfo * infoUnpacker = nullptr, const PrediffingInfo * infoPrediffer = nullptr,
+		const OpenImageFileParams *pOpenParams = nullptr);
+	bool ShowWebDiffDoc(IDirDoc * pDirDoc, int nFiles, const FileLocation fileloc[],
+		const fileopenflags_t dwFlags[], const String strDesc[], const String& sReportFile = _T(""),
+		const PackingInfo * infoUnpacker = nullptr, const PrediffingInfo * infoPrediffer = nullptr,
+		const OpenWebPageParams *pOpenParams = nullptr);
 
+	void UpdateTitleBarAndTabBar();
 	void UpdateResources();
 	void ApplyDiffOptions();
 	void SelectFilter();
@@ -202,12 +219,14 @@ public:
 		const std::vector<std::wstring>& events, bool addAllMenu, unsigned baseId);
 	static String GetPluginPipelineByMenuId(unsigned idSearch, const std::vector<std::wstring>& events, unsigned baseId);
 	DropHandler *GetDropHandler() const { return m_pDropHandler; }
-	const CTypedPtrArray<CPtrArray, CMDIChildWnd*>* GetChildArray() const { return &m_arrChild; }
+	const CTypedPtrArray<CPtrArray, CMDIChildWnd*>& GetChildArray() const { return m_arrChild; }
 	IMergeDoc* GetActiveIMergeDoc();
 	DirWatcher* GetDirWatcher() { return m_pDirWatcher.get(); }
 	void WatchDocuments(IMergeDoc* pMergeDoc);
 	void UnwatchDocuments(IMergeDoc* pMergeDoc);
+	CMenuBar* GetMenuBar() { return &m_wndMenuBar; }
 	CToolBar* GetToolbar() { return &m_wndToolBar; }
+	static void WaitAndDoMessageLoop(bool& completed, int ms);
 
 // Overrides
 	virtual void GetMessageString(UINT nID, CString& rMessage) const;
@@ -231,8 +250,9 @@ public:
 // Implementation data
 protected:
 	// control bar embedded members
-	CStatusBar  m_wndStatusBar;
-	CReBar m_wndReBar;
+	CBasicFlatStatusBar  m_wndStatusBar;
+	CMyReBar m_wndReBar;
+	CMenuBar m_wndMenuBar;
 	CToolBar m_wndToolBar;
 	CMDITabBar m_wndTabBar;
 	CTypedPtrArray<CPtrArray, CMDIChildWnd*> m_arrChild;
@@ -258,6 +278,11 @@ protected:
 				}
 				break;
 			}
+			case WM_MDISETMENU:
+				GetMainFrame()->SetMenuBarState(AFX_MBS_HIDDEN);
+				GetMainFrame()->GetMenuBar()->AttachMenu(CMenu::FromHandle(reinterpret_cast<HMENU>(wParam)));
+				return TRUE;
+				break;
 			case WM_TIMER:
 				if (wParam == m_nRedrawTimer)
 				{
@@ -317,6 +342,7 @@ protected:
 	std::vector<TempFilePtr> m_tempFiles; /**< List of possibly needed temp files. */
 	DropHandler *m_pDropHandler;
 	std::unique_ptr<DirWatcher> m_pDirWatcher;
+	std::optional<bool> m_bTabsOnTitleBar;
 
 // Generated message map functions
 protected:
@@ -347,6 +373,8 @@ protected:
 	afx_msg void OnViewStatusBar();
 	afx_msg void OnUpdateViewTabBar(CCmdUI* pCmdUI);
 	afx_msg void OnViewTabBar();
+	afx_msg void OnUpdateViewTabBarOnTitleBar(CCmdUI* pCmdUI);
+	afx_msg void OnViewTabBarOnTitleBar();
 	afx_msg void OnUpdateResizePanes(CCmdUI* pCmdUI);
 	afx_msg void OnResizePanes();
 	afx_msg void OnFileOpenProject();
@@ -355,11 +383,9 @@ protected:
 	afx_msg void OnWindowCloseAll();
 	afx_msg void OnUpdateWindowCloseAll(CCmdUI* pCmdUI);
 	afx_msg void OnSaveProject();
-#if _MFC_VER > 0x0600
 	afx_msg void OnActivateApp(BOOL bActive, DWORD dwThreadID);
-#else
-	afx_msg void OnActivateApp(BOOL bActive, HTASK hTask);
-#endif
+	afx_msg void OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnToolbarSize(UINT id);
 	afx_msg void OnUpdateToolbarSize(CCmdUI* pCmdUI);
 	afx_msg BOOL OnToolTipText(UINT, NMHDR* pNMHDR, LRESULT* pResult);
@@ -371,6 +397,7 @@ protected:
 	afx_msg void OnUpdatePluginName(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateStatusNum(CCmdUI* pCmdUI);
 	afx_msg void OnToolbarButtonDropDown(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnMenubarButtonDropDown(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDiffWhitespace(UINT nID);
 	afx_msg void OnUpdateDiffWhitespace(CCmdUI* pCmdUI);
 	afx_msg void OnDiffIgnoreBlankLines();
@@ -385,6 +412,8 @@ protected:
 	afx_msg void OnUpdateDiffIgnoreCP(CCmdUI* pCmdUI);
 	afx_msg void OnDiffIgnoreComments();
 	afx_msg void OnUpdateDiffIgnoreComments(CCmdUI* pCmdUI);
+	afx_msg void OnDiffIgnoreMissingTrailingEol();
+	afx_msg void OnUpdateDiffIgnoreMissingTrailingEol(CCmdUI* pCmdUI);
 	afx_msg void OnIncludeSubfolders();
 	afx_msg void OnUpdateIncludeSubfolders(CCmdUI* pCmdUI);
 	afx_msg void OnCompareMethod(UINT nID);
@@ -406,11 +435,15 @@ protected:
 	afx_msg LRESULT OnChildFrameRemoved(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnChildFrameActivate(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnChildFrameActivated(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnUpdateMenuBarMenuItem(CCmdUI* pCmdUI);
+	afx_msg void OnViewMenuBar();
+	afx_msg void OnUpdateViewMenuBar(CCmdUI* pCmdUI);
+	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
 private:
-	void addToMru(LPCTSTR szItem, LPCTSTR szRegSubKey, UINT nMaxItems = 20);
+	void addToMru(const tchar_t* szItem, const tchar_t* szRegSubKey, UINT nMaxItems = 20);
 	OpenDocList &GetAllOpenDocs();
 	MergeDocList &GetAllMergeDocs();
 	DirDocList &GetAllDirDocs();
@@ -422,4 +455,8 @@ private:
 	CMergeEditView * GetActiveMergeEditView();
 	void LoadToolbarImages();
 	HMENU NewMenu( int view, int ID );
+	bool CompareFilesIfFilesAreLarge(IDirDoc* pDirDoc, int nFiles, const FileLocation ifileloc[]);
+	void UpdateSystemMenu();
+	std::unique_ptr<WCHAR[]> m_upszLongTextW;
+	std::unique_ptr<CHAR[]> m_upszLongTextA;
 };

@@ -21,10 +21,12 @@
 #include "DirItemIterator.h"
 #include "DirActions.h"
 #include "IListCtrlImpl.h"
+#include "FileOpenFlags.h"
 
 class FileActionScript;
 
 typedef enum { eMain, eContext } eMenuType;
+typedef enum { DO_NOT_EXPAND, EXPAND_ALL, EXPAND_DIFFERENT, EXPAND_IDENTICAL } eExpandSubfoldersType;
 
 class CDirDoc;
 class CDirFrame;
@@ -47,7 +49,7 @@ struct IListCtrl;
 const uintptr_t SPECIAL_ITEM_POS = (uintptr_t)(reinterpret_cast<DIFFITEM *>( - 1L));
 
 /** Default column width in directory compare */
-const UINT DefColumnWidth = 111;
+constexpr int DefColumnWidth = 111;
 
 /**
  * @brief Directory compare results view.
@@ -83,7 +85,7 @@ public:
 
 	void StartCompare(CompareStats *pCompareStats);
 	void Redisplay();
-	void RedisplayChildren(DIFFITEM *diffpos, int level, UINT &index, int &alldiffs);
+	int RedisplayChildren(DIFFITEM *diffpos, int level, UINT &index, int &alldiffs);
 	void UpdateResources();
 	void LoadColumnHeaderItems();
 	DIFFITEM *GetItemKey(int idx) const;
@@ -134,6 +136,7 @@ private:
 	void DoOpenWithEditor(SIDE_TYPE stype);
 	void DoOpenParentFolder(SIDE_TYPE stype);
 	void DoUpdateOpen(SELECTIONTYPE selectionType, CCmdUI* pCmdUI, bool openableForDir = true);
+	void RemoveDuplicatedActions(FileActionScript & actions);
 	void ConfirmAndPerformActions(FileActionScript & actions);
 	void PerformActionList(FileActionScript & actions);
 	void UpdateAfterFileScript(FileActionScript & actionList);
@@ -199,11 +202,10 @@ protected:
 	CListCtrl* m_pList;
 	std::unique_ptr<IListCtrl> m_pIList;
 	int m_nEscCloses; /**< Cached value for option for ESC closing window */
-	bool m_bExpandSubdirs;
+	eExpandSubfoldersType m_nExpandSubdirs;
 	CFont m_font; /**< User-selected font */
 	bool m_bTreeMode; /**< `true` if tree mode is on*/
 	DirViewFilterSettings m_dirfilter;
-	clock_t m_compareStart; /**< Starting process time of the compare */
 	clock_t m_elapsed; /**< Elapsed time of the compare */
 	bool m_bUserCancelEdit; /**< `true` if the user cancels rename */
 	String m_lastCopyFolder; /**< Last Copy To -target folder. */
@@ -217,6 +219,7 @@ protected:
 	std::unique_ptr<CShellContextMenu> m_pShellContextMenuLeft; /**< Shell context menu for group of left files */
 	std::unique_ptr<CShellContextMenu> m_pShellContextMenuMiddle; /**< Shell context menu for group of middle files */
 	std::unique_ptr<CShellContextMenu> m_pShellContextMenuRight; /**< Shell context menu for group of right files */
+	std::unique_ptr<CShellContextMenu> m_pShellContextMenuBoth; /**< Shell context menu for group of both files */
 	HMENU m_hCurrentMenu; /**< Current shell context menu (either left or right) */
 	std::unique_ptr<DirViewTreeState> m_pSavedTreeState;
 	std::unique_ptr<DirViewColItems> m_pColItems;
@@ -233,6 +236,10 @@ protected:
 	afx_msg void OnUpdateDirCopy(CCmdUI* pCmdUI);
 	template<SIDE_TYPE srctype, SIDE_TYPE dsttype>
 	afx_msg void OnUpdateCtxtDirCopy(CCmdUI* pCmdUI);
+	template<SIDE_TYPE srctype, SIDE_TYPE dsttype>
+	afx_msg void OnCtxtDirMove();
+	template<SIDE_TYPE srctype, SIDE_TYPE dsttype>
+	afx_msg void OnUpdateCtxtDirMove(CCmdUI* pCmdUI);
 	template<SIDE_TYPE stype>
 	afx_msg void OnCtxtDirDel();
 	template<SIDE_TYPE stype>
@@ -300,8 +307,7 @@ protected:
 	afx_msg void OnCtxtDirZip(int flag);
 	template<int flag>
 	afx_msg void OnCtxtDirZip() { OnCtxtDirZip(flag); }
-	template<SIDE_TYPE stype>
-	afx_msg void OnCtxtDirShellContextMenu() { ShowShellContextMenu(stype); }
+	afx_msg void OnCtxtDirShellContextMenu(UINT id) { ShowShellContextMenu(id); }
 	afx_msg void OnSelectAll();
 	afx_msg void OnUpdateSelectAll(CCmdUI* pCmdUI);
 	afx_msg void OnPluginSettings(UINT nID);
@@ -336,7 +342,9 @@ protected:
 	afx_msg void OnViewTreeMode();
 	afx_msg void OnUpdateViewTreeMode(CCmdUI* pCmdUI);
 	afx_msg void OnViewExpandAllSubdirs();
-	afx_msg void OnUpdateViewExpandAllSubdirs(CCmdUI* pCmdUI);
+	afx_msg void OnViewExpandDifferentSubdirs();
+	afx_msg void OnViewExpandIdenticalSubdirs();
+	afx_msg void OnUpdateViewExpandSubdirs(CCmdUI* pCmdUI);
 	afx_msg void OnViewCollapseAllSubdirs();
 	afx_msg void OnUpdateViewCollapseAllSubdirs(CCmdUI* pCmdUI);
 	afx_msg void OnViewSwapPanes(int pane1, int pane2);
@@ -395,6 +403,8 @@ protected:
 	afx_msg void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnSearch();
 	afx_msg void OnBeginDrag(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnStatusBarClick(NMHDR* pNMHDR, LRESULT* pResult);
+
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 	bool OnHeaderBeginDrag(LPNMHEADER hdr, LRESULT* pResult);
@@ -403,7 +413,7 @@ protected:
 	bool IsItemToHide(const String& currentItem, const std::vector<String>& ItemsToHide) const;
 
 private:
-	void Open(CDirDoc *pDoc, const PathContext& paths, DWORD dwFlags[3], FileTextEncoding encoding[3], PackingInfo * infoUnpacker = nullptr);
+	void Open(CDirDoc *pDoc, const PathContext& paths, fileopenflags_t dwFlags[3], FileTextEncoding encoding[3], PackingInfo * infoUnpacker = nullptr);
 	void OpenSelection(CDirDoc *pDoc, SELECTIONTYPE selectionType = SELECTIONTYPE_NORMAL, PackingInfo * infoUnpacker = nullptr, bool openableForDir = true);
 	void OpenSelection(SELECTIONTYPE selectionType = SELECTIONTYPE_NORMAL, PackingInfo * infoUnpacker = nullptr, bool openableForDir = true);
 	void OpenSelectionAs(UINT id);
@@ -411,6 +421,8 @@ private:
 	void OpenParentDirectory(CDirDoc *pDocOpen);
 	template<SIDE_TYPE srctype, SIDE_TYPE dsttype>
 	void DoUpdateDirCopy(CCmdUI* pCmdUI, eMenuType menuType);
+	template<SIDE_TYPE srctype, SIDE_TYPE dsttype>
+	void DoUpdateDirMove(CCmdUI* pCmdUI, eMenuType menuType);
 	const DIFFITEM &GetDiffItem(int sel) const;
 	DIFFITEM &GetDiffItem(int sel);
 	int GetSingleSelectedItem() const;
@@ -419,8 +431,7 @@ private:
 	void FixReordering();
 	void HeaderContextMenu(CPoint point, int i);
 	void ListContextMenu(CPoint point, int i);
-	bool ListShellContextMenu(SIDE_TYPE side);
-	void ShowShellContextMenu(SIDE_TYPE side);
+	void ShowShellContextMenu(UINT id);
 	CShellContextMenu* GetCorrespondingShellContextMenu(HMENU hMenu) const;
 	void ReloadColumns();
 	bool IsLabelEdit() const;

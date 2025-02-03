@@ -53,6 +53,7 @@
 #define AppVersion GetFileVersion(SourcePath + "\..\..\Build\" + ARCH + "\Release\WinMergeU.exe")
 #define ShellExtensionVersion GetFileVersion(SourcePath + "..\..\Build\ShellExtension\" + ShellExtension64bit)
 #define WinMergeContextMenuVersion GetFileVersion(SourcePath + "..\..\Build\ShellExtension\" + ARCH + "\WinMergeContextMenu.dll")
+#define CurYear GetDateTimeString('yyyy', '', '')
 
 [Setup]
 AppName=WinMerge
@@ -62,6 +63,7 @@ AppPublisher=Thingamahoochie Software
 AppPublisherURL=https://WinMerge.org/
 AppSupportURL=https://WinMerge.org/
 AppUpdatesURL=https://WinMerge.org/
+AppCopyright=Copyright (c) 1996-{#CurYear} Dean P. Grimm / Thingamahoochie Software
 WizardStyle=modern
 UsePreviousPrivileges=no
 PrivilegesRequiredOverridesAllowed=dialog
@@ -89,8 +91,8 @@ OutputBaseFilename=WinMerge-{#AppVersion}-{#ARCH}-Setup
 ;This must be admin to install C++ Runtimes and shell extension
 PrivilegesRequired=admin
 
-;Windows Vista or later required
-MinVersion=0,6.0
+;Windows 7 or later required
+MinVersion=0,6.1
 
 UninstallDisplayIcon={app}\WinMergeU.exe
 
@@ -127,53 +129,50 @@ SignedUninstaller=yes
 
 [Languages]
 ;Inno Setup's Native Language
-Name: English; MessagesFile: compiler:Default.isl,..\..\Translations\InnoSetup\English.isl
+Name: English; MessagesFile: compiler:Default.isl,..\..\Translations\InnoSetup\English.islu
 
 ;Localizations:
-Name: Arabic; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Arabic.isl,..\..\Translations\InnoSetup\Arabic.isl
-Name: Basque; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Basque.isl,..\..\Translations\InnoSetup\Basque.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Basque.txt
-Name: Bulgarian; MessagesFile: compiler:Languages\Bulgarian.isl,..\..\Translations\InnoSetup\Bulgarian.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Bulgarian.txt
-Name: Catalan; MessagesFile: compiler:Languages\Catalan.isl,..\..\Translations\InnoSetup\Catalan.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Catalan.txt
-Name: ChineseSimplified; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\ChineseSimplified.isl,..\..\Translations\InnoSetup\ChineseSimplified.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-ChineseSimplified.txt
-Name: ChineseTraditional; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\ChineseTraditional.isl,..\..\Translations\InnoSetup\ChineseTraditional.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-ChineseTraditional.txt
-Name: Corsican; MessagesFile: compiler:Languages\Corsican.isl,..\..\Translations\InnoSetup\Corsican.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Corsican.txt
-Name: Croatian; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Croatian.isl,..\..\Translations\InnoSetup\Croatian.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Croatian.txt
-Name: Czech; MessagesFile: compiler:Languages\Czech.isl,..\..\Translations\InnoSetup\Czech.isl
-Name: Danish; MessagesFile: compiler:Languages\Danish.isl,..\..\Translations\InnoSetup\Danish.isl
-Name: Dutch; MessagesFile: compiler:Languages\Dutch.isl,..\..\Translations\InnoSetup\Dutch.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Dutch.txt
-Name: Finnish; MessagesFile: compiler:Languages\Finnish.isl,..\..\Translations\InnoSetup\Finnish.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Finnish.txt
-Name: French; MessagesFile: compiler:Languages\French.isl,..\..\Translations\InnoSetup\French.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-French.txt
-Name: Galician; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Galician.isl,..\..\Translations\InnoSetup\Galician.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Galician.txt
-Name: German; MessagesFile: compiler:Languages\German.isl,..\..\Translations\InnoSetup\German.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-German.txt
-Name: Greek; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Greek.isl,..\..\Translations\InnoSetup\Greek.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Greek.txt
-Name: Hungarian; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Hungarian.isl,..\..\Translations\InnoSetup\Hungarian.isl
-Name: Italian; MessagesFile: compiler:Languages\Italian.isl,..\..\Translations\InnoSetup\Italian.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Italian.txt
-Name: Japanese; MessagesFile: compiler:Languages\Japanese.isl,..\..\Translations\InnoSetup\Japanese.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Japanese.txt
-Name: Korean; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Korean.isl,..\..\Translations\InnoSetup\Korean.isl
-Name: Lithuanian; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Lithuanian.isl,..\..\Translations\InnoSetup\Lithuanian.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Lithuanian.txt
-Name: Norwegian; MessagesFile: compiler:Languages\Norwegian.isl,..\..\Translations\InnoSetup\Norwegian.isl
-Name: Persian; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Farsi.isl,..\..\Translations\InnoSetup\Persian.isl
-Name: Polish; MessagesFile: compiler:Languages\Polish.isl,..\..\Translations\InnoSetup\Polish.isl
-Name: Portuguese; MessagesFile: compiler:Languages\Portuguese.isl,..\..\Translations\InnoSetup\Portuguese.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Portuguese.txt
-Name: PortugueseBrazilian; MessagesFile: compiler:Languages\BrazilianPortuguese.isl,..\..\Translations\InnoSetup\Brazilian.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Brazilian.txt
-Name: Romanian; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Romanian.isl,..\..\Translations\InnoSetup\Romanian.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Romanian.txt
-Name: Russian; MessagesFile: compiler:Languages\Russian.isl,..\..\Translations\InnoSetup\Russian.isl
-Name: Serbian; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\SerbianCyrillic.isl,..\..\Translations\InnoSetup\Serbian.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Serbian.txt
-Name: Sinhala; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Sinhala.islu,..\..\Translations\InnoSetup\Sinhala.islu
-Name: Slovak; MessagesFile: compiler:Languages\Slovak.isl,..\..\Translations\InnoSetup\Slovak.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Slovak.txt
-Name: Slovenian; MessagesFile: compiler:Languages\Slovenian.isl,..\..\Translations\InnoSetup\Slovenian.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Slovenian.txt
-Name: Spanish; MessagesFile: compiler:Languages\Spanish.isl,..\..\Translations\InnoSetup\Spanish.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Spanish.txt
-Name: Swedish; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Swedish.isl,..\..\Translations\InnoSetup\Swedish.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Swedish.txt
-Name: Turkish; MessagesFile: compiler:Languages\Turkish.isl,..\..\Translations\InnoSetup\Turkish.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Turkish.txt
-Name: Ukrainian; MessagesFile: compiler:Languages\Ukrainian.isl,..\..\Translations\InnoSetup\Ukrainian.isl; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Ukrainian.txt
+Name: Arabic; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Arabic.isl,..\..\Translations\InnoSetup\Arabic.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Arabic.txt
+Name: Basque; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Basque.isl,..\..\Translations\InnoSetup\Basque.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Basque.txt
+Name: Bulgarian; MessagesFile: compiler:Languages\Bulgarian.isl,..\..\Translations\InnoSetup\Bulgarian.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Bulgarian.txt
+Name: Catalan; MessagesFile: compiler:Languages\Catalan.isl,..\..\Translations\InnoSetup\Catalan.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Catalan.txt
+Name: ChineseSimplified; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\ChineseSimplified.isl,..\..\Translations\InnoSetup\ChineseSimplified.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-ChineseSimplified.txt
+Name: ChineseTraditional; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\ChineseTraditional.isl,..\..\Translations\InnoSetup\ChineseTraditional.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-ChineseTraditional.txt
+Name: Corsican; MessagesFile: compiler:Languages\Corsican.isl,..\..\Translations\InnoSetup\Corsican.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Corsican.txt
+Name: Croatian; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Croatian.isl,..\..\Translations\InnoSetup\Croatian.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Croatian.txt
+Name: Czech; MessagesFile: compiler:Languages\Czech.isl,..\..\Translations\InnoSetup\Czech.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Czech.txt
+Name: Danish; MessagesFile: compiler:Languages\Danish.isl,..\..\Translations\InnoSetup\Danish.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Danish.txt
+Name: Dutch; MessagesFile: compiler:Languages\Dutch.isl,..\..\Translations\InnoSetup\Dutch.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Dutch.txt
+Name: Finnish; MessagesFile: compiler:Languages\Finnish.isl,..\..\Translations\InnoSetup\Finnish.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Finnish.txt
+Name: French; MessagesFile: compiler:Languages\French.isl,..\..\Translations\InnoSetup\French.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-French.txt
+Name: Galician; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Galician.isl,..\..\Translations\InnoSetup\Galician.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Galician.txt
+Name: German; MessagesFile: compiler:Languages\German.isl,..\..\Translations\InnoSetup\German.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-German.txt
+Name: Greek; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Greek.isl,..\..\Translations\InnoSetup\Greek.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Greek.txt
+Name: Hungarian; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Hungarian.isl,..\..\Translations\InnoSetup\Hungarian.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Hungarian.txt
+Name: Italian; MessagesFile: compiler:Languages\Italian.isl,..\..\Translations\InnoSetup\Italian.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Italian.txt
+Name: Japanese; MessagesFile: compiler:Languages\Japanese.isl,..\..\Translations\InnoSetup\Japanese.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Japanese.txt
+Name: Korean; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Korean.isl,..\..\Translations\InnoSetup\Korean.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Korean.txt
+Name: Lithuanian; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Lithuanian.isl,..\..\Translations\InnoSetup\Lithuanian.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Lithuanian.txt
+Name: Norwegian; MessagesFile: compiler:Languages\Norwegian.isl,..\..\Translations\InnoSetup\Norwegian.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Norwegian.txt
+Name: Persian; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Farsi.isl,..\..\Translations\InnoSetup\Persian.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Persian.txt
+Name: Polish; MessagesFile: compiler:Languages\Polish.isl,..\..\Translations\InnoSetup\Polish.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Polish.txt
+Name: Portuguese; MessagesFile: compiler:Languages\Portuguese.isl,..\..\Translations\InnoSetup\Portuguese.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Portuguese.txt
+Name: PortugueseBrazilian; MessagesFile: compiler:Languages\BrazilianPortuguese.isl,..\..\Translations\InnoSetup\Brazilian.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Brazilian.txt
+Name: Romanian; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Romanian.isl,..\..\Translations\InnoSetup\Romanian.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Romanian.txt
+Name: Russian; MessagesFile: compiler:Languages\Russian.isl,..\..\Translations\InnoSetup\Russian.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Russian.txt
+Name: Serbian; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\SerbianCyrillic.isl,..\..\Translations\InnoSetup\Serbian.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Serbian.txt
+Name: Sinhala; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Sinhala.islu,..\..\Translations\InnoSetup\Sinhala.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Sinhala.txt
+Name: Slovak; MessagesFile: compiler:Languages\Slovak.isl,..\..\Translations\InnoSetup\Slovak.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Slovak.txt
+Name: Slovenian; MessagesFile: compiler:Languages\Slovenian.isl,..\..\Translations\InnoSetup\Slovenian.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Slovenian.txt
+Name: Spanish; MessagesFile: compiler:Languages\Spanish.isl,..\..\Translations\InnoSetup\Spanish.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Spanish.txt
+Name: Swedish; MessagesFile: ..\..\Translations\InnoSetup\Unbundled.is6\Swedish.isl,..\..\Translations\InnoSetup\Swedish.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Swedish.txt
+Name: Tamil; MessagesFile: compiler:Default.isl,..\..\Translations\InnoSetup\Tamil.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Tamil.txt
+Name: Turkish; MessagesFile: compiler:Languages\Turkish.isl,..\..\Translations\InnoSetup\Turkish.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Turkish.txt
+Name: Ukrainian; MessagesFile: compiler:Languages\Ukrainian.isl,..\..\Translations\InnoSetup\Ukrainian.islu; InfoAfterFile: ..\..\Translations\Docs\Readme\ReadMe-Ukrainian.txt
 
 
 [Messages]
-English.FinishedLabel=Setup has finished installing WinMerge on your computer.
-English.SetupAppTitle=Setup - WinMerge {#AppVersion}
-English.WizardInfoBefore=License Agreement
-English.InfoBeforeLabel=GNU General Public License
-
+SetupWindowTitle=WinMerge {#AppVersion} {#ARCH}
 
 [Types]
 Name: typical; Description: {cm:TypicalInstallation}
@@ -294,6 +293,9 @@ Name: Languages\Spanish; Description: {cm:SpanishLanguage}; Flags: disablenounin
 Name: Languages\Swedish; Description: {cm:SwedishLanguage}; Flags: disablenouninstallwarning; Types: full; Languages: not Swedish
 Name: Languages\Swedish; Description: {cm:SwedishLanguage}; Flags: disablenouninstallwarning; Types: full typical compact; Languages: Swedish
 
+Name: Languages\Tamil; Description: {cm:TamilLanguage}; Flags: disablenouninstallwarning; Types: full; Languages: not Tamil
+Name: Languages\Tamil; Description: {cm:TamilLanguage}; Flags: disablenouninstallwarning; Types: full typical compact; Languages: Tamil
+
 Name: Languages\Turkish; Description: {cm:TurkishLanguage}; Flags: disablenouninstallwarning; Types: full; Languages: not Turkish
 Name: Languages\Turkish; Description: {cm:TurkishLanguage}; Flags: disablenouninstallwarning; Types: full typical compact; Languages: Turkish
 
@@ -366,8 +368,8 @@ Name: {app}\Languages\MergeTurkish.lang; Type: files
 Name: {app}\MergePlugins\list.txt; Type: files; Check: not IsComponentSelected('Plugins')
 
 ;Removes the user's guide icon if the user deselects the user's guide component.
-Name: {group}\{cm:UsersGuide}.lnk; Type: files; Check: not IsComponentSelected('Docs')
-Name: {group}\{cm:ReadMe}.lnk; Type: files
+Name: {group}\{cm:UsersGuide}.lnk; Type: files; Check: not IsComponentSelected('Docs') and not WizardNoIcons
+Name: {group}\{cm:ReadMe}.lnk; Type: files; Check: not WizardNoIcons
 
 ;This removes the quick launch icon in case the user chooses not to install it after previously having it installed
 Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\WinMerge.lnk; Type: files; Check: not IsTaskSelected('QuickLauchIcon')
@@ -377,12 +379,12 @@ Name: {commonappdata}\Microsoft\Internet Explorer\Quick Launch\WinMerge.lnk; Typ
 Name: {autodesktop}\WinMerge.lnk; Type: files; Check: not IsTaskSelected('DesktopIcon')
 
 ;Removes the Uninstall icon from the start menu...
-Name: {group}\{cm:UninstallProgram,WinMerge}.lnk; Type: files;
-Name: {group}\{cm:UninstallProgram,WinMerge}; Type: files;
+Name: {group}\{cm:UninstallProgram,WinMerge}.lnk; Type: files; Check: not WizardNoIcons
+Name: {group}\{cm:UninstallProgram,WinMerge}; Type: files; Check: not WizardNoIcons
 
 ;Remove ANSI executable link from start menu for NT-based Windows versions
 ;This was installed earlier, but not anymore.
-Name: {group}\WinMerge (ANSI).lnk; Type: files; MinVersion: 0,4
+Name: {group}\WinMerge (ANSI).lnk; Type: files; MinVersion: 0,4; Check: not WizardNoIcons
 
 Name: {app}\Docs; Type: filesandordirs
 
@@ -539,6 +541,9 @@ Source: ..\..\Translations\Docs\Readme\ReadMe-Spanish.txt; DestDir: {app}\Docs; 
 Source: ..\..\Translations\WinMerge\Swedish.po; DestDir: {app}\Languages; Components: Languages\Swedish; Flags: ignoreversion comparetimestamp
 Source: ..\..\Translations\ShellExtension\Swedish.po; DestDir: {app}\Languages\ShellExtension; Components: Languages\Swedish; Flags: ignoreversion comparetimestamp
 Source: ..\..\Translations\Docs\Readme\ReadMe-Swedish.txt; DestDir: {app}\Docs; Components: Languages\Swedish
+Source: ..\..\Translations\WinMerge\Tamil.po; DestDir: {app}\Languages; Components: Languages\Tamil; Flags: ignoreversion comparetimestamp
+Source: ..\..\Translations\ShellExtension\Tamil.po; DestDir: {app}\Languages\ShellExtension; Components: Languages\Tamil; Flags: ignoreversion comparetimestamp
+Source: ..\..\Translations\Docs\Readme\ReadMe-Tamil.txt; DestDir: {app}\Docs; Components: Languages\Tamil
 Source: ..\..\Translations\WinMerge\Turkish.po; DestDir: {app}\Languages; Components: Languages\Turkish; Flags: ignoreversion comparetimestamp
 Source: ..\..\Translations\ShellExtension\Turkish.po; DestDir: {app}\Languages\ShellExtension; Components: Languages\Turkish; Flags: ignoreversion comparetimestamp
 Source: ..\..\Translations\Docs\Readme\ReadMe-Turkish.txt; DestDir: {app}\Docs; Components: Languages\Turkish
@@ -566,12 +571,15 @@ Source: ..\..\Docs\users\GPL.rtf; DestDir: {app}\Docs\; Flags: comparetimestamp 
 Source: ..\..\Plugins\Plugins.xml; DestDir: {app}\MergePlugins; Flags: IgnoreVersion CompareTimeStamp; Components: Plugins
 Source: ..\..\Plugins\dlls\editor addin.sct; DestDir: {app}\MergePlugins; Flags: IgnoreVersion CompareTimeStamp; Components: Plugins
 Source: ..\..\Plugins\dlls\insert datetime.sct; DestDir: {app}\MergePlugins; Flags: IgnoreVersion CompareTimeStamp; Components: Plugins
+Source: ..\..\Plugins\dlls\CompareEscapedJavaPropertiesFiles.sct; DestDir: {app}\MergePlugins; Flags: IgnoreVersion CompareTimeStamp; Components: Plugins
 Source: ..\..\Plugins\dlls\CompareMSExcelFiles.sct; DestDir: {app}\MergePlugins; Flags: IgnoreVersion CompareTimeStamp; Components: Plugins
 Source: ..\..\Plugins\dlls\CompareMSWordFiles.sct; DestDir: {app}\MergePlugins; Flags: IgnoreVersion CompareTimeStamp; Components: Plugins
 Source: ..\..\Plugins\dlls\CompareMSPowerPointFiles.sct; DestDir: {app}\MergePlugins; Flags: IgnoreVersion CompareTimeStamp; Components: Plugins
 Source: ..\..\Plugins\dlls\CompareMSVisioFiles.sct; DestDir: {app}\MergePlugins; Flags: IgnoreVersion CompareTimeStamp; Components: Plugins
 Source: ..\..\Plugins\dlls\ApplyPatch.sct; DestDir: {app}\MergePlugins; Flags: IgnoreVersion CompareTimeStamp; Components: Plugins
 Source: ..\..\Plugins\dlls\PrediffLineFilter.sct; DestDir: {app}\MergePlugins; Flags: IgnoreVersion CompareTimeStamp; Components: Plugins
+Source: ..\..\Plugins\dlls\IgnoreLeadingLineNumbers.sct; DestDir: {app}\MergePlugins; Flags: ignoreversion replacesameversion; Components: Plugins
+Source: ..\..\Plugins\dlls\AI.sct; DestDir: {app}\MergePlugins; Flags: ignoreversion replacesameversion; Components: Plugins
 Source: ..\..\Plugins\dlls\{#ARCH}\IgnoreColumns.dll; DestDir: {app}\MergePlugins; Flags: ignoreversion replacesameversion; Components: Plugins
 Source: ..\..\Plugins\dlls\{#ARCH}\IgnoreCommentsC.dll; DestDir: {app}\MergePlugins; Flags: ignoreversion replacesameversion; Components: Plugins
 Source: ..\..\Plugins\dlls\{#ARCH}\IgnoreFieldsComma.dll; DestDir: {app}\MergePlugins; Flags: ignoreversion replacesameversion; Components: Plugins
@@ -586,11 +594,15 @@ Source: ..\..\Build\{#ARCH}\Release\Frhed\Docs\Contributors.txt; DestDir: {app}\
 Source: ..\..\Build\{#ARCH}\Release\Frhed\Docs\History.txt; DestDir: {app}\Frhed\Docs; Components: Core
 Source: ..\..\Build\{#ARCH}\Release\Frhed\Docs\Links.txt; DestDir: {app}\Frhed\Docs; Components: Core
 Source: ..\..\Build\{#ARCH}\Release\Frhed\Docs\Sample.tpl  ; DestDir: {app}\Frhed\Docs; Components: Core
-Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\de.po; DestDir: {app}\Frhed\Languages; Components: Core
-Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\fr.po; DestDir: {app}\Frhed\Languages; Components: Core
-Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\ja.po; DestDir: {app}\Frhed\Languages; Components: Core
-Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\nl.po; DestDir: {app}\Frhed\Languages; Components: Core
-Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\sl.po; DestDir: {app}\Frhed\Languages; Components: Core
+Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\de.po; DestDir: {app}\Frhed\Languages; Components: Languages\German
+Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\fr.po; DestDir: {app}\Frhed\Languages; Components: Languages\French
+Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\gl.po; DestDir: {app}\Frhed\Languages; Components: Languages\Galician
+Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\ja.po; DestDir: {app}\Frhed\Languages; Components: Languages\Japanese
+Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\nl.po; DestDir: {app}\Frhed\Languages; Components: Languages\Dutch
+Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\pl.po; DestDir: {app}\Frhed\Languages; Components: Languages\Polish
+Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\ru.po; DestDir: {app}\Frhed\Languages; Components: Languages\Russian
+Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\sk.po; DestDir: {app}\Frhed\Languages; Components: Languages\Slovak
+Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\sl.po; DestDir: {app}\Frhed\Languages; Components: Languages\Slovenian
 Source: ..\..\Build\{#ARCH}\Release\Frhed\Languages\heksedit.lng; DestDir: {app}\Frhed\Languages; Components: Core
 
 ;WinIMerge
@@ -604,14 +616,14 @@ Source: ..\..\Build\{#ARCH}\Release\WinIMerge\vcomp140.dll; DestDir: {app}; Comp
 Source: ..\..\Build\{#ARCH}\Release\WinWebDiff\LICENSE*.txt; DestDir: {app}\WinWebDiff; Components: Core
 Source: ..\..\Build\{#ARCH}\Release\WinWebDiff\WinWebDiffLib.dll; DestDir: {app}\WinWebDiff; Flags: ignoreversion replacesameversion; Components: Core
 
-;GnuWin32 Patch for Windows
-Source: ..\..\Build\GnuWin32\*.*; DestDir: {app}\Commands\GnuWin32; Flags: recursesubdirs; Components: Plugins
+;GNU patch
+Source: ..\..\Build\msys2\*.*; DestDir: {app}\Commands\msys2; Flags: recursesubdirs; Components: Plugins
 ; HTML Tidy
 Source: ..\..\Build\tidy-html5\bin\*.*; DestDir: {app}\Commands\tidy-html5; Flags: recursesubdirs; Components: Plugins
 Source: ..\..\Build\tidy-html5\tidy-html5-5.4.0\README\LICENSE.md; DestDir: {app}\Commands\tidy-html5; Flags: recursesubdirs; Components: Plugins
 ; jq
-Source: ..\..\Build\jq\jq-win32.exe; DestDir: {app}\Commands\jq; DestName: jq.exe; Flags: recursesubdirs; Components: Plugins
-Source: ..\..\Build\jq\jq-jq-1.4\COPYING; DestDir: {app}\Commands\jq; Flags: recursesubdirs; Components: Plugins
+Source: ..\..\Build\jq\jq-windows-i386.exe; DestDir: {app}\Commands\jq; DestName: jq.exe; Flags: recursesubdirs; Components: Plugins
+Source: ..\..\Build\jq\jq-jq-1.7.1\COPYING; DestDir: {app}\Commands\jq; Flags: recursesubdirs; Components: Plugins
 ; md4c
 Source: ..\..\Build\md4c\mingw32\bin\*.*; DestDir: {app}\Commands\md4c; Flags: recursesubdirs; Components: Plugins
 Source: ..\..\Build\md4c\mingw32\share\licenses\md4c\LICENSE.md; DestDir: {app}\Commands\md4c; Flags: recursesubdirs; Components: Plugins
@@ -643,8 +655,8 @@ Name: "{app}\MergePlugins"
 
 [Icons]
 ;Start Menu Icons
-Name: {group}\WinMerge; Filename: {app}\WinMergeU.exe; AppUserModelID: "Thingamahoochie.WinMerge"
-Name: {group}\{cm:UsersGuide}; Filename: {app}\Docs\WinMerge.chm
+Name: {group}\WinMerge; Filename: {app}\WinMergeU.exe; AppUserModelID: "Thingamahoochie.WinMerge"; Check: not WizardNoIcons
+Name: {group}\{cm:UsersGuide}; Filename: {app}\Docs\WinMerge.chm; Check: not WizardNoIcons
 
 ;Desktop Icon
 Name: {autodesktop}\WinMerge; Filename: {app}\WinMergeU.exe; Tasks: desktopicon
@@ -757,6 +769,7 @@ Root: HKA;  SubKey: Software\Thingamahoochie\WinMerge\Locale; ValueType: dword; 
 Root: HKA;  SubKey: Software\Thingamahoochie\WinMerge\Locale; ValueType: dword; ValueName: LanguageId; ValueData: $00000424; Flags: deletevalue; Languages: Slovenian
 Root: HKA;  SubKey: Software\Thingamahoochie\WinMerge\Locale; ValueType: dword; ValueName: LanguageId; ValueData: $00000c0a; Flags: deletevalue; Languages: Spanish
 Root: HKA;  SubKey: Software\Thingamahoochie\WinMerge\Locale; ValueType: dword; ValueName: LanguageId; ValueData: $0000041D; Flags: deletevalue; Languages: Swedish
+Root: HKA;  SubKey: Software\Thingamahoochie\WinMerge\Locale; ValueType: dword; ValueName: LanguageId; ValueData: $00000449; Flags: deletevalue; Languages: Tamil
 Root: HKA;  SubKey: Software\Thingamahoochie\WinMerge\Locale; ValueType: dword; ValueName: LanguageId; ValueData: $0000041f; Flags: deletevalue; Languages: Turkish
 Root: HKA;  SubKey: Software\Thingamahoochie\WinMerge\Locale; ValueType: dword; ValueName: LanguageId; ValueData: $00000422; Flags: deletevalue; Languages: Ukrainian
 
@@ -773,7 +786,7 @@ Filename: {sys}\regsvr32.exe; Parameters: "/s ""{app}\{#ShellExtension64bit}""";
 Filename: {sys}\regsvr32.exe; Parameters: "/s /n /i:user ""{app}\{#ShellExtension64bit}"""; Flags: waituntilterminated; Check: not IsAdminInstallMode and not IsWindows11OrLater
 Filename: {app}\WinMerge32BitPluginProxy.exe; Parameters: "/RegServer"; Flags: waituntilidle; Check: IsAdminInstallMode
 Filename: {app}\WinMerge32BitPluginProxy.exe; Parameters: "/RegServerPerUser"; Flags: waituntilidle; Check: not IsAdminInstallMode
-Filename: {win}\sysnative\WindowsPowerShell\v1.0\PowerShell.exe; Parameters: "-c ""$host.ui.RawUI.WindowTitle = 'Registering WinMergeContextMenu package...'; if ((Get-AppxPackage -name WinMerge) -eq $null) {{ Add-AppxPackage '{app}\WinMergeContextMenuPackage.msix' -ExternalLocation '{app}'}"""; Flags: waituntilterminated; Check: IsWindows11OrLater
+Filename: {win}\sysnative\WindowsPowerShell\v1.0\PowerShell.exe; Parameters: "-NoProfile -WindowStyle Hidden -c ""if ((Get-AppxPackage -name WinMerge) -eq $null) {{ Add-AppxPackage \""{app}\WinMergeContextMenuPackage.msix\"" -ExternalLocation \""{app}\""}"""; Flags: waituntilterminated; Check: IsWindows11OrLater
 
 [UninstallRun]
 Filename: {syswow64}\regsvr32.exe; Parameters: "/s /u ""{app}\{#ShellExtension32bit}"""; Flags: waituntilterminated; Check: IsAdminInstallMode; Components: ShellExtension32bit
@@ -791,7 +804,7 @@ Name: {app}\Codecs; Type: filesandordirs
 Name: {app}\Formats; Type: filesandordirs
 Name: {app}\Lang; Type: filesandordirs
 
-Name: {group}; Type: dirifempty
+Name: {group}; Type: dirifempty; Check: not WizardNoIcons
 Name: {app}; Type: dirifempty
 
 
@@ -807,7 +820,7 @@ Var
     strGroup_Path: string;
 Begin
     {Saves the path that Inno Setup intended to create the start menu group at}
-    strGroup_Path := ExpandConstant('{group}');
+    if not WizardNoIcons Then strGroup_Path := ExpandConstant('{group}');
 
     {If the start menu path isn't blank then..}
     if strGroup_Path <> '' Then
@@ -850,9 +863,14 @@ Begin
 End;
 
 Function OldGroup(): string;
+Var
+    carNoIcons: Cardinal;
 Begin
     {Stores where in \All Users\Programs\ our start menu used to be located}
-     RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\WinMerge_is1', 'Inno Setup: Icon Group', Result)
+     RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\WinMerge_is1', 'Inno Setup: Icon Group', Result);
+     carNoIcons := 0;
+     RegQueryDWORDValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\WinMerge_is1', 'Inno Setup: No Icons', carNoIcons);
+     if carNoIcons <> 0 Then Result := '';
 End;
 
 Procedure DeletePreviousStartMenu();
@@ -865,7 +883,7 @@ Begin
     strOld := OldGroup();
 
     {Detects the current start menu group's path, if any (not creating a group is a valid option)}
-    strNew := ExpandConstant('{group}');
+    If not WizardNoIcons Then strNew := ExpandConstant('{group}');
 
     {removes the start menu portion of the path from the group path making it match the format of strOld}
     StringChange(strNew, ExpandConstant('{commonprograms}\'), '')
@@ -881,7 +899,7 @@ Begin
 
                     {Display a dialog asking the user if they'd like to delete the previous start menu group}
                     {If they'd like to delete the previous start menu group then...}
-                    If Msgbox(strMessage, mbConfirmation, mb_YesNo) = mrYes Then
+                    If SuppressibleMsgbox(strMessage, mbConfirmation, mb_YesNo, mrYes) = mrYes Then
                         Begin
                             strOld := ExpandConstant('{commonprograms}\') + strOld;
                             {Remove old start menu}
@@ -895,8 +913,8 @@ Function UnregisterWinMergeContextMenuPackage: Boolean;
 var
   ResultCode: Integer;
 Begin;
-  if RegKeyExists(HKCU, 'SOFTWARE\Classes\PackagedCom\ClassIndex\{90340779-F37E-468E-9728-A2593498ED32}') then
-    Exec(ExpandConstant('{win}\sysnative\WindowsPowerShell\v1.0\PowerShell.exe'), '-c "$host.ui.RawUI.WindowTitle = ""Unregistering WinMergeContextMenu package...""; Get-AppxPackage -name WinMerge | Remove-AppxPackage"', '', SW_SHOW, ewWaitUntilTerminated, ResultCode);  
+  if RegKeyExists(HKLM, 'SOFTWARE\Classes\PackagedCom\ClassIndex\{90340779-F37E-468E-9728-A2593498ED32}') then
+    Exec(ExpandConstant('{win}\sysnative\WindowsPowerShell\v1.0\PowerShell.exe'), '-NoProfile -WindowStyle Hidden -c "Get-AppxPackage -name WinMerge | Remove-AppxPackage"', '', SW_SHOW, ewWaitUntilTerminated, ResultCode);  
   Result := true;
 End;
 
@@ -959,6 +977,18 @@ begin
   end;
 end;
 
+procedure RegisterUserTasks();
+var
+  params: string;
+  UserTasksFlags: DWORD;
+  ResultCode: Integer;
+Begin
+  UserTasksFlags := 4097; { 4096(Clipboard Compare)+1(New Text Compare) }
+  RegQueryDWORDValue(HKCU, 'Software\Thingamahoochie\WinMerge', 'UserTasksFlags', UserTasksFlags);
+  params := '/s- /minimize /noninteractive /set-usertasks-to-jumplist ' + IntToStr(UserTasksFlags);
+  Exec(ExpandConstant('{app}\WinMergeU.exe'), params, '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+end;
+
 {This event procedure is queed each time the user changes pages within the installer}
 Procedure CurPageChanged(CurPage: integer);
 Begin
@@ -966,8 +996,10 @@ Begin
     If CurPage = wpInstalling Then
             {Delete the previous start menu group if the location has changed since the last install}
             DeletePreviousStartMenu;
-    If CurPage = wpFinished Then
+    If CurPage = wpFinished Then Begin
       DeleteRenamedFiles;
+      RegisterUserTasks;
+    End;
 End;
 
 // Checks if context menu is already enabled for shell extension

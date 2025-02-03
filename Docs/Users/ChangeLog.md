@@ -1,5 +1,1051 @@
 # Change log
 
+## WinMerge 2.16.46 - 2025-01-27
+
+### General
+
+- BugFix: ALT-F4 opens Tools menu instead of exit from WinMerge (#2592)
+
+- BugFix: Fixes an issue causing a momentary drawing shift when launching
+    WinMerge with Windows animation effects enabled and the window maximized.
+
+### Folder compare
+
+- BugFix: Compare - Text files different and case also different
+    - bug when delete and copy (#2599)
+
+- Add a Prompt to Copy Only Differences in Folder Comparison (PR #2622,#198,#1168,#1350,#1995)
+
+### Plugins
+
+- BugFix: Fixes an issue where the Plugins → Prediffer menu is not displayed
+    correctly since version 2.16.43.
+
+- BugFix: Fixed an issue in the CompareMSPowerPointFiles.sct plugin that
+    caused error 0x80048010 when comparing PowerPoint files
+
+- Enable per-file plugin application with file number specification (PR #2598)
+
+- Some Plugins window fixes (PR #2621)
+
+### Manual
+
+- BugFix: Typos and minor errors in WinMerge manual (#2597)
+
+### Translations
+
+- Translation updates:
+  - Brazilian (PR #2601,#2623)
+  - Chinese Simplified (PR #2603,#2624) 
+  - French (PR #2595,#2612)
+  - Hungarian (PR #2602)
+  - Italian (PR #2610,#2627)
+  - Japanese
+  - Korean (PR #2611,#2630)
+  - Lithuanian (PR #2604,#2628)
+  - Portuguese (PR #2614)
+  - Russian (PR #2593,#2609,#2629)
+
+## WinMerge 2.16.45.1 - 2024-12-27
+
+### General
+
+- BugFix: IME switch not toggle menu when menu hide (PR #2572)
+- Add "Ignore missing trailing EOL" option to Compare settings
+    (PR #2573,#203,#989,#2317)
+
+### File compare
+
+- BugFix: The height of the lines connecting moving blocks in the location
+    pane may be incorrect (#2543)
+
+### Folder compare
+
+- BugFix: Looks like the View Tab Bar "folder icon" is getting a green
+    check-mark before the folder compare has even completed. (#2562)
+
+### Plugins
+
+- BugFix: WinMerge 2.16.44.0 : CompareMSWordFiles.sct Plugin : Forced Enabled
+    Confirm Conversions Pop-Up (#2566)
+
+### Archive support
+
+- Update 7-Zip to 24.09
+
+### Translations
+
+- Translation updates:
+  - Brazilian (PR #2585)
+  - Chinese Simplified (PR #2588) 
+  - Hungarian (PR #2586)
+  - Italian (PR #2587)
+  - Lithuanian (PR #2591)
+  - Japanese
+  - Korean (PR #2558,#2559)
+
+### Internals
+
+- Update POCO C++ Libraries to 1.14.0
+
+## WinMerge 2.16.45.0 - 2024-11-27
+
+### General
+
+- BugFix: Second monitor - BIG title bar v 2.16.44 (#2510,#2512,#2540,#2549)
+- BugFix: Window close button is not extending to the edge of the screen
+    when maximized (#2520)
+- BugFix: When WinMerge window is maximized, it prevents auto-hidden Windows
+    11 taskbar from appearing (#2518)
+- Foreground and background title bars are distinguishable (PR #2497)
+- Title bar background color and text color follow windows settings when not
+    customized (PR #2505)
+- Main Menu toggle Show/Hide (PR #2509)
+- Inactive title text chosen by inactive title color (PR #2544)
+- Reduce the contrast of inactive title bar text (PR #2545)
+- System Icon turn gray when app inactive (PR #2547)
+
+### File compare
+
+- BugFix: Wrong line gets copied over when selecting text (#2499)
+- BugFix: Bug Report: Display Issues When Resizing WinMerge Across Dual
+    Monitors (#2514)
+- BugFix: Diff renders incorrectly with "Cascadia Mono" variant (#2525)
+- BugFix: The height of the lines connecting moving blocks in the location
+    pane may be incorrect
+- BugFix: Crash on opening 2 files via drag & drop (#2548)
+- BugFix: A crash could occur if a single invalid file path was specified in
+    the "Select files or folders" window.
+- BugFix: "Debug Assertion Failed!" Error When Refreshing After Deleting All
+    Content in Left or Right Pane (#2556)
+- Adjust right-click deselect from down to up to preserve RB + scroll anywhere
+    (PR #2511)
+- Press 1-3 to copy current diff line to clipbd while popup menu is open
+    (PR #2532)
+- Caret (text cursor) follow windows settings (PR #2534)
+- Feature Request: Fixed-Width Font in "Find what" and "Replace with" Fields
+    (#2539)
+
+### Folder compare
+
+- BugFix: Crash on typing while search is in progress (#1814), (PR #2557)
+
+### Options dialog
+
+- Add a "Defaults" button to the "Options (Colors/System)" dialog. (PR #2506)
+- The "Clear all recent items" button in the Shell Integration category of the
+    Options dialog now clears combobox history as well as jump lists. (#2555)
+
+### Select Files or Folders dialog
+
+- BugFix: Crash on opening 2 files via drag & drop (#2548)
+
+### Plugins
+
+- Apache Tika plugin: Update Apache Tika to 3.0.0
+
+### Installer
+
+- BugFix: When uninstalling WinMerge, the Shell Extension for Windows 11 was
+    not uninstalled.
+- Installer - Run PowerShell hidden and with -NoProfile when installing
+    silently (#2515)
+
+### Translations
+
+- Translation updates:
+  - Brazilian (PR #2526)
+  - Chinese Simplified (PR #2501,#2524) 
+  - French (PR #2536)
+  - Hungarian (PR #2495,#2523)
+  - Italian (PR #2529)
+  - Japanese
+  - Korean (PR #2496,#2533)
+  - Lithuanian (PR #2503,#2537)
+  - Portuguese (PR #2507)
+  - Russian (PR #2500,#2502,#2521,#2522,#2528,#2531,#2538,#2542,frhed#17,
+      frhed#18)
+
+## WinMerge 2.16.44 - 2024-10-27
+
+### General
+
+- Added Medium size (24px) option to Toolbar icons
+
+### Webpage compare
+
+- BugFix: Differences panel for Webpage mode (winwebdiff#7)
+
+### Plugins
+
+- BugFix: Floating-point precision issue in CompareMSExcelFiles.sct plugin (#2494)
+
+### Translations
+
+- Translation updates:
+  - Brazilian (PR #2493)
+  - Corsican (PR #2490)
+
+## WinMerge 2.16.43 - 2024-10-23
+
+### General
+
+- BugFix: WinMerge incorrectly states "The selected files are identical" (#2408)
+- Implement Menu Bar as a Toolbar (PR #2400)
+- Add support for placing the tab bar on the title bar (PR #2428)
+- Add One-Hand mice wheel scroll diff and merge (PR #2435)
+- Add Support for Custom System Color Overrides (PR #2376)
+- Easy move small main window when tab on titlebar (PR #2489)
+
+### File compare
+
+- BugFix: Wrong syntax highlighting for TeX files (#2415)
+- BugFix: Text replacement result is wrong. (#2422)
+- Copy Selected Difference to Clipboard (PR #2429)
+- Added Ada parser and default file associations (#2452)
+- Added C++20 modules default file associations cppm and ixx (PR #2464)
+- Anti-aliasing has been applied to the lines that connect moved blocks in the
+    location pane.
+
+### Folder compare
+
+- BugFix: ExitCode always 2 with /enableexitcode with no apparent issues (#2450)
+
+### Webpage compare
+
+- BugFix: Location pane may not render differences (winwebdiff#6)
+
+### Options dialog
+
+- Add a "Defaults" button to the "Options (Project)" dialog. (PR #2401)
+- Add a "Defaults" button to the "Options (Backup Files)" dialog. (PR #2406)
+- Add a "Defaults" button to the "Options (Codepage)" dialog. (PR #2448)
+- Add a "Defaults" button to the "Options (General)" dialog. (PR #2453)
+
+### Plugins
+
+- Create CompareEscapedJavaPropertiesFiles.sct (PR #2455)
+
+### Manual
+
+- BugFix: 2 mistakes about default values in manual (#2456)
+- Update documentation for "Include unique subfolders contents" setting (PR #2396)
+
+### Translations
+
+- Translation updates:
+  - Brazilian (PR #2397,#2431,#2439,#2454,#2460,#2468,#2477,#2486)
+  - Chinese Simplified (PR #2394,#2461,#2469,#2485)
+  - Dutch (PR #2474)
+  - French (PR #2399,#2444)
+  - Hungarian (PR #2433,#2440,#2458,#2472,#2482)
+  - Italian (PR #2393,#2438,#2446,#2447,#2457,#2467,#2470,#2487)
+  - Japanese
+  - Korean (PR #2426,#2459,#2473)
+  - Lithuanian (PR #2436,#2443,#2462,#2471,#2483)
+  - Portuguese (PR #2410,#2441,#2480)
+  - Russian (PR #2462)
+
+### Internals
+
+- Make InsertLineNumberInPOFiles.bat and RenewPOFiles.bat work again
+
+## WinMerge 2.16.42.1 - 2024-07-28
+
+### General
+
+- BugFix: Digital signature was not added to version 2.16.42.
+
+### Translations
+
+- Translation updates:
+  - Chinese Simplified (PR #2394)
+  - Italian (PR #2393)
+
+## WinMerge 2.16.42 - 2024-07-27
+
+### General
+
+- Enable Rounded Corners for WinMerge Menu on Windows 11 (PR #2364)
+- Introduce a flat status bar without separator lines. (PR #2377)
+
+### Folder compare
+
+- BugFix: Folder comparison status not accurately reflected in toolbar (#2374)
+- BugFix: Status of folder comparison not correctly reflected by tab icon after
+    Refresh (F5) (#2383)
+
+### File compare
+
+- Replace - more intelligent choice of replace in (whole file vs selection) (#2368)
+
+### Image compare
+
+- BugFix: Image Comparison : In Alpha Animation, dialogs hang winmerge (#2370) 
+- BugFix: Fixed an issue where the right edge of the status bar appeared white.
+- Added the ability to change the blink interval and overlay animation interval.
+
+### Plugins
+
+- Make the gpt4-o-mini model selectable in the AIConvertText plugin settings
+    window
+
+### Archive support
+
+- Update 7-Zip to 24.07
+
+### Translations
+
+- Translation updates:
+  - Chinese Simplified (PR #2392)
+  - Brazilian (PR #2391)
+  - Hungarian (PR #2388)
+  - Lithuanian (PR #2390)
+
+## WinMerge 2.16.41 - 2024-06-24
+
+### General
+
+- Made the tabs in the tab bar rounded like Firefox.
+
+### File compare
+
+- Added support for F# (FSharp) language syntax highlight (PR #2298)
+- Improved F# parsing, support for multi-line comments (PR #2301)
+- Multi line comment fix (PR #2303)
+- Multi line comment fix part 2 (PR #2309)
+- Typescript files to use JavaScript highlighting as default (PR #2312)
+
+### Folder compare
+
+- BugFix: Refresh selected shows wrong file names being compared (#2338)
+- BugFix: Selected files changes on expanding a folder that is upper on the
+    tree (#2359)
+
+### Options dialog
+
+- BugFix: Options - Syntax color settings get reverted when
+    "Customized text colors" settings is touched. (#2355)
+- Add a "Defaults" button to the "Options (Editor > Compare/Merge)" dialog. (PR #2348)
+- Add a "Defaults" button to the "Options (Archive Support)" dialog. (PR #2362)
+
+### Plugins
+
+- BugFix: Fixed the plugin pipeline not being configured correctly in the Select Plugin dialog.
+- Add a text conversion plugin using OpenAI API (PR #2258)
+- Update jq to 1.7.1
+- Update md4c to 0.5.2
+
+### Archive support
+
+- Update 7-Zip to 24.05
+
+### Installer
+
+- BugFix; WinMerge 2.16.40 - Installer - Missing version and archicteure info (#2300)
+
+### Translations
+
+- Translation updates:
+  - Brazilian (PR #2308)
+  - Chinese Simplified (PR #2306,#2310,#2314,#2352)
+  - Corsican (PR #2361)
+  - French (PR #2354)
+  - German (PR #2349)
+  - Hungarian (PR #2307)
+  - Italian (PR #2299)
+  - Lithuanian (PR #2318,#2320)
+  - Japanese
+  - Korean (PR #2333)
+  - Polish (PR #2313)
+  - Portuguese (PR #2321)
+  - Turkish (PR #2315)
+
+### Internals
+
+- Update GitHub Actions CI (#2304)
+- Fix some typos (#2305)
+- Update POCO C++ Libraries to 1.13.3
+- Update boost to 1.85.0
+- Update Google C++ Testing Framework to 1.14.0
+
+## WinMerge 2.16.40 - 2024-04-27
+
+### General
+
+- BugFix: Fixed several Wine-related issues
+
+### File compare
+
+- BugFix: Replace text issue (#2279)
+
+### Options dialog
+
+- Add a "Defaults" button to the "Options (Editor > General)" dialog.
+    (PR #2283)
+- Adjust position of "Defaults" button in "Options > Compare > Table"
+    (PR #2295)
+
+### Plugins
+
+- BugFix: CompareMSExcelFiles.sct: Fixed the issue where, when the 'Extract
+    workbook data to multiple files' option was enabled, all sheets of .xlsx
+    files containing more than 10 sheets were not compared.
+    (This bug was introduced in version 2.16.39 beta.)
+- BugFix: insert datetime.sct: Fixed an issue where it didn't work properly
+    depending on the locale.
+    (This bug was introduced in version 2.16.39 beta.)
+- BugFix: Fixed an issue where a "Catastrophic failure" message box might have
+    appeared when reloading a plugin while the Select Files or Folders window
+    was displayed.
+- Allow plugin pipeline aliases or simple plugins to be registered in the GUI
+    (PR #2257)
+
+### Installer
+
+- BugFix: French encoding problem on the end of installation (last dialog box)
+   (#2272)
+
+### Translations
+
+- Translation updates:
+  - Brazilian (PR #2289)
+  - Catalan (PR #2270,#2274)
+  - Chinese Simplified (PR #2290)
+  - Corsican (PR #2288)
+  - French (PR #2271,#2275,#2297)
+  - Hungarian (PR #2291)
+  - Japanese
+  - Polish (PR#2277)
+
+## WinMerge 2.16.39 - 2024-03-24
+
+### General
+
+- BugFix: Fixed an issue where typing only a single character in the header
+    bar could cause a crash.
+
+### File compare
+
+- BugFix: Fixed possible crash
+- BugFix: Creation of .bak files fails when the original filename starts with
+    a dot (#2217)
+- Update Java syntax highlighting keyword list. (PR #2215)
+- Replace "Match similar lines" with "Align similar lines" (PR #2230)
+- Make it possible to select the behavior when copying to another pane with
+    "Copy to Right" etc. while text is selected.  (PR #2224)
+- Make it possible to transform the text copied with "Copy Right/Left" using a
+    plugin. (PR #2238)
+- Update PHP syntax highlighting keyword list. (PR #2265)
+
+### Webpage compare
+
+- BugFix: Make event sync settings persistent (#2248)
+
+### Select Files or Folders dialog
+
+- BugFix: Fixed the issue when the compare button could not be clicked when
+    specifying an archive file and a regular file.
+
+### Reports
+
+- BugFix: Fixed an issue where the widths of the left and right panes in HTML
+    reports are not equal.
+- BugFix: Fixed an issue where the caption set in the header bar was not being
+    applied to the HTML report.
+
+### Plugins
+
+- BugFix: Fixed crash when error occurs in Unpacker plugin
+- Replace the source code written in VBScript with JScript (PR #2098)
+- Add the ability to replace using patterns from Substitution Filters to the
+    Replace plugin. (PR #2252)
+- Added sanity check for regular expressions in PrediffLineFilter plugin.
+
+### Installer
+
+- BugFix: If the /noicons option was specified in the previous installation,
+    a message box asking you to delete the previous start menu will be
+    displayed in the next installation. (#2206)
+- Move custom messages in a separate iss file (#2247)
+
+### Archive support
+
+- BugFix: 7zip encrypted archives with encrypted file names (#2225)
+
+### Internals
+
+- Update codeql-analysis.yml - Version v2 to v3 (PR #2196)
+
+### Translations
+
+- Translation updates:
+  - Brazilian (PR #2234,#2243)
+  - Chinese Simplified (PR #2241,#2244,#2251,#2256,#2259)
+  - Corsican (PR #2266)
+  - French (PR #2237,#2264)
+  - Hungarian (PR #2232,#2250)
+  - Italian (PR #2245,#2249)
+  - Japanese
+  - Korean (PR #2239)
+  - Lithuanian (PR #2235,#2246)
+  - Portuguese (PR #2263)
+  - Russian (PR #2194,#2195,#2198,#2210,#2211,#2212)
+  - Slovenian (#2096)
+
+## WinMerge 2.16.38 - 2024-01-27
+
+### File compare
+
+- BugFix: Fixed an issue where changing the BOM in the right pane in the
+    Codepage dialog was not reflected.
+- Update C++ syntax highlighting keyword list. (PR #2166)
+
+### Webpage compare
+
+- During comparison, the status bar now displays "Comparing...".
+- Add Location Pane (PR #2160)
+
+### Folder compare
+
+- Modify the "Display Columns" dialog. (PR #2154)
+
+### Plugins
+
+- BugFix: Fixed the issue where the following string containing double
+    quotes is not interpreted correctly when specified to the `/unpacker`
+    command line argument.
+    
+    `/unpacker "Replace ""a"" ""b"""`
+
+### Translations
+
+- Translation updates:
+  - Brazilian (PR #2151,#2178)
+  - Chinese Simplified (PR #2153,#2183)
+  - Corsican (PR #2180)
+  - Hungarian (PR #2156,#2157,#2158)
+  - Japanese
+  - Korean (PR #2152)
+  - Lithuanian (PR #2155,#2177)
+  - Portuguese (PR #2185)
+
+## WinMerge 2.16.37 - 2023-12-24
+
+### File compare
+
+- BugFix: Fixed an issue where the scroll position when clicking on Location 
+    View may not be as expected when Wrap Lines is enabled.
+- BugFix: Can't click and change file line endings with the version 2.16.36.
+    (#2129)
+- BugFix: Unable to locate CR using \r in regular expression search
+- Added new C# keywords (PR #2136)
+
+### Folder compare
+
+- BugFix: Empty files are not copied (#2146)
+
+### Binary compare
+
+- BugFix: Could not replace data at the end of the file
+
+### Image compare
+
+- BugFix: Fixed an issue where the file name was not displayed in the header
+    even after saving a newly created pane with a name.
+
+### Webpage compare
+
+- BugFix: Fixed an issue where the message box "Another application has updated
+    file ... since WinMerge scanned it last time" is displayed when comparing
+    URLs that are file://.
+- Improved synchronize events (winmerge/winwebdiff#4) 
+
+### Translations
+
+- Translation updates:
+  - Bulgarian (PR #2124)
+  - French (PR #2135,#2140,#2141,#2142,winmerge/frhed#15)
+  - Italian (PR #2130)
+  - Korean (PR #2126,#2127,#2143)
+  - Polish (PR #2128)
+
+## WinMerge 2.16.36 - 2023-11-27
+
+### Image compare
+
+- BugFix: Fix an issue where opening read-only and multi-page image files
+    would cause them to be treated as only one-page images.
+    (winmerge/winimerge#32)
+
+### Webpage compare
+
+- Improved performance when there are many differences
+
+### File filter
+
+- Bugfix: Modify the "File Filters" dialog. (#2118) 
+
+### Translations
+
+- Translation updates:
+  - Corsican (PR #2123)
+  - Galician (PR #2120)
+  - Hungarian (PR #2122)
+  - Portuguese (PR #2119)
+  - Spanish (PR #2120)
+  - Slovenian
+  - Turkish (PR #2116)
+
+## WinMerge 2.16.35 - 2023-11-20
+
+### File compare
+
+- BugFix: Fixed an issue where "Copy to Left/Right and Advance" would
+    sometimes skip differences when comparing 3 files. (#1234)
+- BugFix: Print Preview buttons are not translatable (#2083,#2079)
+- BugFix: Fixed the issue where the caption set in the header bar is restored
+    when the window is resized.
+
+### Binary compare
+
+- BugFix: V2.16.34 "X86" wired action (#2081)
+
+### Image compare
+
+- BugFix: Close main window with 'Esc' if there is only one MDI child window
+    (#2084)
+
+### Webpage compare
+
+- BugFix: Close main window with 'Esc' if there is only one MDI child window
+    (#2084)
+- Webpage Compare: synchronize events (#2111,#2064) 
+
+### Folder compare
+
+- BugFix: Ignoring carriage return differences doesn't work anymore
+    (#2080,#2099)
+
+### File filters
+
+- BugFix: Fixed the issue where "[F]" could be set as the file filter if no file
+    filter was selected in the Filters dialog.
+
+### Installer
+
+- BugFix: fix bug of Registry path (PR #2086)
+- BugFix: "Register Windows 11 Shell Extension" fails because PowerShell script
+    doesn't escape special chars correctly (#2109)
+
+### Translations
+
+- Translation updates:
+  - Brazilian (PR #2088,#2112)
+  - Bulgarian (PR #2105)
+  - Chinese Simplified (PR #2091,#2113)
+  - French (PR #2106)
+  - Galician (PR #2085,#2107)
+  - Hungarian (PR #2093)
+  - Japanese
+  - Korean (PR #2092)
+  - Lithuanian (PR #2090,#2114)
+  - Polish (PR #2087)
+  - Romanian (PR #2089,#2095)
+  - Slovenian (#2096)
+  - Spanish (PR #2085,#2107)
+  - Turkish (PR #2076)
+
+## WinMerge 2.16.34 - 2023-10-27
+
+### File compare
+
+- Allow NUL and \\.\NUL in paths specified as command line arguments (PR #2056)
+- Added "(F4)" to the description of the toolbar icon "Difference in the Current Line". (#2050)
+- Fix a crash problem when the Diff algorithm is set to something other than
+    default and one file does not have an EOL of the last line and the other
+    file has an EOL of the last line.
+
+### Image compare
+
+- BugFix:  Fixed the issue where .png is added when saving even if the file
+    format does not use a converter such as jpg or png file.
+
+### Folder compare
+
+- BugFix: Folder compare omits unique folders from results if they contain any
+    files and/or subfolders folder compare/merge (#2046)
+
+### Line filters
+
+- Modify the "Line Filters" dialog. (PR #2047)
+
+### Substitution filters
+
+- Modify the "Substitution Filters" dialog. (PR #2068)
+
+### Translations
+
+- Translation updates:
+  - French (PR #2055,#2058)
+  - Korean (PR #2057,#2059,#2060)
+
+### Internals
+
+- Small code changes for CMDIChildWnd handling (#2043)
+
+## WinMerge 2.16.33 - 2023-09-20
+
+### General
+
+- Reduce startup time and decrease the usage of Win32 user objects.
+
+### File compare
+
+- BugFix: Cannot compare one-line file (#1972)
+- BugFix:  "Current Difference" specified by double-clicking cannot merge
+    using the "Copy to Right (or Left)" menu. (#1980)
+- BugFix: Wimerge saves changes to the wrong file (#1985) (PR #1988)
+- BugFix: "Ignore comment differences" still compares inline comments (#2008)
+- Update Rust syntax highlighting keyword list. (PR #1998)
+- [Feature Request] Both Shell Menu (#1986) (PR #2021)
+
+### Table compare
+
+- When "Use First Line as Header" is enabled, make the header display the
+    first line regardless of the scroll position when the first line is hidden.
+- Generate reports in tabular format for table comparisons. (PR #1983)
+
+### Folder compare
+
+- BugFix: Fixed an issue where Differences, Left/Right EOL columns, etc. were
+    displayed as undefined values when the file comparison method was
+    Full Contents or Quick Contents and the file size exceeded 64MB.
+- BugFix: Fix the problem that when comparing with the BinaryContents compare
+    method, the contents of the files are identical, but if one side is a
+    symbolic link, it is judged to be different. (#1976)
+- BugFix: Fixed an issue where values in the Left/Right EOL column may not
+    display correctly when using the Quick contents compare method.
+- Add Expand Different Subfolders menu item (#1382) (PR #1964)
+- Allow Diff algorithms (patience, histogram) other than default to be applied
+    to folder comparisons (PR #2015) (#2002)
+- Show confirmation message when closing a window that took a long time
+    to compare folders
+
+### Line filters
+
+- Improve line filters and substitution filters (PR #2032) (#796) (#1620)
+
+### Substitution filters
+
+- Avoid infinite loops in the RegularExpression::subst() function when 
+    the length of the string matching the pattern is 0
+- Improve line filters and substitution filters (PR #2032) (#796) (#1620)
+
+### Options dialog
+
+-  Execute the "pause" command to prevent the error message from disappearing
+     if the registration of the ShellExtension for Windows 11 fails
+
+### Plugins
+
+- BugFix: WinMerge cannot successfully disable some of its Plugins (#2012)
+- Update jq to version 1.7
+
+### Manual
+
+- Manual: Use po4a for manual translation (PR #1994) (#499)
+
+### Translations
+
+- Translation updates:
+  - Brazilian (PR #1969,#2001,#2025)
+  - Chinese Simplified (PR #1953,#1971,#2017,#2026)
+  - Corsican (PR #2022)
+  - German (PR #1952,#1977,#1989)
+  - Hungarian (PR #1968,#1999)
+  - Japanese
+  - Korean (PR #1979,#2030)
+  - Lithuanian (PR #1974,#2018,#2027)
+  - Polish (PR #1990)
+  - Portuguese (PR #1973,#2014)
+  - Slovenian
+  - Ukrainian (PR #1955)
+
+### Internals
+
+- Optimize inserts in std containers using reserve (PR #2000)
+
+## WinMerge 2.16.32 - 2023-07-27
+
+### General
+
+- BugFix: Export/Import settings bug with Substitution Filters (#1925)
+
+### File compare
+
+- BugFix: Save function doesn't work if the path length exceeds 248
+    characters (#1923)
+- BugFix: Redundant confirmation "The selected files are identical" (#1902)
+- Update Python syntax highlighting keyword list. (PR #1938)
+
+### Folder compare
+
+- BugFix: Treeview scrolls to the wrong position. (#1915)
+- Allow changing the number of CPU cores to use while doing folder comparison
+    (PR #1945)
+
+### Webpage compare
+
+- Add support for generating report files (PR #1941)
+
+### Command line
+
+- Compare folders recursively if "Include subfolders" is checked in the
+    Options dialog even if the /r command line option is not specified.
+    (PR #1914)
+
+### Archive support
+
+- Update 7-Zip to 23.01 (PR #1913)
+
+### Translations
+
+- New translation: Tamil (PR #1946)
+- Translation updates:
+  - Brazilian (PR #1948)
+  - Chinese Traditional (PR #1940)
+  - Corsican (PR #1933)
+  - French (PR #1927,#1928,#1951)
+  - Korean (PR #1908)
+  - Lithuanian (PR #1949)
+  - Portuguese (PR #1930)
+  - Slovenian
+  - Turkish (#1931)
+
+## WinMerge 2.16.31 - 2023-06-20
+
+### General
+
+- BugFix: Some Substitution filter doesn't work (#1861)
+- Add tasks to Jump List (PR #1828)
+- Update DirCmpReport.cpp (PR #1892)
+
+### File compare
+
+- BugFix: Fix input range check processing in "Go to" dialog. (PR #1826)
+- BugFix: End of line diff is a bit wanky (#1838, PR #1849)
+- Confirm copy all in file merge (PR #1827)
+- Modify the "Go to" dialog. (PR #1896)
+
+### Folder compare
+
+- BugFix: Display problem with Item totals : (#1840)
+- BugFix: Bug in ignore whitespace ? (#1882)
+
+### Plugins
+
+- PrettifyJSON: Update jq to version 1.6 (#1871)
+- Translate some plugin error messages (PR #1873)
+- ApplyPatch: Update GNU patch to 2.7.6-1 (PR #1897)(#1871)
+
+### Installer
+
+- Silent install blocked (#1852)
+
+### Translations
+
+- Translation updates:
+  - Brazilian (PR #1829,#1837,#1876,#1903)
+  - Bulgarian (PR #1822)
+  - Chinese Simplified (PR #1835,#1846,#1885,#1906)
+  - Dutch (PR #1831)
+  - French (PR #1841,#1842,#1894)
+  - Galician (PR #1833)
+  - German (PR #1850,#1875,#1907)
+  - Hungarian (PR #1832,#1839,#1845,#1878,#1905)
+  - Japanese
+  - Korean (PR #1820,#1821,#1877)
+  - Lithuanian (PR #1847,#1889,#1904)
+  - Polish (PR #1869,#1870,#1884)
+  - Portuguese (PR #1843,#1895)
+  - Spanish (PR #1834)
+  - Russian (PR #1824,#1825,#1862)
+
+## WinMerge 2.16.30 - 2023-04-27
+
+### General
+
+- BugFix: When using an ini file all differences are displayed as black
+    sections (#1799)
+- Reduced file size of WinMergeU.exe for 32-bit version
+
+### File compare
+
+- BugFix: Fixed an issue where XML format files, such as vcxproj, were not
+    being syntax highlighted.
+- BugFix: Fixed an issue where the EOL character was not being displayed in
+    the ARM64 version.
+- Modify the "Go to" dialog. (PR #1779)
+
+### Image compare
+
+- BugFix: Middle Click to close image tab crash (#1785)
+- BugFix: Fixed an issue where the changed Color distance threshold value
+    would revert back to 0 the next time WinMerge was started.
+- Image compare: Increase color distance threshold (CD Threshold)
+    (winmerge/winimerge #29)
+
+### Filters
+
+- Updated file filters to allow UTF-8 without BOM.
+
+### Options dialog
+
+- BugFix: Fixed an issue where the shell integration category page in the
+    Options dialog was not displaying correctly in version 2.16.29.
+- BugFix: Fixed an issue where plugin settings were not exported when
+    exporting from the Options dialog.
+
+### Plugins
+
+- BugFix: Fixed an issue where the ApplyPatch plugin was not functioning
+    correctly when the 'Plugins -> Manual Unpacking' menu item was checked.
+- BugFix: Fixed the problem that the plug-in setting window cannot be opened
+    on 32-bit OS
+- Added a "Plugin Settings" button to the "Select Plugin" window.
+- Make the plugin settings dialog translatable and enable saving settings to
+    an INI file (PR #1783)
+
+### Command line
+
+- BugFix: Fixed the problem that the /fr option is ignored when specifying the
+    command line option /new
+- BugFix: Fixed the problem of not moving to the conflicted line after
+    auto-merge.
+
+### Project file
+
+- BugFix: Opening a project fails when a path has environmental variables in
+    it. (#1793)
+
+### Installer
+
+- BugFix: Unsuccessful installation, Portable Win32 version (#1802) 
+
+### Translations
+
+- Translation updates:
+  - Brazilian (PR #1806)
+  - Chinese Simplified (PR #1808)
+  - German (PR #1807)
+  - Hungarian (PR #1809)
+  - Japanese
+  - Korean (PR #1774,#1788,#1790,#1791)
+  - Lithuanian (PR #1817)
+  - Polish (PR #1815)
+  - Portuguese (PR #1787)
+  - Slovenian (#1812)
+
+## WinMerge 2.16.29 - 2023-03-21
+
+### File compare
+
+- BugFix: 3-way compare does not properly align identical lines when resolving
+  conflicts, and show false highlights (#1696)
+- BugFix: Failure to indent lines properly (#1740)
+- BugFix: Fixed problems with non-default Diff algorithm:
+  - Even though the Ignore carriage return differences option was disabled,
+      EOL differences were ignored when the option to ignore whitespace
+      differences was enabled.
+  - Differences between CR and CR+LF were not ignored even though Ignore
+      carriage return differences option was enabled.
+- BugFix: Fixed a bug with Match whole word only options of Substitution
+    filters
+- Add MATLAB syntax highlighting. (PR #1766)
+
+### Table compare
+
+- The "View > Wrap Lines" menu item in the Table Compare window is now
+  "Wrap Text" and its check status is saved separately from the same menu item
+  in the Text Compare window. (osdn #47553)
+- Added an option to change the CSV file separator from comma to semicolon or
+    another character.
+
+### Binary compare
+
+- BugFix: Resizing WinMerge Window looses the correct scroll position for the
+    memory address your cursor is at (WinMerge/frhed #13)
+- BugFix: Fixed an issue where an infinite loop occurred when the file size was
+    truncated during file loading.
+
+### Image compare
+
+- BugFix: Fixed issue preventing saving image comparison reports to a network
+    share
+
+### Webpage compare
+
+- BugFix: Fixed issue with missing file path in header bar
+
+### Folder compare
+
+- BugFix: After I collapse a folder, the arrow next to it stays turned down
+    (#1747)
+- BugFix: Fixed an issue where the Left/Right Date and Left/Right Size columns
+    would not update when deleting files on one side.
+- Implement issue #1413: "Move" needs options "Left to Right" or
+    "Right to Left" like "Copy" (PR #1732,#1720)
+- Pressing F2 or Rename should not select file extension (#1735)
+
+### Options dialog
+
+- Added Enable Compare As menu option in Shell integration category
+
+### Plugins
+
+- BugFix: Plugin IgnoreLeadingLineNumbers hangs (#1715)
+
+### Command line
+
+- BugFix: Fixed a crash that occurred when comparing alternate data streams,
+    such as file.zip:Zone.Identifier:$DATA, using the /self-compare command
+    line option.
+- BugFix: Fixed a crash that occurred when the /t command line option was
+    specified with only one path provided
+
+### Shell extension
+
+- BugFix: Windows 11 Tabs - wrong folder selected from new menu (#1733)
+- BugFix: Fixed the issue where the WinMerge menu would not appear when
+    right-clicking on a non-item area in Windows 11 Explorer.
+- Added Compare As menu item
+
+### Installer
+
+- Installer: components step unclear about "Patch GnuWin32" (#1698)
+- The ShellExtension*.dll file is now renamed before installation to prevent
+    installation failure when Explorer is loading ShellExtension*.dll.
+- Added IgnoreLeadingLineNumbers plugin to non-x86 installers
+
+### Translations
+
+- BugFix: Fix an issue where some messages are not translated. (PR #1712)
+- Translation updates:
+  - Brazilian (PR #1711,#1713,#1727,#1728,#1756)
+  - Chinese Simplified (PR #1714,#1719,#1722,#1731,#1765)
+  - Corsican (PR #1717,#1723,#1752)
+  - Dutch (PR #1757)
+  - German (PR #1730,#1754)
+  - Hungarian (PR #1725,#1726,#1758)
+  - Japanese
+  - Korean (PR #1689,#1690,#1692,#1693,#1694,#1718)
+  - Lithuanian (PR #1729,#1755)
+  - Polish (PR #1763,#1764)
+  - Portuguese (PR #1737)
+  - Russian (PR #1710,#1751)
+  - Swedish (#1706,PR #1707)
+
 ## WinMerge 2.16.28 - 2023-02-15
 
 ### Folder compare
@@ -572,7 +1618,7 @@
 
 ### Filters
 
-- Filters enchancement (PR #1179,#1174)
+- Filters enhancement (PR #1179,#1174)
   - File masks
     - Putting `!` before file masks will exclude files that match that masks.
     - If you put `\` after the file masks, the masks will match folders instead
@@ -655,7 +1701,7 @@
 
 ### Folder compare
 
-- BugFix: Sorting on Comparison Result being done incorectly (#483)
+- BugFix: Sorting on Comparison Result being done incorrectly (#483)
 - BugFix: Fix an issue where WinMerge sometimes crashes when executing
     "Refresh Selected" in the folder compare window. (PR #1120)
 - BugFix: Fixed a bug that the parent folder icon was not displayed in non-recursive mode.
@@ -1052,7 +2098,7 @@
 - BugFix:ALL.vs2019.sln cl : command line warning D9035: option 'Gm' has been
     deprecated and will be removed in a future release (#862)
 - Resolves: Add continuous code security and quality analysis (PR #844, #843)
-- Improvement: Add check and error mesage in DownloadDeps.cmd that path to
+- Improvement: Add check and error message in DownloadDeps.cmd that path to
     7-zip exists (#864)
 
 ## WinMerge 2.16.13 - 2021-06-22
@@ -1072,7 +2118,7 @@
 - BugFix: The edited contents were discarded when the "Recompare As" menu item
     was selected after editing the file
 - BugFix: Incorrect comparison (#834)
-    (This bug occured when enabling both the 'Ignore blank lines' option and
+    (This bug occurred when enabling both the 'Ignore blank lines' option and
      the 'Completely unhighlight the ignored differences' option.)
 - Add Smarty syntax highlighting. (PR #821)
 - Thicken the caret in overwrite mode (osdn.net #42179)
@@ -1470,7 +2516,7 @@
 ### Folder compare
 
   - BugFix: Pausing comparing doesn't pause immediately (GitHub #342)
-  - BugFix: Sorting on Comparison Result being done incorectly (GitHub #483)
+  - BugFix: Sorting on Comparison Result being done incorrectly (GitHub #483)
   - Commandline to display versions in the output report (GitHub #418)
   - "Don't ask again" checkbox for the Confirm Copy dialog (GitHub PR #445)
 
@@ -2269,7 +3315,7 @@
   - Install 7-zip plugin by default
 
 ### Drag and Drop
-  - Accept drag&droped files or folders from various places like:
+  - Accept drag&dropped files or folders from various places like:
       Zip folder, FTP folder, Recycle bin, images in Web browser
 
 ### Plugins
@@ -2307,7 +3353,7 @@
 ### Command line
   - Incompatible change: The third file path is now treated as a right path
       for 3-way comparison, not output path
-      Use /o option for ouput path instead
+      Use /o option for output path instead
   - Add /wm, /dm, /fl, /fm, /fr, /al, /am and /ar option for 3-way comparison
 
 ### Other changes
@@ -2355,7 +3401,7 @@
   - BugFix: Quick contents compare didn't ignore EOL byte differences (#2929005)
   - BugFix: Compare by size always checked file times too (#2919510)
   - BugFix: Crash when pasting from clipboard (#3109525)
-  - BugFix: Keeps verifing path even turned off in options (#3111581)
+  - BugFix: Keeps verifying path even turned off in options (#3111581)
   - BugFix: Crash after deleting text (#3109521)
   - BugFix: Added EOL chars between copied file/path names (#2817546)
   - BugFix: Created new matching folder to wrong folder (#2890961)
@@ -2410,7 +3456,7 @@
   - Create config log file to My Documents-folder (#2789839)
   - BugFix: Reports had same left/right descriptions (#2772646)
   - BugFix: When conflict file saved trailing line-ending was lost (#2550412)
-  - BugFix: File compare HTML reports use invald DOCTYPE (#2783477)
+  - BugFix: File compare HTML reports use invalid DOCTYPE (#2783477)
   - BugFix: "##" in file filter pattern caused an infinite loop (#2789345)
   - BugFix: Could select prediffer when plugins were disabled (#2787131)
   - BugFix: Opening mixed-EOL file one side forced both files to be handled as

@@ -5,7 +5,6 @@
  */
 #pragma once
 
-#include "UnicodeString.h"
 #include "TempFile.h"
 #include <memory>
 #include <vector>
@@ -15,7 +14,7 @@ namespace ClipboardHistory
 {
 	struct Item
 	{
-		time_t timestamp;
+		time_t timestamp = 0;
 		std::shared_ptr<TempFile> pTextTempFile;
 		std::shared_ptr<TempFile> pBitmapTempFile;
 	};

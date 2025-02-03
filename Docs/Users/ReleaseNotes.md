@@ -1,166 +1,187 @@
-# WinMerge 2.16.28 Release Notes
+# WinMerge 2.16.46 Release Notes
 
 - [About This Release](#about-this-release)
-- [What Is New in 2.16.28?](#what-is-new-in-21628)
-- [What Is New in 2.16.26?](#what-is-new-in-21626)
-- [What Is New in 2.16.25 beta?](#what-is-new-in-21625-beta)
+- [What Is New in 2.16.46](#what-is-new-in-21646)
+- [What Is New in 2.16.45.1 beta?](#what-is-new-in-216451-beta)
+- [What Is New in 2.16.45.0 beta?](#what-is-new-in-216450-beta)
 - [Known issues](#known-issues)
 
-February 2023
+January 2025
 
 ## About This Release
 
-This is a WinMerge 2.16.28 stable release.
+This is a WinMerge 2.16.46 stable release.
 This release replaces earlier WinMerge stable releases as a recommended release.
 
 Please submit bug reports to our bug-tracker.
 
-## What Is New in 2.16.28
-
-### Folder compare
-
-- BugFix: Fixed an issue where files with no extension were not compared if they
-    were in a folder with a '.' in the folder name.
-
-## What Is New in 2.16.26
+## What Is New in 2.16.46
 
 ### General
 
-- Fixed issue where the program would crash when certain path names were set
-    in the file path bar.
+- BugFix: ALT-F4 opens Tools menu instead of exit from WinMerge (#2592)
 
-### File compare
-
-- Feature request: Allow pasting when editing caption of pages (PR #1651)
+- BugFix: Fixes an issue causing a momentary drawing shift when launching
+    WinMerge with Windows animation effects enabled and the window maximized.
 
 ### Folder compare
 
-- BugFix: Filters aren't saved anywhere (#1638)
-- BugFix: Fixed issue where the Open menu item in file path bar of folder
-    comparison window was disabled.
-- Add processing to indicate that two directories are identical in the
-    "Comparison result" column when they are identical in a 3-way folder
-    comparison. (PR #1649)
-- Request: highlight the file after opening its parent folder (#1662)
-- Show/hide directories in 3-way comparison (PR #1683)
+- BugFix: Compare - Text files different and case also different
+    - bug when delete and copy (#2599)
 
-### Binary compare
-
-- BugFix: Fixed issue where the Open menu item in file path bar of binary
-    comparison window was disabled.
-
-### Webpage compare
-
-- BugFix: Deleted color of Word Difference in Options dialog was not used.
-- Implemented Ignore numbers comparison option.
-
-### Options dialog
-
-- Modify the "Options (Compare > Folder)" dialog. (PR #1645)
+- Add a Prompt to Copy Only Differences in Folder Comparison (PR #2622,#198,#1168,#1350,#1995)
 
 ### Plugins
 
-- Add PreviewMarkdown plugin (PR #1641)
-- Add PreviewPlantUML plugin (PR #1666)
-- CompareMSExcelFiles: Added "Compare worksheets as HTML" in CompareMSExcelFiles
-    plugin options window
-- ApacheTika: Updated Apache Tika to version 2.6.0
-- ApacheTika: If Java is not installed, OpenJDK 19.0.2 will now be downloaded
-    and used.
+- BugFix: Fixes an issue where the Plugins → Prediffer menu is not displayed
+    correctly since version 2.16.43.
+
+- BugFix: Fixed an issue in the CompareMSPowerPointFiles.sct plugin that
+    caused error 0x80048010 when comparing PowerPoint files
+
+- Enable per-file plugin application with file number specification (PR #2598)
+
+- Some Plugins window fixes (PR #2621)
+
+### Manual
+
+- BugFix: Typos and minor errors in WinMerge manual (#2597)
 
 ### Translations
 
 - Translation updates:
-  - Brazilian (PR #1656,#1670)
-  - Chinese Simplified (PR #1635,#1665,#1667,#1677,#1681)
-  - Corsican (PR #1674)
-  - French (PR #1640,#1679)
-  - German (PR #1660,#1671)
-  - Hungarian (PR #1664)
+  - Brazilian (PR #2601,#2623)
+  - Chinese Simplified (PR #2603,#2624) 
+  - French (PR #2595,#2612)
+  - Hungarian (PR #2602)
+  - Italian (PR #2610,#2627)
   - Japanese
-  - Lithuanian (PR #1657,#1673)
-  - Polish (PR #1648)
-  - Portuguese (PR #1669)
-  - Russian (PR #1676)
-  - Slovenian
-  - Swedish (PR #1655,#1663,#1682)
+  - Korean (PR #2611,#2630)
+  - Lithuanian (PR #2604,#2628)
+  - Portuguese (PR #2614)
+  - Russian (PR #2593,#2609,#2629)
 
-## What Is New in 2.16.25 Beta
+## What Is New in 2.16.45.1 Beta
+
+### General
+
+- BugFix: IME switch not toggle menu when menu hide (PR #2572)
+- Add "Ignore missing trailing EOL" option to Compare settings
+    (PR #2573,#203,#989,#2317)
 
 ### File compare
 
-- BugFix: Selection in "Replace" by regular expression doesn't work with `\n`
-    (#1556)
-- BugFix: WinMerge hangs for a certain regex search & replace action for
-    clearing all lines not containing '%' (#1575)
-- Add html5 keywords to crystaledit (PR #1565)
-- Add css keywords to crystaledit (PR #1572)
-- Preliminary exit (performance optimization) for Scrollbars calculation
-    (PR #1574, #1573)
-- Fix issue #1583 Syntax highlighting for SQL leaves many things out.
-    (PR #1591, #1583)
-- Starting Pane Consistency (#1598)
-
-### Binary compare
-
-- BugFix: Crash 0xc0000409 (#1544)
-- Binary compare: Allow 64bit versions to open files larger than 2GB
-    (PR #1549)
+- BugFix: The height of the lines connecting moving blocks in the location
+    pane may be incorrect (#2543)
 
 ### Folder compare
 
-- BugFix: Fix the problem that WinMerge crashes when pressing the "OK" button 
-    in the "Display Columns" dialog in the debug version. (PR #1568)
-- BugFix: Crash when copying files/folders (#1558)
-- BugFix: File Duplication Bug In Outputted Zips (#1588)
-- BugFix: Fixed problem with scrolling to unexpected position when expanding
-    folders (osdn.net #46061)
-- BugFix: Fixed incorrect links to files with # in filename in folder
-    comparison report (osdn.net #46082)
-- Changes the display processing of the "Comparison result" column for a 3-way
-    folder comparison. (PR #1545)
-- Add "Copy All Displayed Columns" to the context menu of the folder compare
-    window. (PR #1615)
-    
-### Options dialog
+- BugFix: Looks like the View Tab Bar "folder icon" is getting a green
+    check-mark before the folder compare has even completed. (#2562)
 
-- Added Auto-reload modified files option (PR #1611)
+### Plugins
+
+- BugFix: WinMerge 2.16.44.0 : CompareMSWordFiles.sct Plugin : Forced Enabled
+    Confirm Conversions Pop-Up (#2566)
+
+### Archive support
+
+- Update 7-Zip to 24.09
 
 ### Translations
 
 - Translation updates:
-  - Brazilian (PR #1617,#1630)
-  - Chinese Simplified (PR #1614)
-  - Corsican (PR #1628,#1629)
-  - Galician (#1581)
-  - German (PR #1616,#1633)
-  - Hungarian (PR #1618,#1631)
-  - Lithuanian (PR #1621,#1632)
+  - Brazilian (PR #2585)
+  - Chinese Simplified (PR #2588) 
+  - Hungarian (PR #2586)
+  - Italian (PR #2587)
+  - Lithuanian (PR #2591)
   - Japanese
-  - Polish (PR #1566)
-  - Russian (PR #1553,#1554,#1555)
-  - Slovenian
-  - Swedish (PR #1594)
-  - Turkish (PR #1563)
+  - Korean (PR #2558,#2559)
 
-### Others
+### Internals
 
-- png optimization(loss less) (PR #1541)
-- Fields rearranged for size optimization (PR #1576)
-- refactoring Diff3.h (PR #1577)
-- Fix: Mismatch between keyword list and comments (PR #1578)
-- DiffFileData optimization for same-files (PR #1579)
-- Fixed potentially wrong SubEditList ReadOnly attribute storage; refactoring
-    (PR #1580)
-- CheckForInvalidUtf8 performance improvement; code cleanup (PR #1582)
-- Update unicoder.cpp (PR #1584)
-- unicoder.cpp light performance improvements (PR #1586)
-- Update markdown.cpp (PR #1590)
-- Add a feature for debugging. (PR #1595)
+- Update POCO C++ Libraries to 1.14.0
+
+## What Is New in 2.16.45.0 Beta
+
+### General
+
+- BugFix: Second monitor - BIG title bar v 2.16.44 (#2510,#2512,#2540,#2549)
+- BugFix: Window close button is not extending to the edge of the screen
+    when maximized (#2520)
+- BugFix: When WinMerge window is maximized, it prevents auto-hidden Windows
+    11 taskbar from appearing (#2518)
+- Foreground and background title bars are distinguishable (PR #2497)
+- Title bar background color and text color follow windows settings when not
+    customized (PR #2505)
+- Main Menu toggle Show/Hide (PR #2509)
+- Inactive title text chosen by inactive title color (PR #2544)
+- Reduce the contrast of inactive title bar text (PR #2545)
+- System Icon turn gray when app inactive (PR #2547)
+
+### File compare
+
+- BugFix: Wrong line gets copied over when selecting text (#2499)
+- BugFix: Bug Report: Display Issues When Resizing WinMerge Across Dual
+    Monitors (#2514)
+- BugFix: Diff renders incorrectly with "Cascadia Mono" variant (#2525)
+- BugFix: The height of the lines connecting moving blocks in the location
+    pane may be incorrect
+- BugFix: Crash on opening 2 files via drag & drop (#2548)
+- BugFix: A crash could occur if a single invalid file path was specified in
+    the "Select files or folders" window.
+- BugFix: "Debug Assertion Failed!" Error When Refreshing After Deleting All
+    Content in Left or Right Pane (#2556)
+- Adjust right-click deselect from down to up to preserve RB + scroll anywhere
+    (PR #2511)
+- Press 1-3 to copy current diff line to clipbd while popup menu is open
+    (PR #2532)
+- Caret (text cursor) follow windows settings (PR #2534)
+- Feature Request: Fixed-Width Font in "Find what" and "Replace with" Fields
+    (#2539)
+
+### Folder compare
+
+- BugFix: Crash on typing while search is in progress (#1814), (PR #2557)
+
+### Options dialog
+
+- Add a "Defaults" button to the "Options (Colors/System)" dialog. (PR #2506)
+- The "Clear all recent items" button in the Shell Integration category of the
+    Options dialog now clears combobox history as well as jump lists. (#2555)
+
+### Select Files or Folders dialog
+
+- BugFix: Crash on opening 2 files via drag & drop (#2548)
+
+### Plugins
+
+- Apache Tika plugin: Update Apache Tika to 3.0.0
+
+### Installer
+
+- BugFix: When uninstalling WinMerge, the Shell Extension for Windows 11 was
+    not uninstalled.
+- Installer - Run PowerShell hidden and with -NoProfile when installing
+    silently (#2515)
+
+### Translations
+
+- Translation updates:
+  - Brazilian (PR #2526)
+  - Chinese Simplified (PR #2501,#2524) 
+  - French (PR #2536)
+  - Hungarian (PR #2495,#2523)
+  - Italian (PR #2529)
+  - Japanese
+  - Korean (PR #2496,#2533)
+  - Lithuanian (PR #2503,#2537)
+  - Portuguese (PR #2507)
+  - Russian (PR #2500,#2502,#2521,#2522,#2528,#2531,#2538,#2542)
 
 ## Known issues
 
- - Shell integration does not open winmerge when selecting two folders (#1619)
  - Suggestion to make the result of image comparison more reliable (#1391)
  - Crashes when comparing large files (#325)
  - Very slow to compare significantly different directories (#322)

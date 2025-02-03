@@ -20,7 +20,7 @@ public:
 	bool IsActivated() const { return m_bActivated; }
 	void ActivateFrame(int nCmdShow);
 	void SetLastCompareResult(int nResult);
-	static void ShowIdenticalMessage(const PathContext& paths, bool bIdenticalAll, std::function<int (LPCTSTR, UINT, UINT)> funcMessageBox);
+	static void ShowIdenticalMessage(const PathContext& paths, bool bIdenticalAll, std::function<int (const tchar_t*, UINT, UINT)> funcMessageBox);
 	static String GetTitleString(const PathContext& paths, const String desc[], const PackingInfo *pInfoUnpacker, const PrediffingInfo *pInfoPrediffer, bool hasTrivialDiffs = false);
 	static String GetTooltipString(const PathContext& paths, const String desc[], const PackingInfo *pInfoUnpacker, const PrediffingInfo *pInfoPrediffer, bool hasTrivialDiffs = false);
 	static void ChangeMergeMenuText(int srcPane, int dstPane, CCmdUI* pCmdUI);
@@ -33,7 +33,7 @@ public:
 		return TRUE; // https://stackoverflow.com/questions/35553955/getting-rid-of-3d-look-of-mdi-frame-window
 	}
 protected:
-	int m_nLastSplitPos[2];
+	int m_nLastSplitPos[3];
 private:
 	bool m_bActivated;
 	HICON m_hCurrent;

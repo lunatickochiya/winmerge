@@ -20,8 +20,9 @@
 #include "FileLocation.h"
 #include "MergeFrameCommon.h"
 #include "FileTransform.h"
+#include "BasicFlatStatusBar.h"
 
-class CDirDoc;
+struct IDirDoc;
 
 /** 
  * @brief Frame class for file compare, handles panes, statusbar etc.
@@ -49,13 +50,13 @@ public:
 	bool OpenDocs(int nFiles, const FileLocation fileloc[], const bool bRO[], const String strDesc[], CMDIFrameWnd *pParent);
 	void MoveOnLoad(int nPane = -1, int nLineIndex = -1);
 	void ChangeFile(int pane, const String& path);
-	CDirDoc* GetDirDoc() const override { return m_pDirDoc; };
-	void SetDirDoc(CDirDoc * pDirDoc) override;
+	IDirDoc* GetDirDoc() const override { return m_pDirDoc; };
+	void SetDirDoc(IDirDoc * pDirDoc) override;
 	void UpdateResources();
 	void RefreshOptions();
 	bool CloseNow() override;
-	void DirDocClosing(CDirDoc * pDirDoc) override { m_pDirDoc = nullptr; }
-	void UpdateLastCompareResult();
+	void DirDocClosing(IDirDoc * pDirDoc) override { m_pDirDoc = nullptr; }
+	int UpdateLastCompareResult();
 	void UpdateAutoPaneResize();
 	void UpdateSplitter();
 	bool GenerateReport(const String& sFileName) const override;
@@ -63,6 +64,7 @@ public:
 	const PackingInfo* GetUnpacker() const override { return &m_infoUnpacker; };
 	void SetUnpacker(const PackingInfo* infoUnpacker) override { if (infoUnpacker) m_infoUnpacker = *infoUnpacker; };
 	const PrediffingInfo* GetPrediffer() const override { return nullptr; };
+	const EditorScriptInfo* GetEditorScript() const override { return nullptr; };
 	int GetFileCount() const override { return m_filePaths.GetSize(); }
 	String GetPath(int pane) const override { return m_filePaths[pane]; }
 	bool GetReadOnly(int pane) const override { return m_bRO[pane]; }
@@ -73,11 +75,13 @@ public:
 	void CheckFileChanged(void) override;
 	String GetDescription(int pane) const override { return m_strDesc[pane]; }
 	static bool IsLoadable();
+	String GetSaveAsPath() const { return m_strSaveAsPath; }
+	void SetSaveAsPath(const String& strSaveAsPath) { m_strSaveAsPath = strSaveAsPath; }
 
 // Attributes
 protected:
 	CEditorFilePathBar m_wndFilePathBar;
-	CStatusBar m_wndStatusBar[3];
+	CBasicFlatStatusBar m_wndStatusBar[3];
 // Overrides
 public:
 	// ClassWizard generated virtual function overrides
@@ -102,7 +106,6 @@ private:
 	void CreateImgWndStatusBar(CStatusBar &, CWnd *);
 private:
 	bool OpenImages();
-	int UpdateDiffItem(CDirDoc * pDirDoc);
 	void UpdateHeaderSizes();
 	void UpdateHeaderPath(int pane);
 	void SetTitle(LPCTSTR lpszTitle);
@@ -121,8 +124,9 @@ private:
 	BUFFERTYPE m_nBufferType[3];
 	DiffFileInfo m_fileInfo[3];
 	bool m_bRO[3];
+	String m_strSaveAsPath; /**< "3rd path" where output saved if given */
 	bool m_bAutoMerged;
-	CDirDoc *m_pDirDoc;
+	IDirDoc *m_pDirDoc;
 	int m_nActivePane;
 	PackingInfo m_infoUnpacker;
 	std::vector<int> m_unpackerSubcodes[3];
@@ -236,6 +240,10 @@ protected:
 	afx_msg void OnImgUseBackColor();
 	afx_msg void OnImgVectorImageScaling(UINT nId);
 	afx_msg void OnUpdateImgVectorImageScaling(CCmdUI* pCmdUI);
+	afx_msg void OnImgBlinkInterval(UINT nId);
+	afx_msg void OnUpdateImgBlinkInterval(CCmdUI* pCmdUI);
+	afx_msg void OnImgOverlayAnimationInterval(UINT nId);
+	afx_msg void OnUpdateImgOverlayAnimationInterval(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateImgUseBackColor(CCmdUI* pCmdUI);
 	afx_msg void OnImgCompareExtractedText();
 	afx_msg void OnToolsGenerateReport();
